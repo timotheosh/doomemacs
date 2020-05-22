@@ -6,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(setq user-full-name "Tim Hawes"
+      user-mail-address "trhawes@gmail.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -51,3 +51,11 @@
 ;;
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
+;;
+
+(map! :map projectile-mode-map
+      :g "<f4>" #'projectile-find-file)
+
+(map! :map centaur-tabs-mode-map
+      :g "C-<prior>" #'centaur-tabs-backward
+      :g "C-<next>" #'centaur-tabs-forward)
