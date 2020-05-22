@@ -1,0 +1,4 @@
+#+title:doomacs
+#+author: Tim Hawes
+* doomemacs
+My config for Doom Emacs
