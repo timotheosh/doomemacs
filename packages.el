@@ -7,4 +7,8 @@
 (package! multi-eshell)
 (package! eshell-prompt-extras)
 
+(package! aggressive-indent)
+(package! smartparens)
+(package! origami)
+
 (package! virtualenvwrapper)

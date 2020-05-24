@@ -28,7 +28,7 @@ Doom exposes five (optional) variables for controlling fonts in Doom. Here are t
 - ~doom-big-font~ -- used for ~doom-big-font-mode~ Use this for presentations or streaming.
 They all accept either a font-spec, font string ("Input Mono-12"), or xlfd font string. You generally only need these two:
 #+BEGIN_SRC emacs-lisp
-(setq doom-font (font-spec :family "monospace" :size 14))
+(setq doom-font (font-spec :family "monospace" :size 18))
 #+END_SRC
 * Theme
 There are two ways to load a theme. Both assume the theme is installed and available. You can either set ~doom-theme~ or manually load a theme with the ~load-theme~ function. This is the default:
@@ -63,8 +63,21 @@ You can also try 'gd' (or 'C-c g d') to jump to their definition and see how the
 #+END_SRC
 ** Return counsel-find-file back to its default behavior
 #+BEGIN_SRC emacs-lisp
-(map! :map ivy-minibuffer-map
-      :g "TAB" #'ivy-partial-or-done)
+(after! ivy
+  (map! :map ivy-minibuffer-map
+        :g "TAB" #'ivy-partial))
+(after! counsel
+  (map! :map counsel-M-x-map
+        :g "TAB" #'ivy-partial))
+#+END_SRC
+** Multi-term
+#+BEGIN_SRC emacs-lisp
+(map! "C-M-<right>" 'multi-term-next
+      "C-M-<left>" 'multi-term-prev)
+#+END_SRC
+** Shell-pop
+#+BEGIN_SRC emacs-lisp
+(map! "<f3>" '+eshell/toggle)
 #+END_SRC
 * Emacs Frame Manager
 The purpose of this modules is managing Emacs windows in an environment without using EXWM. This will offer functions an emacsclient can run conditioned on the current state of the window, and fast terminal access within Emacs. This will work with X11, not sure what the implications are for Cocoa or Windows.
@@ -355,6 +368,77 @@ If you use `org' and don't want your org files in the default location below, ch
 (setq org-startup-folded t)
 #+END_SRC
 * Programming Languages
+** General
+*** Packages
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! aggressive-indent)
+(package! smartparens)
+(package! origami)
+#+END_SRC
+*** Settings
+**** Code folding
+#+BEGIN_SRC emacs-lisp
+(use-package! origami
+  :bind (("C-<tab>" . origami-recursively-toggle-node)
+           ("C-<iso-lefttab>" . origami-toggle-all-nodes))
+  :hook 'prog-mode-hook)
+#+END_SRC
+**** Smartparens confirguration
+#+BEGIN_SRC emacs-lisp
+(use-package! smartparens-config
+  :config
+  ;; For lisp modes
+  (sp-with-modes sp--lisp-modes
+    ;; disable ', it's the quote character!
+    (sp-local-pair "'" nil :actions nil)
+    ;; also only use the pseudo-quote inside strings where it serve as
+    ;; hyperlink.
+    (sp-local-pair "`" "'" :when '(sp-in-string-p sp-in-comment-p))
+    (sp-local-pair "`" nil
+                   :skip-match
+                   (lambda (ms mb me)
+                     (cond
+                      ((equal ms "'")
+                       (or (sp--org-skip-markup ms mb me)
+                           (not (sp-point-in-string-or-comment))))
+                      (t (not (sp-point-in-string-or-comment))))))))
+#+END_SRC
+**** Match parenthesis/brackets
+#+BEGIN_SRC emacs-lisp
+(defun my/match-paren (arg)
+  "Go to the matching paren if on a paren; otherwise insert normally."
+  (interactive "p")
+  (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
+        ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
+        (t (self-insert-command (or arg 1)))))
+(map! :map prog-mode-map
+      :g "<backtab>" 'my/match-paren)
+#+END_SRC
+** Common Lisp
+*** Settings
+#+BEGIN_SRC emacs-lisp :tangle +common-lisp.el
+(setq! sly-lisp-implementations
+        '((sbcl ("~/programs/bin/ros" "-L" "sbcl" "-Q" "run") :coding-system utf-8-unix)
+          (clisp ("~/programs/bin/ros" "-L" "clisp" "-Q" "run"))
+          (clozure-cl ("~/programs/bin/ros" "-L" "ccl-bin" "-Q" "run"))
+          (cmucl ("~/programs/bin/ros" "-L" "cmu-bin" "-Q" "run"))
+          (ecl ("~/programs/bin/ros" "-L" "ecl" "-Q" "run") :coding-system utf-8-unix)
+          (abcl ("~/programs/bin/ros" "-L" "abcl-bin" "-Q" "run"))))
+#+END_SRC
+*** Load
+#+BEGIN_SRC emacs-lisp
+(load! "+common-lisp")
+#+END_SRC
+** Emacs Lisp
+*** Settings
+#+BEGIN_SRC emacs-lisp :tangle +emacs-lisp.el
+(use-package! aggressive-indent)
+(add-hook! 'emacs-lisp-mode-hook #'eldoc-mode #'smartparens-strict-mode #'aggressive-indent-mode)
+#+END_SRC
+*** Load Settings
+#+BEGIN_SRC emacs-lisp
+(load! "+emacs-lisp.el")
+#+END_SRC
 ** Python
 *** Packages
 #+BEGIN_SRC emacs-lisp :tangle packages.el
