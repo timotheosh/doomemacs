@@ -13,3 +13,4 @@
 # tangled files
 +*
 config.el
+packages.el

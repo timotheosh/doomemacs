@@ -52,14 +52,16 @@ To get information about any of these functions/macros, move the cursor over the
 
 You can also try 'gd' (or 'C-c g d') to jump to their definition and see how they are implemented.
 * Keys
-** Tabs
+** Centaur Tabs
 #+BEGIN_SRC emacs-lisp
-(map! :map projectile-mode-map
-      :g "<f4>" #'projectile-find-file)
-
 (map! :map centaur-tabs-mode-map
       :g "C-<prior>" #'centaur-tabs-backward
       :g "C-<next>" #'centaur-tabs-forward)
+#+END_SRC
+** Projectile hotkeys
+#+BEGIN_SRC emacs-lisp
+(map! :map projectile-mode-map
+      :g "<f4>" #'projectile-find-file)
 #+END_SRC
 ** Return counsel-find-file back to its default behavior
 #+BEGIN_SRC emacs-lisp
@@ -188,11 +190,40 @@ Utility functions for frame management. These find frames, suspend frames, raise
 Use Gmail in gnus
 ** Settings
 #+BEGIN_SRC emacs-lisp :tangle +email.el
-
+(setq!
+ send-mail-function 'smtpmail-send-it
+ message-send-mail-function 'smtpmail-send-it
+ user-mail-address "trhawes@gmail.com"
+ smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil))
+ smtpmail-auth-credentials (expand-file-name "~/.authinfo")
+ smtpmail-default-smtp-server "smtp.gmail.com"
+ smtpmail-smtp-server "smtp.gmail.com"
+ smtpmail-smtp-service 587
+ smtpmail-debug-info t
+ starttls-extra-arguments nil
+ starttls-gnutls-program "/usr/bin/gnutls-cli"
+ starttls-extra-arguments nil
+ starttls-use-gnutls t
+ )
 #+END_SRC
 ** Load Email settings
 #+BEGIN_SRC emacs-lisp
 (load! "+email")
+#+END_SRC
+* Web browser
+** Settings
+#+BEGIN_SRC emacs-lisp
+(setq! browse-url-generic-program "/usr/local/bin/next")
+(setq! browse-url-default-browser 'eww-browse-url)
+;;(setq shr-external-browser 'browse-url-generic)
+(setq!
+ browse-url-browser-function
+ '(
+   ("youtube\\.com" . browse-url-generic)
+   ("vimeo\\.com" . browse-url-generic)
+   ("facebook\\.com" . browse-url-firefox)
+   ("reddit\\.com" . browse-url-firefox)
+   ("." . eww-browse-url)))
 #+END_SRC
 * Dired
 ** Packages
@@ -370,18 +401,31 @@ If you use `org' and don't want your org files in the default location below, ch
 * Programming Languages
 ** General
 *** Packages
-#+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! aggressive-indent)
-(package! smartparens)
-(package! origami)
-#+END_SRC
+- [[https://github.com/Malabarba/aggressive-indent-mode][Aggressive indent]] for better formatting of code.
+  #+BEGIN_SRC emacs-lisp :tangle packages.el
+  (package! aggressive-indent)
+  #+END_SRC
+- [[https://github.com/company-mode/company-quickhelp][Company-quickhelp]] for on the fly documentation.
+  #+BEGIN_SRC emacs-lisp :tangle packages.el
+  (package! company-quickhelp)
+  #+END_SRC
 *** Settings
 **** Code folding
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! origami)
+#+END_SRC
 #+BEGIN_SRC emacs-lisp
 (use-package! origami
   :bind (("C-<tab>" . origami-recursively-toggle-node)
            ("C-<iso-lefttab>" . origami-toggle-all-nodes))
   :hook 'prog-mode-hook)
+#+END_SRC
+**** Company-quickhelp
+#+BEGIN_SRC emacs-lisp
+(after! company
+  (setq! company-quickhelp-delay 0.2))
+(map! :map company-active-map
+      :g "C-c h" #'company-quickhelp-manual-begin)
 #+END_SRC
 **** Smartparens confirguration
 #+BEGIN_SRC emacs-lisp
@@ -414,16 +458,54 @@ If you use `org' and don't want your org files in the default location below, ch
 (map! :map prog-mode-map
       :g "<backtab>" 'my/match-paren)
 #+END_SRC
+**** Lisp extra fontlock
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! lisp-extra-font-lock)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package! lisp-extra-font-lock)
+#+END_SRC
 ** Common Lisp
 *** Settings
 #+BEGIN_SRC emacs-lisp :tangle +common-lisp.el
-(setq! sly-lisp-implementations
-        '((sbcl ("~/programs/bin/ros" "-L" "sbcl" "-Q" "run") :coding-system utf-8-unix)
-          (clisp ("~/programs/bin/ros" "-L" "clisp" "-Q" "run"))
-          (clozure-cl ("~/programs/bin/ros" "-L" "ccl-bin" "-Q" "run"))
-          (cmucl ("~/programs/bin/ros" "-L" "cmu-bin" "-Q" "run"))
-          (ecl ("~/programs/bin/ros" "-L" "ecl" "-Q" "run") :coding-system utf-8-unix)
-          (abcl ("~/programs/bin/ros" "-L" "abcl-bin" "-Q" "run"))))
+(use-package! aggressive-indent)
+(use-package! company-quickhelp)
+(add-hook! 'lisp-mode-hook
+           #'smartparens-strict-mode
+           #'aggressive-indent-mode
+           #'lisp-extra-font-lock
+           #'company-quickhelp-mode)
+(after! sly
+  (setq! sly-lisp-implementations
+         '((sbcl ("~/programs/bin/ros" "-L" "sbcl" "-Q" "run") :coding-system utf-8-unix)
+           (clisp ("~/programs/bin/ros" "-L" "clisp" "-Q" "run"))
+           (clozure-cl ("~/programs/bin/ros" "-L" "ccl-bin" "-Q" "run"))
+           (cmucl ("~/programs/bin/ros" "-L" "cmu-bin" "-Q" "run"))
+           (ecl ("~/programs/bin/ros" "-L" "ecl" "-Q" "run") :coding-system utf-8-unix)
+           (abcl ("~/programs/bin/ros" "-L" "abcl-bin" "-Q" "run"))))
+  (add-hook! 'sly-mrepl-hook #'company-quickhelp-mode))
+#+END_SRC
+**** Hyperspec lookup
+Open CL REPL and execute: ~(ql:quickload "clhs")~, then follow instructions.
+~C-c C-d h~ on common lisp directive, and it should open the definition in the default web browser.
+#+BEGIN_SRC emacs-lisp
+(load! "/home/thawes/.roswell/lisp/quicklisp/clhs-use-local.el")
+(map! :after sly
+      :map lisp-mode-map
+      :g "C-c C-d h" #'sly-documentation-lookup)
+#+END_SRC
+**** Common Lisp Language Server
+This is functional, but untested on Doom Emacs, and disabled for now. Most of the functionality for this is given with Sly/Slime.
+
+In order to use, be sure to install the language server first, by running ~ros install cxxxr/cl-lsp~
+See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
+#+BEGIN_SRC emacs-lisp
+;; (add-to-list 'lsp-language-id-configuration '(lisp-mode "lisp"))
+;;   (lsp-register-client
+;;    (make-lsp-client :new-connection (lsp-stdio-connection "cl-lsp")
+;;                     :major-modes '(lisp-mode)
+;;                     :server-id 'cl-lsp))
+;;   (add-hook 'lisp-mode-hook 'lsp-deferred)
 #+END_SRC
 *** Load
 #+BEGIN_SRC emacs-lisp
@@ -431,9 +513,14 @@ If you use `org' and don't want your org files in the default location below, ch
 #+END_SRC
 ** Emacs Lisp
 *** Settings
-#+BEGIN_SRC emacs-lisp :tangle +emacs-lisp.el
-(use-package! aggressive-indent)
-(add-hook! 'emacs-lisp-mode-hook #'eldoc-mode #'smartparens-strict-mode #'aggressive-indent-mode)
+#+BEGIN_SRC emacs-lisp :tangle +emacs-lisp.el\
+(after! emacs-lisp
+  (add-to-list 'company-backends 'company-elisp))
+(add-hook! 'emacs-lisp-mode-hook
+           #'eldoc-mode
+           #'smartparens-strict-mode
+           #'aggressive-indent-mode
+           #'lisp-extra-font-lock)
 #+END_SRC
 *** Load Settings
 #+BEGIN_SRC emacs-lisp
