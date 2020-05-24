@@ -513,7 +513,7 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
 #+END_SRC
 ** Emacs Lisp
 *** Settings
-#+BEGIN_SRC emacs-lisp :tangle +emacs-lisp.el\
+#+BEGIN_SRC emacs-lisp :tangle +emacs-lisp.el
 (after! emacs-lisp
   (add-to-list 'company-backends 'company-elisp))
 (add-hook! 'emacs-lisp-mode-hook
