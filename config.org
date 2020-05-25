@@ -21,6 +21,10 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
       user-mail-address "trhawes@gmail.com"
       github-account-name "timotheosh")
 #+END_SRC
+* Global
+#+BEGIN_SRC emacs-lisp
+(setq! show-paren-mode 1)
+#+END_SRC
 * Appearance
 ** Fonts
 Doom exposes five (optional) variables for controlling fonts in Doom. Here are the three important ones:
@@ -422,6 +426,109 @@ If you use `org' and don't want your org files in the default location below, ch
 ** Basic Config
 #+BEGIN_SRC emacs-lisp
 (setq org-startup-folded t)
+#+END_SRC
+** Org modules
+*** Github Flavored Markdown
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! ox-gfm)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package! ox-gfm)
+#+END_SRC
+*** Pretty bullets
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! org-bullets)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package! org-bullets
+  :config
+  (add-hook! 'org-mode-hook #'org-bullets-mode))
+#+END_SRC
+*** Convert org to OpenOffice
+#+BEGIN_SRC emacs-lisp
+(use-package! ox-odt)
+#+END_SRC
+*** Inline Racket
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! ob-racket :recipe (:host github :repo "wallyqs/ob-racket"))
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package! ob-racket)
+#+END_SRC
+*** Jira
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! org-jira :pin "melpa")
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package! org-jira)
+#+END_SRC
+*** Projectile
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! org-projectile)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package! org-projectile
+  :bind (("C-c n p" . org-projectile-project-todo-completing-read)
+           ("C-c c" . org-capture))
+  :config
+  (if (string= system-name "scholasticus")
+          (setq! org-projectile-projects-file
+                "~/org/GTD/work/code-projects.org")
+        (setq! org-projectile-projects-file
+              "~/org/GTD/home/code-projects.org"))
+      (setq! org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+      (push (org-projectile-project-todo-entry) org-capture-templates))
+#+END_SRC
+*** org2blog
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! org2blog)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package! org2blog
+  :config
+  (setq! org2blog/wp-blog-alist
+          '(("timhawes"
+             :url "https://timhawes.wordpress.com/xmlrpc.php"
+             :username "timotheosh"))))
+#+END_SRC
+*** org-protocol
+#+BEGIN_SRC emacs-lisp
+(use-package! org-protocol)
+#+END_SRC
+*** Agenda files
+#+BEGIN_SRC emacs-lisp
+(if (string= system-name "scholasticus")
+    (setq! org-agenda-files (file-expand-wildcards "~/org/GTD/work/*.org"))
+  (setq! org-agenda-files (file-expand-wildcards "~/org/GTD/home/*.org")))
+#+END_SRC
+*** Templates
+#+BEGIN_SRC emacs-lisp
+(setq! org-capture-templates
+       `(("h" "Home Templates")
+         ("ht" "Todo" entry (file+datetree "~/org/GTD/home/home-gtd.org" "Tasks")
+          "* TODO %?\nEntered on %U\n  %i\n  %a")
+         ("hj" "Journal" entry (file+datetree "~/org/home/journal.org")
+          "* %?\nEntered on %U\n  %i\n  %a")
+         ("w" "Work Templates")
+         ("wt" "Todo" entry (file+datetree "~/org/GTD/work/work-gtd.org" "Tasks")
+          "* TODO %?\nEntered on %U\n  %i\n  %a")
+         ("wT" "Training" entry (file+datetree "~/org/GTD/work/work-gtd.org" "Training")
+          "* TODO %?\nEntered on %U\n  %i\n  %a")
+         ("wc" "Credential Automation" entry (file+datetree "~/org/GTD/work/work-gtd.org" "Credential Automation")
+          "* TODO %?\nEntered on %U\n  %i\n  %a")
+         ("wd" "Documentation" entry (file+datetree "~/org/GTD/work/work-gtd.org" "Documentation")
+          "* TODO %?\nEntered on %U\n  %i\n  %a")
+         ("wm" "Metrics" entry (file+datetree "~/org/GTD/work/work-gtd.org" "Metrics")
+          "* TODO %?\nEntered on %U\n  %i\n  %a")
+         ("wD" "Dashboards" entry (file+datetree "~/org/GTD/work/work-gtd.org" "Dashboards")
+          "* TODO %?\nEntered on %U\n  %i\n  %a")
+         ))
+#+END_SRC
+*** Settings
+#+BEGIN_SRC emacs-lisp
+(add-hook! 'org-mode-hook
+           #'visual-line-mode
+           #'org-indent-mode)
 #+END_SRC
 * Programming Languages
 ** General
