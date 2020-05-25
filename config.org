@@ -242,10 +242,30 @@ Use Gmail in gnus
 #+END_SRC
 * Eshell
 ** Packages
+*** [[https://github.com/tom-tan/esh-help][esh-help]] for Eshell help
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! esh-help)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(after! eshell
+  (use-package! esh-help)
+  (setup-esh-help-eldoc))
+#+END_SRC
+*** [[https://github.com/emacsmirror/multi-eshell][Multiple eshell]] Original blog seems to be missing, but available on marmalade.
+#+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! multi-eshell)
-(package! eshell-prompt-extras)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package! multi-eshell)
+#+END_SRC
+*** [[https://github.com/porterjamesj/virtualenvwrapper.el][Virtualenvwrapper]] for Emacs
+[[https://virtualenvwrapper.readthedocs.io/en/latest/][Virtualenvwrapper]] is a set of extensions for more easily managing multiple virtualenv's for Python. It is available on Debian and Ubuntu systems. This is an Emacs module that interfaces with that system, making it easy to use in Eshell and Emacs proper.
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! virtualenvwrapper)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package! virtualenvwrapper)
+(setq! venv-location "~/.virtualenvs/")
 #+END_SRC
 ** Settings
 *** Custom magit commands in eshell
@@ -313,6 +333,9 @@ Use Gmail in gnus
 (require 'esh-module) ;; load tramp functions into eshell
 #+END_SRC
 *** Custom prompt
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! eshell-prompt-extras)
+#+END_SRC
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
 (use-package! eshell-prompt-extras
   :config
@@ -473,7 +496,7 @@ If you use `org' and don't want your org files in the default location below, ch
 (add-hook! 'lisp-mode-hook
            #'smartparens-strict-mode
            #'aggressive-indent-mode
-           #'lisp-extra-font-lock
+           #'lisp-extra-font-lock-mode
            #'company-quickhelp-mode)
 (after! sly
   (setq! sly-lisp-implementations
@@ -520,28 +543,15 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
            #'eldoc-mode
            #'smartparens-strict-mode
            #'aggressive-indent-mode
-           #'lisp-extra-font-lock)
+           #'lisp-extra-font-lock-mode
+           #'company-quickhelp-mode)
 #+END_SRC
 *** Load Settings
 #+BEGIN_SRC emacs-lisp
 (load! "+emacs-lisp.el")
 #+END_SRC
 ** Python
-*** Packages
-#+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! virtualenvwrapper)
-#+END_SRC
-*** Modules
-#+BEGIN_SRC emacs-lisp :tangle modules/lang/python/config.el
-;;; lang/python/config.el -*- lexical-binding: t; -*-
+*** Set Interpreter
+#+BEGIN_SRC emacs-lisp
 (setq python-shell-interpreter "ipython")
-;; Make available immediately
-(use-package! virtualenvwrapper
-  :config
-  (venv-initialize-interactive-shells) ;; if you want interactive shell support
-  (venv-initialize-eshell) ;; if you want eshell support
-  ;; note that setting `venv-location` is not necessary if you
-  ;; use the default location (`~/.virtualenvs`), or if the
-  ;; the environment variable `WORKON_HOME` points to the right place
-  (setq venv-location "/home/thawes/.virtualenvs/"))
 #+END_SRC
