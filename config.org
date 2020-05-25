@@ -3,14 +3,13 @@
 #+property: header-args :tangle yes :mkdirp yes
 
 Place your private configuration here! Remember, you do not need to run ~doom sync~ after modifying this file!
-* Packages File
+* Headings
+** Packages File
 Create the packages.el file.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 #+END_SRC
-
-* Heading
 #+BEGIN_SRC emacs-lisp
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
@@ -19,9 +18,11 @@ Create the packages.el file.
 Some functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets.
 #+BEGIN_SRC emacs-lisp
 (setq user-full-name "Tim Hawes"
-      user-mail-address "trhawes@gmail.com")
+      user-mail-address "trhawes@gmail.com"
+      github-account-name "timotheosh")
 #+END_SRC
-* Fonts
+* Appearance
+** Fonts
 Doom exposes five (optional) variables for controlling fonts in Doom. Here are the three important ones:
 - ~doom-font~
 - ~doom-variable-pitch-font~
@@ -30,28 +31,17 @@ They all accept either a font-spec, font string ("Input Mono-12"), or xlfd font 
 #+BEGIN_SRC emacs-lisp
 (setq doom-font (font-spec :family "monospace" :size 18))
 #+END_SRC
-* Theme
+** Theme
 There are two ways to load a theme. Both assume the theme is installed and available. You can either set ~doom-theme~ or manually load a theme with the ~load-theme~ function. This is the default:
 #+BEGIN_SRC emacs-lisp
 (setq doom-theme 'doom-one)
 #+END_SRC
-* Line number style
+** Line number style
 This determines the style of line numbers in effect. If set to `nil', line numbers are disabled. For relative line numbers, set this to `relative'.
 #+BEGIN_SRC emacs-lisp
 (setq display-line-numbers-type t)
 #+END_SRC
-* Additional Macros
-Here are some additional functions/macros that could help you configure Doom:
-- ~load!~ for loading external *.el files relative to this one
-- ~use-package~ for configuring packages
-- ~after!~ for running code after a package has loaded
-- ~add-load-path!~ for adding directories to the `load-path', relative to this file. Emacs searches the ~load-path~ when you load packages with ~require~ or ~use-package~.
-- ~map!~ for binding new keys
-
-To get information about any of these functions/macros, move the cursor over the highlighted symbol at press 'K' (non-evil users must press 'C-c g k'). This will open documentation for it, including demos of how they are used.
-
-You can also try 'gd' (or 'C-c g d') to jump to their definition and see how they are implemented.
-* Keys
+* Key Maps
 ** Centaur Tabs
 #+BEGIN_SRC emacs-lisp
 (map! :map centaur-tabs-mode-map
@@ -81,8 +71,19 @@ You can also try 'gd' (or 'C-c g d') to jump to their definition and see how the
 #+BEGIN_SRC emacs-lisp
 (map! "<f3>" '+eshell/toggle)
 #+END_SRC
+* Additional Macros
+Here are some additional functions/macros that could help you configure Doom:
+- ~load!~ for loading external *.el files relative to this one
+- ~use-package~ for configuring packages
+- ~after!~ for running code after a package has loaded
+- ~add-load-path!~ for adding directories to the `load-path', relative to this file. Emacs searches the ~load-path~ when you load packages with ~require~ or ~use-package~.
+- ~map!~ for binding new keys
+
+To get information about any of these functions/macros, move the cursor over the highlighted symbol at press 'K' (non-evil users must press 'C-c g k'). This will open documentation for it, including demos of how they are used.
+
+You can also try 'gd' (or 'C-c g d') to jump to their definition and see how they are implemented.
 * Emacs Frame Manager
-The purpose of this modules is managing Emacs windows in an environment without using EXWM. This will offer functions an emacsclient can run conditioned on the current state of the window, and fast terminal access within Emacs. This will work with X11, not sure what the implications are for Cocoa or Windows.
+The purpose of this module is managing Emacs windows in an environment without using EXWM. This will offer functions an emacsclient can run conditioned on the current state of the window, and fast terminal access within Emacs. This will work with X11, not sure what the implications are for Cocoa or Windows.
 ** Setup
 We'll need to load this file.
 #+BEGIN_SRC emacs-lisp
@@ -186,9 +187,10 @@ Utility functions for frame management. These find frames, suspend frames, raise
       (efm/start-client-with-command name title command skip-taskbar))))
 
 #+END_SRC
-* Email
+* Applications
+** Email
 Use Gmail in gnus
-** Settings
+*** Settings
 #+BEGIN_SRC emacs-lisp :tangle +email.el
 (setq!
  send-mail-function 'smtpmail-send-it
@@ -206,12 +208,11 @@ Use Gmail in gnus
  starttls-use-gnutls t
  )
 #+END_SRC
-** Load Email settings
 #+BEGIN_SRC emacs-lisp
 (load! "+email")
 #+END_SRC
-* Web browser
-** Settings
+** Web browser
+*** Settings
 #+BEGIN_SRC emacs-lisp
 (setq! browse-url-generic-program "/usr/local/bin/next")
 (setq! browse-url-default-browser 'eww-browse-url)
@@ -412,27 +413,34 @@ Display progress in the mode line instead."
 #+BEGIN_SRC emacs-lisp
 (load! "+eshell.el")
 #+END_SRC
-* Org-mode Files
+* Org-mode
+** Org files location
 If you use `org' and don't want your org files in the default location below, change `org-directory'. It must be set before org loads!
 #+BEGIN_SRC emacs-lisp
 (setq org-directory "~/org/")
 #+END_SRC
-* Org-mode
+** Basic Config
 #+BEGIN_SRC emacs-lisp
 (setq org-startup-folded t)
 #+END_SRC
 * Programming Languages
 ** General
-*** Packages
-- [[https://github.com/Malabarba/aggressive-indent-mode][Aggressive indent]] for better formatting of code.
-  #+BEGIN_SRC emacs-lisp :tangle packages.el
-  (package! aggressive-indent)
-  #+END_SRC
-- [[https://github.com/company-mode/company-quickhelp][Company-quickhelp]] for on the fly documentation.
-  #+BEGIN_SRC emacs-lisp :tangle packages.el
-  (package! company-quickhelp)
-  #+END_SRC
 *** Settings
+**** [[https://github.com/Malabarba/aggressive-indent-mode][Aggressive indent]] for better formatting of code.
+Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! aggressive-indent)
+#+END_SRC
+**** [[https://github.com/company-mode/company-quickhelp][Company-quickhelp]] for on the fly documentation.
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! company-quickhelp)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(after! company
+  (setq! company-quickhelp-delay 0.2))
+(map! :map company-active-map
+      :g "C-c h" #'company-quickhelp-manual-begin)
+#+END_SRC
 **** Code folding
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! origami)
@@ -443,14 +451,7 @@ If you use `org' and don't want your org files in the default location below, ch
            ("C-<iso-lefttab>" . origami-toggle-all-nodes))
   :hook 'prog-mode-hook)
 #+END_SRC
-**** Company-quickhelp
-#+BEGIN_SRC emacs-lisp
-(after! company
-  (setq! company-quickhelp-delay 0.2))
-(map! :map company-active-map
-      :g "C-c h" #'company-quickhelp-manual-begin)
-#+END_SRC
-**** Smartparens confirguration
+**** Smartparens for paredit functionality is many different programming language modes
 #+BEGIN_SRC emacs-lisp
 (use-package! smartparens-config
   :config
@@ -468,7 +469,16 @@ If you use `org' and don't want your org files in the default location below, ch
                       ((equal ms "'")
                        (or (sp--org-skip-markup ms mb me)
                            (not (sp-point-in-string-or-comment))))
-                      (t (not (sp-point-in-string-or-comment))))))))
+                      (t (not (sp-point-in-string-or-comment)))))))
+  (sp-with-modes 'org-mode
+    (sp-local-pair "\\[" "\\]")
+    (sp-local-pair "$" "$")
+    (sp-local-pair "'" "'" :actions '(rem))
+    (sp-local-pair "=" "=" :actions '(rem))
+    (sp-local-pair "\\left(" "\\right)" :trigger "\\l(" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+    (sp-local-pair "\\left[" "\\right]" :trigger "\\l[" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+    (sp-local-pair "\\left\\{" "\\right\\}" :trigger "\\l{" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+    (sp-local-pair "\\left|" "\\right|" :trigger "\\l|" :post-handlers '(sp-latex-insert-spaces-inside-pair))))
 #+END_SRC
 **** Match parenthesis/brackets
 #+BEGIN_SRC emacs-lisp
