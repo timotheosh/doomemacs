@@ -71,6 +71,25 @@ This determines the style of line numbers in effect. If set to `nil', line numbe
   (map! :map counsel-M-x-map
         :g "TAB" #'ivy-partial))
 #+END_SRC
+* Additional Modules
+** Swiper
+Better isearch replacement
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! swiper)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(map! "C-s" #'swiper)
+#+END_SRC
+** Smex
+Useful for showing recent choices.
+#+BEGIN_SRC emacs-list :tangle packages.el
+(package! smex)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package! smex
+  :init
+  (smex-initialize))
+#+END_SRC
 * Additional Macros
 Here are some additional functions/macros that could help you configure Doom:
 - ~load!~ for loading external *.el files relative to this one
@@ -236,19 +255,10 @@ Use Gmail in gnus
    ("." . eww-browse-url)))
 #+END_SRC
 * Dired
-** Packages
-#+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! ranger)
-#+END_SRC
 ** Settings
-#+BEGIN_SRC emacs-lisp :tangle +dired
-(add-hook 'dired-mode-hook (lambda ()
-                             (setq dired-hide-details-mode t)
-                             (setq ranger-override-dired-mode t)))
-#+END_SRC
-** Load Dired settings
 #+BEGIN_SRC emacs-lisp
-(load! "+dired")
+(setq! dired-hide-details-mode t)
+(setq! ranger-override-dired-mode t)
 #+END_SRC
 * Shells
 ** Multi-vterm
