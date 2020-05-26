@@ -490,7 +490,7 @@ If you use `org' and don't want your org files in the default location below, ch
 #+END_SRC
 *** Jira
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! org-jira :pin "melpa")
+(package! org-jira)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! org
