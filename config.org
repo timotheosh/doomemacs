@@ -90,6 +90,14 @@ Useful for showing recent choices.
   :init
   (smex-initialize))
 #+END_SRC
+** [[https://github.com/lastquestion/explain-pause-mode][explain-pause-mode]]
+explain-pause-mode is very lightweight; you can leave it running all the time. You can check the buffer ~*explain-pause-log*~ to see what was slow and the information gathered.
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! explain-pause-mode :recipe (:host github :repo "lastquestion/explain-pause-mode"))
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+;;(explain-pause-mode t)
+#+END_SRC
 * Additional Macros
 Here are some additional functions/macros that could help you configure Doom:
 - ~load!~ for loading external *.el files relative to this one
@@ -574,9 +582,15 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! aggressive-indent)
 #+END_SRC
+**** Company-mode
+#+BEGIN_SRC emacs-lisp
+(after! company
+  (add-hook! 'inferior-python-mode-hook
+    (lambda () (setq! company-mode -1))))
+#+END_SRC
 **** [[https://github.com/company-mode/company-quickhelp][Company-quickhelp]] for on the fly documentation.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-;;(package! company-quickhelp)
+(package! company-quickhelp)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 ;;(after! company
