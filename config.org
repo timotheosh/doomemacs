@@ -269,6 +269,7 @@ Use Gmail in gnus
 (use-package! multi-vterm)
 (map! "C-M-<right>" 'multi-vterm-next
       "C-M-<left>" 'multi-vterm-prev)
+(defalias 'multi-term 'multi-vterm)
 #+END_SRC
 ** Eshell
 *** Packages

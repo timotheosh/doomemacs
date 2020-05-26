@@ -6,6 +6,7 @@
 
 # Backup files
 *~
+*.swp
 
 # Undo-tree save-files
 *.~undo-tree
