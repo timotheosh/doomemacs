@@ -273,10 +273,11 @@ Use Gmail in gnus
 (package! multi-vterm)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
-(use-package! multi-vterm)
-(map! "C-M-<right>" 'multi-vterm-next
-      "C-M-<left>" 'multi-vterm-prev)
-(defalias 'multi-term 'multi-vterm)
+(after! vterm
+  (use-package! multi-vterm)
+  (map! "C-M-<right>" 'multi-vterm-next
+        "C-M-<left>" 'multi-vterm-prev)
+  (defalias 'multi-term 'multi-vterm))
 #+END_SRC
 ** Eshell
 *** Packages
@@ -716,29 +717,21 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
 (load! "+emacs-lisp.el")
 #+END_SRC
 ** Python
-*** Elpy mode instead of anaconda-mode
 #+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! auto-virtualenv)
 (package! anaconda-mode :ignore t)
 (package! python-mode)
-(package! elpy)
 (package! jedi)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
-(use-package! python-mode
-  :config
-  (setq py-max-specpdl-size 5000))
-(after! python-mode
+(after! python
+  (use-package! auto-virtualenv)
   (use-package! jedi
     :commands jedi:setup)
-  (use-package! elpy
-    ;; NOTE: Elpy makes use of py-flake. You may have to change
-    ;; settings in ~/.config/flake8
-    :config
-    (elpy-enable))
-  (setq! indent-tabs-mode nil ;; Spaces, not tabs!
-         tab-width (default-value 'tab-width)
-         python-shell-interpreter "ipython"
-         python-shell-interpreter-args "--simple-prompt -i"
-         elpy-dedicated-shells t
-         jedi:complete-on-dot t))
+  (use-package! lsp-pyls)
+  (add-hook! 'python-mode-hook #'auto-virtualenv-set-virtualenv #'lsp-deferred)
+  (setq! py-ipython-command-args '("--automagic" "--simple-prompt")
+         jedi:complete-on-dot t)
+  (map! :map 'python-mode-map
+        :g "C-c C-c" #'py-execute-buffer-ipython))
 #+END_SRC
