@@ -2,7 +2,6 @@
 #+author: Tim Hawes
 #+property: header-args :tangle yes :mkdirp yes
 
-Place your private configuration here! Remember, you do not need to run ~doom sync~ after modifying this file!
 * Headings
 ** Packages File
 Create the packages.el file.
@@ -582,69 +581,66 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! aggressive-indent)
 #+END_SRC
-**** Company-mode
-#+BEGIN_SRC emacs-lisp
-(after! company
-  (add-hook! 'inferior-python-mode-hook
-    (lambda () (setq! company-mode -1))))
-#+END_SRC
 **** [[https://github.com/company-mode/company-quickhelp][Company-quickhelp]] for on the fly documentation.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! company-quickhelp)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
-;;(after! company
-;;  (setq! company-quickhelp-delay 0.2))
-;;(map! :map company-active-map
-;;      :g "C-c h" #'company-quickhelp-manual-begin)
+(after! company
+  (setq! company-quickhelp-delay nil))
+(map! :map company-active-map
+      :g "C-c h" #'company-quickhelp-manual-begin)
 #+END_SRC
 **** Code folding
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! origami)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
-(use-package! origami
-  :bind (("C-<tab>" . origami-recursively-toggle-node)
+(after! prog-mode
+  (use-package! origami
+    :bind (("C-<tab>" . origami-recursively-toggle-node)
            ("C-<iso-lefttab>" . origami-toggle-all-nodes))
-  :hook 'prog-mode-hook)
+    :hook 'prog-mode-hook))
 #+END_SRC
 **** Smartparens for paredit functionality is many different programming language modes
 #+BEGIN_SRC emacs-lisp
-(use-package! smartparens-config
-  :config
-  ;; For lisp modes
-  (sp-with-modes sp--lisp-modes
-    ;; disable ', it's the quote character!
-    (sp-local-pair "'" nil :actions nil)
-    ;; also only use the pseudo-quote inside strings where it serve as
-    ;; hyperlink.
-    (sp-local-pair "`" "'" :when '(sp-in-string-p sp-in-comment-p))
-    (sp-local-pair "`" nil
-                   :skip-match
-                   (lambda (ms mb me)
-                     (cond
-                      ((equal ms "'")
-                       (or (sp--org-skip-markup ms mb me)
-                           (not (sp-point-in-string-or-comment))))
-                      (t (not (sp-point-in-string-or-comment)))))))
-  (sp-with-modes 'org-mode
-    (sp-local-pair "\\[" "\\]")
-    (sp-local-pair "$" "$")
-    (sp-local-pair "'" "'" :actions '(rem))
-    (sp-local-pair "=" "=" :actions '(rem))
-    (sp-local-pair "\\left(" "\\right)" :trigger "\\l(" :post-handlers '(sp-latex-insert-spaces-inside-pair))
-    (sp-local-pair "\\left[" "\\right]" :trigger "\\l[" :post-handlers '(sp-latex-insert-spaces-inside-pair))
-    (sp-local-pair "\\left\\{" "\\right\\}" :trigger "\\l{" :post-handlers '(sp-latex-insert-spaces-inside-pair))
-    (sp-local-pair "\\left|" "\\right|" :trigger "\\l|" :post-handlers '(sp-latex-insert-spaces-inside-pair))))
+(after! prog-mode
+  (use-package! smartparens-config
+    :config
+    ;; For lisp modes
+    (sp-with-modes sp--lisp-modes
+      ;; disable ', it's the quote character!
+      (sp-local-pair "'" nil :actions nil)
+      ;; also only use the pseudo-quote inside strings where it serve as
+      ;; hyperlink.
+      (sp-local-pair "`" "'" :when '(sp-in-string-p sp-in-comment-p))
+      (sp-local-pair "`" nil
+                     :skip-match
+                     (lambda (ms mb me)
+                       (cond
+                        ((equal ms "'")
+                         (or (sp--org-skip-markup ms mb me)
+                             (not (sp-point-in-string-or-comment))))
+                        (t (not (sp-point-in-string-or-comment)))))))
+    (sp-with-modes 'org-mode
+      (sp-local-pair "\\[" "\\]")
+      (sp-local-pair "$" "$")
+      (sp-local-pair "'" "'" :actions '(rem))
+      (sp-local-pair "=" "=" :actions '(rem))
+      (sp-local-pair "\\left(" "\\right)" :trigger "\\l(" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+      (sp-local-pair "\\left[" "\\right]" :trigger "\\l[" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+      (sp-local-pair "\\left\\{" "\\right\\}" :trigger "\\l{" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+      (sp-local-pair "\\left|" "\\right|" :trigger "\\l|" :post-handlers '(sp-latex-insert-spaces-inside-pair)))))
 #+END_SRC
 **** Match parenthesis/brackets
 #+BEGIN_SRC emacs-lisp
-(defun my/match-paren (arg)
-  "Go to the matching paren if on a paren; otherwise insert normally."
-  (interactive "p")
-  (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
-        ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
-        (t (self-insert-command (or arg 1)))))
+(after! prog-mode
+  (defun my/match-paren (arg)
+    "Go to the matching paren if on a paren; otherwise insert normally."
+    (interactive "p")
+    (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
+          ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
+          (t (self-insert-command (or arg 1))))))
 (map! :map prog-mode-map
       :g "<backtab>" 'my/match-paren)
 #+END_SRC
@@ -653,33 +649,35 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 (package! lisp-extra-font-lock)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
-(use-package! lisp-extra-font-lock)
+(after! prog-mode (use-package! lisp-extra-font-lock))
 #+END_SRC
 ** Common Lisp
 *** Settings
 #+BEGIN_SRC emacs-lisp :tangle +common-lisp.el
-(use-package! aggressive-indent)
-(use-package! company-quickhelp)
-(add-hook! 'lisp-mode-hook
-           #'smartparens-strict-mode
-           #'aggressive-indent-mode
-           #'lisp-extra-font-lock-mode
-           #'company-quickhelp-mode)
-(after! sly
-  (setq! sly-lisp-implementations
-         '((sbcl ("~/programs/bin/ros" "-L" "sbcl" "-Q" "run") :coding-system utf-8-unix)
-           (clisp ("~/programs/bin/ros" "-L" "clisp" "-Q" "run"))
-           (clozure-cl ("~/programs/bin/ros" "-L" "ccl-bin" "-Q" "run"))
-           (cmucl ("~/programs/bin/ros" "-L" "cmu-bin" "-Q" "run"))
-           (ecl ("~/programs/bin/ros" "-L" "ecl" "-Q" "run") :coding-system utf-8-unix)
-           (abcl ("~/programs/bin/ros" "-L" "abcl-bin" "-Q" "run"))))
-  (add-hook! 'sly-mrepl-hook #'company-quickhelp-mode))
+(after! prog-mode
+  (use-package! aggressive-indent)
+  (use-package! company-quickhelp)
+  (add-hook! 'lisp-mode-hook
+             #'smartparens-strict-mode
+             #'aggressive-indent-mode
+             #'lisp-extra-font-lock-mode
+             #'company-quickhelp-mode)
+  (after! sly
+    (setq! sly-lisp-implementations
+           '((sbcl ("~/programs/bin/ros" "-L" "sbcl" "-Q" "run") :coding-system utf-8-unix)
+             (clisp ("~/programs/bin/ros" "-L" "clisp" "-Q" "run"))
+             (clozure-cl ("~/programs/bin/ros" "-L" "ccl-bin" "-Q" "run"))
+             (cmucl ("~/programs/bin/ros" "-L" "cmu-bin" "-Q" "run"))
+             (ecl ("~/programs/bin/ros" "-L" "ecl" "-Q" "run") :coding-system utf-8-unix)
+             (abcl ("~/programs/bin/ros" "-L" "abcl-bin" "-Q" "run"))))
+    (add-hook! 'sly-mrepl-hook #'company-quickhelp-mode)))
 #+END_SRC
 **** Hyperspec lookup
 Open CL REPL and execute: ~(ql:quickload "clhs")~, then follow instructions.
 ~C-c C-d h~ on common lisp directive, and it should open the definition in the default web browser.
 #+BEGIN_SRC emacs-lisp
-(load! "/home/thawes/.roswell/lisp/quicklisp/clhs-use-local.el")
+(after! lisp-mode
+  (load! "/home/thawes/.roswell/lisp/quicklisp/clhs-use-local.el"))
 (map! :after sly
       :map lisp-mode-map
       :g "C-c C-d h" #'sly-documentation-lookup)
