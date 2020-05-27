@@ -108,6 +108,26 @@ Here are some additional functions/macros that could help you configure Doom:
 To get information about any of these functions/macros, move the cursor over the highlighted symbol at press 'K' (non-evil users must press 'C-c g k'). This will open documentation for it, including demos of how they are used.
 
 You can also try 'gd' (or 'C-c g d') to jump to their definition and see how they are implemented.
+* My Functions/Macros
+This will kill the buffer and return back to the last buffer visited, when you stop running a program in a terminal.
+#+BEGIN_SRC emacs-lisp
+(defadvice term-handle-exit
+    (after term-kill-buffer-on-exit activate)
+  (kill-buffer)
+  (switch-to-buffer (car (car (window-prev-buffers)))))
+#+END_SRC
+These are some convenience functions for programs I run often.
+#+BEGIN_SRC emacs-lisp
+(defun aptitude ()
+  "Run Aptitude"
+    (interactive)
+    (ansi-term "aptitude"))
+
+(defun htop ()
+  "Run Htop"
+  (interactive)
+  (ansi-term "htop"))
+#+END_SRC
 * Emacs Frame Manager
 The purpose of this module is managing Emacs windows in an environment without using EXWM. This will offer functions an emacsclient can run conditioned on the current state of the window, and fast terminal access within Emacs. This will work with X11, not sure what the implications are for Cocoa or Windows.
 ** Setup
