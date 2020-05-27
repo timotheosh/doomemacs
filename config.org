@@ -722,6 +722,7 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
 (package! anaconda-mode :ignore t)
 (package! python-mode)
 (package! jedi)
+(package! pydoc)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! python
@@ -729,6 +730,10 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
   (use-package! jedi
     :commands jedi:setup)
   (use-package! lsp-pyls)
+  (use-package! pydoc
+    :config
+    (map! :map 'python-mode-map
+          :g "C-c C-h" #'pydoc-at-point))
   (add-hook! 'python-mode-hook #'auto-virtualenv-set-virtualenv #'lsp-deferred)
   (setq! py-ipython-command-args '("--automagic" "--simple-prompt")
          jedi:complete-on-dot t)
