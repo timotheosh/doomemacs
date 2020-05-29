@@ -427,7 +427,8 @@ Use Gmail in gnus
 #+END_SRC
 *** Modules
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
-(add-to-list 'eshell-modules-list 'eshell-tramp 'esh-opt)
+(after! eshell
+  (add-to-list 'eshell-modules-list 'eshell-tramp 'esh-opt))
 #+END_SRC
 *** Preferred functions and variables
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
