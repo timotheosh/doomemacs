@@ -327,87 +327,103 @@ Use Gmail in gnus
 (setq! venv-location "~/.virtualenvs/")
 #+END_SRC
 *** Settings
+**** Directory path for eshell-directory-name
+#+BEGIN_SRC emacs-lisp
+(after! eshell
+  (setq! eshell-directory-name (concat doom-private-dir "eshell")))
+#+END_SRC
 **** Custom magit commands in eshell
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
-(defun eshell/mgit (&rest args)
-  "Using magit in eshell"
-  (eshell-eval-using-options
-   "mgit" args
-   '((?s "status" nil status "Show git status for repo.")
-     (?l "log" nil log "Show git log for all branches")
-     (nil "help" nil nil "Show this usage information")
-     :show-usage)
-   (eshell-do-eval
-    (eshell-parse-command
-     (cond
-      (status "magit-status")
-      (log "magit-log-all-branches")))
-    t)))
+(after! eshell
+  (defun eshell/mgit (&rest args)
+    "Using magit in eshell"
+    (eshell-eval-using-options
+     "mgit" args
+     '((?s "status" nil status "Show git status for repo.")
+       (?l "log" nil log "Show git log for all branches")
+       (nil "help" nil nil "Show this usage information")
+       :show-usage)
+     (eshell-do-eval
+      (eshell-parse-command
+       (cond
+        (status "magit-status")
+        (log "magit-log-all-branches")))
+      t))))
 #+END_SRC
 **** Custom dpkg commands in eshell
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
-(defun eshell/deb (&rest args)
-  "deb command for eshell"
-  (eshell-eval-using-options
-   "deb" args
-   '((?f "find" t find "list available packages matching a pattern")
-     (?i "installed" t installed "list installed debs matching a pattern")
-     (?l "list-files" t list-files "list files of a package")
-     (?s "show" t show "show an available package")
-     (?v "version" t version "show the version of an installed package")
-     (?w "where" t where "find the package containing the given file")
-     (nil "help" nil nil "show this usage information")
-     :show-usage)
-   (eshell-do-eval
-    (eshell-parse-command
-     (cond
-      (find
-       (format "apt-cache search %s" find))
-      (installed
-       (format "dlocate -l %s | grep '^.i'" installed))
-      (list-files
-       (format "dlocate -L %s | sort" list-files))
-      (show
-       (format "apt-cache show %s" show))
-      (version
-       (format "dlocate -s %s | egrep '^(Package|Status|Version):'" version))
-      (where
-       (format "dlocate %s" where))))
-    t)))
+(after! eshell
+  (defun eshell/deb (&rest args)
+    "deb command for eshell"
+    (eshell-eval-using-options
+     "deb" args
+     '((?f "find" t find "list available packages matching a pattern")
+       (?i "installed" t installed "list installed debs matching a pattern")
+       (?l "list-files" t list-files "list files of a package")
+       (?s "show" t show "show an available package")
+       (?v "version" t version "show the version of an installed package")
+       (?w "where" t where "find the package containing the given file")
+       (nil "help" nil nil "show this usage information")
+       :show-usage)
+     (eshell-do-eval
+      (eshell-parse-command
+       (cond
+        (find
+         (format "apt-cache search %s" find))
+        (installed
+         (format "dlocate -l %s | grep '^.i'" installed))
+        (list-files
+         (format "dlocate -L %s | sort" list-files))
+        (show
+         (format "apt-cache show %s" show))
+        (version
+         (format "dlocate -s %s | egrep '^(Package|Status|Version):'" version))
+        (where
+         (format "dlocate %s" where))))
+      t))))
 #+END_SRC
 **** Eshell history settings
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
-(setq eshell-history-size 1024)
+(after! eshell
+  (setq eshell-history-size 1024)
 
-(load "em-hist")           ; So the history vars are defined
-(if (boundp 'eshell-save-history-on-exit)
-    (setq eshell-save-history-on-exit t)) ; Don't ask, just save
-                                        ;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
-(if (boundp 'eshell-ask-to-save-history)
-    (setq eshell-ask-to-save-history 'always)) ; For older(?) version
-                                        ;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
+  ; So the history vars are defined
+  (load "em-hist")
+
+  ;; Don't ask, just save
+  ;;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
+  (if (boundp 'eshell-save-history-on-exit)
+      (setq eshell-save-history-on-exit t))
+
+  ;; For older(?) version
+  ;;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
+  (if (boundp 'eshell-ask-to-save-history)
+      (setq eshell-ask-to-save-history 'always))
+)
 #+END_SRC
 **** Tramp settings for eshell
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
-(require 'esh-module) ;; load tramp functions into eshell
+(after! eshell
+  (use-package! esh-module)) ;; load tramp functions into eshell
 #+END_SRC
 **** Custom prompt
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! eshell-prompt-extras)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
-(use-package! eshell-prompt-extras
-  :config
-  ;; for virtualenvwrapper stuff
-  (with-eval-after-load "esh-opt"
-    (require 'virtualenvwrapper)
-    (venv-initialize-eshell)
-    (autoload 'epe-theme-lambda "eshell-prompt-extras")
-    (setq eshell-highlight-prompt nil
-          eshell-prompt-function 'epe-theme-lambda
-          eshell-prompt-regexp "^[^#\nλ]*[#λ] "
-          epe-show-python-info t
-          epe-path-style 'single)))
+(after! eshell
+  (use-package! eshell-prompt-extras
+    :config
+    ;; for virtualenvwrapper stuff
+    (with-eval-after-load "esh-opt"
+      (require 'virtualenvwrapper)
+      (venv-initialize-eshell)
+      (autoload 'epe-theme-lambda "eshell-prompt-extras")
+      (setq eshell-highlight-prompt nil
+            eshell-prompt-function 'epe-theme-lambda
+            eshell-prompt-regexp "^[^#\nλ]*[#λ] "
+            epe-show-python-info t
+            epe-path-style 'single))))
 #+END_SRC
 *** Modules
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
@@ -415,57 +431,63 @@ Use Gmail in gnus
 #+END_SRC
 *** Preferred functions and variables
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
-(setq eshell-prefer-lisp-functions t)
-(setq eshell-prefer-lisp-variables t)
+(after! eshell
+  (setq eshell-prefer-lisp-functions t)
+  (setq eshell-prefer-lisp-variables t))
 #+END_SRC
 *** Password caching
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
-(setq password-cache t) ; enable password caching
-(setq password-cache-expiry 300) ; for 5 minutes (time in secs)
+(after! eshell
+  (setq password-cache t) ; enable password caching
+  (setq password-cache-expiry 300)) ; for 5 minutes (time in secs)
 #+END_SRC
 *** Progress bar for apt in minibuffer
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
 ;; Progress bars, like apt in the status/echo area
-(advice-add
- 'ansi-color-apply-on-region
- :before 'ora-ansi-color-apply-on-region)
+(after! eshell
+  (advice-add
+   'ansi-color-apply-on-region
+   :before 'ora-ansi-color-apply-on-region)
 
-(defun ora-ansi-color-apply-on-region (begin end)
-  "Fix progress bars for e.g. apt(8).
-Display progress in the mode line instead."
-  (let ((end-marker (copy-marker end))
-        mb)
-    (save-excursion
-      (goto-char (copy-marker begin))
-      (while (re-search-forward "\0337" end-marker t)
-        (setq mb (match-beginning 0))
-        (when (re-search-forward "\0338" end-marker t)
-          (ora-apt-progress-message
-           (substring-no-properties
-            (delete-and-extract-region mb (point))
-            2 -2)))))))
+  (defun ora-ansi-color-apply-on-region (begin end)
+    "Fix progress bars for e.g. apt(8).
+     Display progress in the mode line instead."
+    (let ((end-marker (copy-marker end))
+          mb)
+      (save-excursion
+        (goto-char (copy-marker begin))
+        (while (re-search-forward "\0337" end-marker t)
+          (setq mb (match-beginning 0))
+          (when (re-search-forward "\0338" end-marker t)
+            (ora-apt-progress-message
+             (substring-no-properties
+              (delete-and-extract-region mb (point))
+              2 -2)))))))
 
-(defun ora-apt-progress-message (progress)
-  (message
-   (replace-regexp-in-string
-    "%" "%%"
-    (ansi-color-apply progress))))
+  (defun ora-apt-progress-message (progress)
+    (message
+     (replace-regexp-in-string
+      "%" "%%"
+      (ansi-color-apply progress))))
+)
 #+END_SRC
 *** Visual commands
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
 ;; Visual commands
 ;; defaults are ("vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")
-(setq eshell-visual-commands '("vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm"))
-(dolist (cmd '("tmux" "aptitude" "aws-shell" "neofetch" "htop"))
-  (add-to-list 'eshell-visual-commands cmd))
+(after! eshell
+  (setq eshell-visual-commands '("vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm"))
+  (dolist (cmd '("tmux" "aptitude" "aws-shell" "neofetch" "htop"))
+    (add-to-list 'eshell-visual-commands cmd)))
 #+END_SRC
 *** Use Emacs completion package for Eshell
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
 ;; Uses the default Emacs completion package for tab-complete in eshell.
-(add-hook 'eshell-mode-hook
-          (lambda ()
-            (define-key eshell-mode-map (kbd "<tab>")
-              (lambda () (interactive) (pcomplete-std-complete)))))
+;;(after! eshell
+;;  (add-hook! 'eshell-mode-hook
+;;            (lambda ()
+;;              (define-key eshell-mode-map (kbd "<tab>")
+;;                (lambda () (interactive) (pcomplete-std-complete))))))
 #+END_SRC
 *** Load Eshell Settings
 #+BEGIN_SRC emacs-lisp

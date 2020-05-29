@@ -11,6 +11,10 @@
 # Undo-tree save-files
 *.~undo-tree
 
+# Eshell residue
+eshell/history
+eshell/lastdir
+
 # tangled files
 +*
 config.el
