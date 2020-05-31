@@ -132,6 +132,8 @@ These are some convenience functions for programs I run often.
   (interactive)
   (let ((input (split-string (read-string "run command: "))))
     (make-process :name "run-program" :buffer nil :command input)))
+
+(map! "C-!" #'run-program)
 #+END_SRC
 * Emacs Frame Manager
 The purpose of this module is managing Emacs windows in an environment without using EXWM. This will offer functions an emacsclient can run conditioned on the current state of the window, and fast terminal access within Emacs. This will work with X11, not sure what the implications are for Cocoa or Windows.
