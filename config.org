@@ -127,6 +127,11 @@ These are some convenience functions for programs I run often.
   "Run Htop"
   (interactive)
   (ansi-term "htop"))
+
+(defun run-program ()
+  (interactive)
+  (let ((input (split-string (read-string "run command: "))))
+    (make-process :name "run-program" :buffer nil :command input)))
 #+END_SRC
 * Emacs Frame Manager
 The purpose of this module is managing Emacs windows in an environment without using EXWM. This will offer functions an emacsclient can run conditioned on the current state of the window, and fast terminal access within Emacs. This will work with X11, not sure what the implications are for Cocoa or Windows.
@@ -296,8 +301,8 @@ Use Gmail in gnus
 (after! vterm
   (use-package! multi-vterm)
   (map! "C-M-<right>" 'multi-vterm-next
-        "C-M-<left>" 'multi-vterm-prev)
-  (defalias 'multi-term 'multi-vterm))
+        "C-M-<left>" 'multi-vterm-prev))
+(defalias 'multi-term 'multi-vterm)
 #+END_SRC
 ** Eshell
 *** Packages
