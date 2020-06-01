@@ -22,6 +22,7 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
 #+END_SRC
 * Global
 #+BEGIN_SRC emacs-lisp
+;;(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
 (setq! show-paren-mode 1)
 #+END_SRC
 * Appearance
@@ -111,23 +112,35 @@ You can also try 'gd' (or 'C-c g d') to jump to their definition and see how the
 * My Functions/Macros
 This will kill the buffer and return back to the last buffer visited, when you stop running a program in a terminal.
 #+BEGIN_SRC emacs-lisp
-(defadvice term-handle-exit
-    (after term-kill-buffer-on-exit activate)
-  (kill-buffer)
-  (switch-to-buffer (car (car (window-prev-buffers)))))
+;;(defadvice term-handle-exit
+;;    (after term-kill-buffer-on-exit activate)
+;;  (kill-buffer)
+;;  (switch-to-buffer (car (car (window-prev-buffers)))))
 #+END_SRC
 These are some convenience functions for programs I run often.
 #+BEGIN_SRC emacs-lisp
+(defun multi-term-program (program)
+  "Make a multi-term buffer running program."
+  (let ((multi-term-program program))
+    (multi-term)))
+
 (defun aptitude ()
   "Run Aptitude"
     (interactive)
-    (ansi-term "aptitude"))
+    (multi-term-program "aptitude"))
 
 (defun htop ()
   "Run Htop"
   (interactive)
-  (ansi-term "htop"))
+  (multi-term-program "htop"))
 
+(defun neofetch ()
+  (interactive)
+  (ansi-term "neofetch"))
+
+#+END_SRC
+This is for running arbitrary programs I don't run often.
+#+BEGIN_SRC emacs-lisp
 (defun run-program ()
   (interactive)
   (let ((input (split-string (read-string "run command: "))))
@@ -304,7 +317,7 @@ Use Gmail in gnus
   (use-package! multi-vterm)
   (map! "C-M-<right>" 'multi-vterm-next
         "C-M-<left>" 'multi-vterm-prev))
-(defalias 'multi-term 'multi-vterm)
+;;(defalias 'multi-term 'multi-vterm)
 #+END_SRC
 ** Eshell
 *** Packages
@@ -784,7 +797,9 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
     :config
     (map! :map 'python-mode-map
           :g "C-c C-h" #'pydoc-at-point))
-  (add-hook! 'python-mode-hook #'auto-virtualenv-set-virtualenv #'lsp-deferred)
+  (add-hook! 'python-mode-hook
+             #'auto-virtualenv-set-virtualenv
+             #'lsp-deferred)
   (setq! py-ipython-command-args '("--automagic" "--simple-prompt")
          jedi:complete-on-dot t)
   (map! :map 'python-mode-map
