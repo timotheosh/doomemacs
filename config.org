@@ -351,6 +351,8 @@ Use Gmail in gnus
 #+BEGIN_SRC emacs-lisp
 (after! eshell
   (setq! eshell-directory-name (concat doom-private-dir "eshell")))
+(after! eshell-z
+  (setq! eshell-directory-name (concat doom-private-dir "eshell")))
 #+END_SRC
 **** Custom magit commands in eshell
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
