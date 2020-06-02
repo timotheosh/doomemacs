@@ -352,8 +352,6 @@ Use Gmail in gnus
 #+BEGIN_SRC emacs-lisp
 (after! eshell
   (setq! eshell-directory-name (concat doom-private-dir "eshell")))
-(after! eshell-z
-  (setq! eshell-directory-name (concat doom-private-dir "eshell")))
 #+END_SRC
 **** Custom magit commands in eshell
 #+BEGIN_SRC emacs-lisp :tangle +eshell.el
@@ -771,7 +769,8 @@ Open CL REPL and execute: ~(ql:quickload "clhs")~, then follow instructions.
 ~C-c C-d h~ on common lisp directive, and it should open the definition in the default web browser.
 #+BEGIN_SRC emacs-lisp
 (after! lisp-mode
-  (load! "/home/thawes/.roswell/lisp/quicklisp/clhs-use-local.el"))
+  (when (file-exists-p "/home/thawes/.roswell/lisp/quicklisp/clhs-use-local.el")
+    (load! "/home/thawes/.roswell/lisp/quicklisp/clhs-use-local.el")))
 (map! :after sly
       :map lisp-mode-map
       :g "C-c C-d h" #'sly-documentation-lookup)
