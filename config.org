@@ -317,7 +317,7 @@ Use Gmail in gnus
 (after! vterm
   (use-package! multi-vterm)
   (map! "C-M-<right>" 'multi-vterm-next
-        "C-M-<left>" 'multi-vterm-prev))
+          "C-M-<left>" 'multi-vterm-prev))
 ;;(defalias 'multi-term 'multi-vterm)
 #+END_SRC
 ** Eshell
@@ -350,7 +350,7 @@ Use Gmail in gnus
 *** Settings
 **** Directory path for eshell-directory-name
 #+BEGIN_SRC emacs-lisp
-(after! eshell
+(after! eshell-z
   (setq! eshell-directory-name (concat doom-private-dir "eshell")))
 #+END_SRC
 **** Custom magit commands in eshell
