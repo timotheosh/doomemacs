@@ -303,6 +303,27 @@ Use Gmail in gnus
    ("." . eww-browse-url)))
 #+END_SRC
 * Pcomplete
+** apt
+#+BEGIN_SRC emacs-lisp
+(defconst pcmpl-apt-commands
+  '("autoclean" "clean" "full-upgrade" "policy" "show"
+    "autopurge" "depends" "help" "purge" "showsrc"
+    "autoremove" "dist-upgrade" "install" "rdepends" "source"
+    "build-dep" "download" "list" "remove" "update"
+    "changelog" "edit-sources" "moo" "search" "upgrade"))
+(defun pcomplete/apt ()
+  (pcomplete-here* pcmpl-apt-commands))
+#+END_SRC
+** apt-get
+#+BEGIN_SRC emacs-lisp
+(defconst pcmpl-apt-get-commands
+  '("autoclean" "check" "dselect-upgrade" "remove"
+    "autoremove" "clean" "indextargets" "source" "moo"
+    "build-dep" "dist-upgrade" "install" "update"
+    "changelog" "download" "purge" "upgrade"))
+(defun pcomplete/apt-get ()
+  (pcomplete-here* pcmpl-apt-get-commands))
+#+END_SRC
 ** exercism
 #+BEGIN_SRC emacs-lisp
 (defconst pcmpl-exercism-commands
