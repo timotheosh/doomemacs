@@ -142,10 +142,10 @@ These are some convenience functions for programs I run often.
 #+END_SRC
 This is for running arbitrary programs I don't run often.
 #+BEGIN_SRC emacs-lisp
-(defun run-program ()
-  (interactive)
-  (let ((input (split-string (read-string "run command: "))))
-    (make-process :name "run-program" :buffer nil :command input)))
+(defun run-program (input)
+  (interactive
+   (list (split-string (read-shell-command "run command: "))))
+  (make-process :name "run-program" :buffer nil :command input))
 
 (map! "C-!" #'run-program)
 #+END_SRC
