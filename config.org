@@ -598,7 +598,7 @@ Use Gmail in gnus
 ;; defaults are ("vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")
 (after! eshell
   (setq eshell-visual-commands '("vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm"))
-  (dolist (cmd '("tmux" "aptitude" "aws-shell" "neofetch" "htop"))
+  (dolist (cmd '("tmux" "aptitude" "aws-shell" "neofetch" "htop" "radeontop"))
     (add-to-list 'eshell-visual-commands cmd)))
 #+END_SRC
 *** Use Emacs completion package for Eshell
