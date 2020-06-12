@@ -25,6 +25,7 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
 ;;(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
 (setq! show-paren-mode 1
        doom-scratch-initial-major-mode t)
+(setq! auth-sources '("~/.authinfo.gpg"))
 #+END_SRC
 * Appearance
 ** Fonts
@@ -622,11 +623,17 @@ Use Gmail in gnus
 ** Org files location
 If you use `org' and don't want your org files in the default location below, change `org-directory'. It must be set before org loads!
 #+BEGIN_SRC emacs-lisp
-(setq org-directory "~/org")
+(setq! org-directory "~/org")
 #+END_SRC
 ** Basic Config
 #+BEGIN_SRC emacs-lisp
-(setq org-startup-folded t)
+(setq! org-startup-folded t)
+#+END_SRC
+** Keymap for org-mode
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (map! :map org-mode-map
+        :g (kbd "<C-down-mouse-1>") #'org-open-at-point))
 #+END_SRC
 ** Org modules
 *** Github Flavored Markdown
@@ -930,4 +937,10 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
          jedi:complete-on-dot t)
   (map! :map 'python-mode-map
         :g "C-c C-c" #'py-execute-buffer-ipython))
+#+END_SRC
+**
+** Clojure
+#+BEGIN_SRC emacs-lisp
+(add-hook! 'clojure-mode-hook #'lsp-deferred)
+(add-hook! 'clojurescript-mode-hook #'lsp-deferred)
 #+END_SRC

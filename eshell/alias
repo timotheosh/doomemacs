@@ -7,3 +7,4 @@ alias update-token /home/thawes/.virtualenvs/devops_utils/bin/devops_utils -e $1
 alias vi find-file $1
 alias vim find-file $1
 alias sudo eshell/sudo $*
+alias less view-file $1
