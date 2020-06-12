@@ -623,11 +623,17 @@ Use Gmail in gnus
 ** Org files location
 If you use `org' and don't want your org files in the default location below, change `org-directory'. It must be set before org loads!
 #+BEGIN_SRC emacs-lisp
-(setq org-directory "~/org")
+(setq! org-directory "~/org")
 #+END_SRC
 ** Basic Config
 #+BEGIN_SRC emacs-lisp
-(setq org-startup-folded t)
+(setq! org-startup-folded t)
+#+END_SRC
+** Keymap for org-mode
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (map! :map org-mode-map
+        :g (kbd "<C-down-mouse-1>") #'org-open-at-point))
 #+END_SRC
 ** Org modules
 *** Github Flavored Markdown
