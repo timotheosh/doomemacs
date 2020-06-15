@@ -154,22 +154,9 @@ This is for running arbitrary programs I don't run often.
 #+END_SRC
 * Emacs Frame Manager
 The purpose of this module is managing Emacs windows in an environment without using EXWM. This will offer functions an emacsclient can run conditioned on the current state of the window, and fast terminal access within Emacs. This will work with X11, not sure what the implications are for Cocoa or Windows.
-** Setup
-We'll need to load this file.
-#+BEGIN_SRC emacs-lisp
-(load! "+emacs-frame-manager")
-#+END_SRC
-Setup the heading for this file
-#+BEGIN_SRC emacs-lisp :tangle +emacs-frame-manager.el
-;; Copyright (C) 2020 Tim Hawes <thawes@gmail.com>
-;; Maintainer: Tim Hawes
-;; Created: 15 May 2020
-;; Version: 0.01
-#+END_SRC
-
 ** Frame Names
 First, we set up unique names for the X Window names, so we can easily reference these windows in an X Window environment. The names have random numbers, to make them easier to isolate among many windows in an X environment.
-   #+BEGIN_SRC emacs-lisp :tangle +emacs-frame-manager.el
+   #+BEGIN_SRC emacs-lisp
 (defvar efm/frame-name "emacs-frame-manager998")
 (defvar efm/shell-name "emacs-frame-manager336")
 (defvar efm/org-name "emacs-frame-manager920")
@@ -181,11 +168,11 @@ The default buffer to load.
 #+END_SRC
 ** Extra frames
 When emacs runs in daemon mode under systemd, emacsclient can, and sometimes will, create extra frames when you execute a command with emacsclient that does not need a frame, before any frames have been opened, and then execute emacsclient with a new frame. We keep track of legitimate frames, so we can just delete the unneeded frames. If you add new frames above that you intend to use, be sure to add them to this list, so they do not get inadvertently deleted.
-   #+BEGIN_SRC emacs-lisp :tangle +emacs-frame-manager.el
+   #+BEGIN_SRC emacs-lisp
 (defvar efm/legit-frames (list efm/frame-name efm/shell-name efm/org-name "F1"))
    #+END_SRC
 - Now the utility functions
-  #+BEGIN_SRC emacs-lisp :tangle +emacs-frame-manager.el
+  #+BEGIN_SRC emacs-lisp
 (defun efm/list-illegite-frames ()
   "Lists visible illegitimate frames. Essentially all frames not in the efm/legit-frames list and is visible."
   (remove-if
@@ -202,7 +189,7 @@ When emacs runs in daemon mode under systemd, emacsclient can, and sometimes wil
   #+END_SRC
 ** Frame management
 Utility functions for frame management. These find frames, suspend frames, raise frames and maximize frames.
-#+BEGIN_SRC emacs-lisp :tangle +emacs-frame-manager.el
+#+BEGIN_SRC emacs-lisp
 
 (defun efm/find-frame (frame-name)
   "Returns a list of frames with frame-name."
@@ -270,7 +257,7 @@ Utility functions for frame management. These find frames, suspend frames, raise
 ** Email
 Use Gmail in gnus
 *** Settings
-#+BEGIN_SRC emacs-lisp :tangle +email.el
+#+BEGIN_SRC emacs-lisp
 (setq!
  send-mail-function 'smtpmail-send-it
  message-send-mail-function 'smtpmail-send-it
@@ -286,9 +273,6 @@ Use Gmail in gnus
  starttls-extra-arguments nil
  starttls-use-gnutls t
  )
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
-(load! "+email")
 #+END_SRC
 ** Web browser
 *** Settings
@@ -454,7 +438,7 @@ Use Gmail in gnus
   (setq! eshell-directory-name (concat doom-private-dir "eshell")))
 #+END_SRC
 **** Custom magit commands in eshell
-#+BEGIN_SRC emacs-lisp :tangle +eshell.el
+#+BEGIN_SRC emacs-lisp
 (after! eshell
   (defun eshell/mgit (&rest args)
     "Using magit in eshell"
@@ -472,7 +456,7 @@ Use Gmail in gnus
       t))))
 #+END_SRC
 **** Custom dpkg commands in eshell
-#+BEGIN_SRC emacs-lisp :tangle +eshell.el
+#+BEGIN_SRC emacs-lisp
 (after! eshell
   (defun eshell/deb (&rest args)
     "deb command for eshell"
@@ -504,7 +488,7 @@ Use Gmail in gnus
       t))))
 #+END_SRC
 **** Eshell history settings
-#+BEGIN_SRC emacs-lisp :tangle +eshell.el
+#+BEGIN_SRC emacs-lisp
 (after! eshell
   (setq eshell-history-size 1024)
 
@@ -523,7 +507,7 @@ Use Gmail in gnus
 )
 #+END_SRC
 **** Tramp settings for eshell
-#+BEGIN_SRC emacs-lisp :tangle +eshell.el
+#+BEGIN_SRC emacs-lisp
 (after! eshell
   (use-package! esh-module)) ;; load tramp functions into eshell
 #+END_SRC
@@ -531,7 +515,7 @@ Use Gmail in gnus
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! eshell-prompt-extras)
 #+END_SRC
-#+BEGIN_SRC emacs-lisp :tangle +eshell.el
+#+BEGIN_SRC emacs-lisp
 (after! eshell
   (use-package! eshell-prompt-extras
     :config
@@ -547,24 +531,24 @@ Use Gmail in gnus
             epe-path-style 'single))))
 #+END_SRC
 *** Modules
-#+BEGIN_SRC emacs-lisp :tangle +eshell.el
+#+BEGIN_SRC emacs-lisp
 (after! eshell
   (add-to-list 'eshell-modules-list 'eshell-tramp 'esh-opt))
 #+END_SRC
 *** Preferred functions and variables
-#+BEGIN_SRC emacs-lisp :tangle +eshell.el
+#+BEGIN_SRC emacs-lisp
 (after! eshell
   (setq eshell-prefer-lisp-functions t)
   (setq eshell-prefer-lisp-variables t))
 #+END_SRC
 *** Password caching
-#+BEGIN_SRC emacs-lisp :tangle +eshell.el
+#+BEGIN_SRC emacs-lisp
 (after! eshell
   (setq password-cache t) ; enable password caching
   (setq password-cache-expiry 300)) ; for 5 minutes (time in secs)
 #+END_SRC
 *** Progress bar for apt in minibuffer
-#+BEGIN_SRC emacs-lisp :tangle +eshell.el
+#+BEGIN_SRC emacs-lisp
 ;; Progress bars, like apt in the status/echo area
 (after! eshell
   (advice-add
@@ -594,7 +578,7 @@ Use Gmail in gnus
 )
 #+END_SRC
 *** Visual commands
-#+BEGIN_SRC emacs-lisp :tangle +eshell.el
+#+BEGIN_SRC emacs-lisp
 ;; Visual commands
 ;; defaults are ("vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")
 (after! eshell
@@ -603,17 +587,13 @@ Use Gmail in gnus
     (add-to-list 'eshell-visual-commands cmd)))
 #+END_SRC
 *** Use Emacs completion package for Eshell
-#+BEGIN_SRC emacs-lisp :tangle +eshell.el
+#+BEGIN_SRC emacs-lisp
 ;; Uses the default Emacs completion package for tab-complete in eshell.
 ;;(after! eshell
 ;;  (add-hook! 'eshell-mode-hook
 ;;            (lambda ()
 ;;              (define-key eshell-mode-map (kbd "<tab>")
 ;;                (lambda () (interactive) (pcomplete-std-complete))))))
-#+END_SRC
-*** Load Eshell Settings
-#+BEGIN_SRC emacs-lisp
-(load! "+eshell.el")
 #+END_SRC
 ** Shell-pop
 #+BEGIN_SRC emacs-lisp
@@ -849,7 +829,7 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 #+END_SRC
 ** Common Lisp
 *** Settings
-#+BEGIN_SRC emacs-lisp :tangle +common-lisp.el
+#+BEGIN_SRC emacs-lisp
 (after! prog-mode
   (use-package! aggressive-indent)
   (use-package! company-quickhelp)
@@ -892,13 +872,9 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
 ;;                     :server-id 'cl-lsp))
 ;;   (add-hook 'lisp-mode-hook 'lsp-deferred)
 #+END_SRC
-*** Load
-#+BEGIN_SRC emacs-lisp
-(load! "+common-lisp")
-#+END_SRC
 ** Emacs Lisp
 *** Settings
-#+BEGIN_SRC emacs-lisp :tangle +emacs-lisp.el
+#+BEGIN_SRC emacs-lisp
 (after! emacs-lisp
   (add-to-list 'company-backends 'company-elisp))
 (add-hook! 'emacs-lisp-mode-hook
@@ -907,10 +883,6 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
            #'aggressive-indent-mode
            #'lisp-extra-font-lock-mode
            #'company-quickhelp-mode)
-#+END_SRC
-*** Load Settings
-#+BEGIN_SRC emacs-lisp
-(load! "+emacs-lisp.el")
 #+END_SRC
 ** Python
 #+BEGIN_SRC emacs-lisp :tangle packages.el
@@ -943,4 +915,42 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
 #+BEGIN_SRC emacs-lisp
 (add-hook! 'clojure-mode-hook #'lsp-deferred)
 (add-hook! 'clojurescript-mode-hook #'lsp-deferred)
+#+END_SRC
+** HTML
+*** Impatience mode for realtime editing of html
+**** Package
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+;;(package! impatient-mode :recipe '(:host github :repo "skeeto/impatient-mode"))
+(package! impatient-mode)
+#+END_SRC
+**** Hooks
+#+BEGIN_SRC emacs-lisp
+(add-hook! 'mhtml-mode-hook #'impatient-mode)
+(add-hook! 'css-mode-hook #'impatient-mode)
+#+END_SRC
+
+#+RESULTS:
+| impatient-mode | doom--enable-+javascript-npm-mode-in-css-mode-h |
+
+** Javascript
+*** Websocket
+Needed by Indium
+**** Package
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! websocket :recipe
+  '(:host github :repo "ahyatt/emacs-websocket")
+  :pin "491a60b")
+#+END_SRC
+*** Indium
+**** Package
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! indium :recipe
+  '(:host github :repo "NicolasPetton/Indium")
+  :pin "9614d63")
+#+END_SRC
+**** Configuration
+#+BEGIN_SRC emacs-lisp
+(after! js2-mode
+  (use-package! websocket)
+  (use-package! indium))
 #+END_SRC
