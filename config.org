@@ -648,7 +648,7 @@ If you use `org' and don't want your org files in the default location below, ch
 (after! org
   (use-package! ob-racket))
 #+END_SRC
-*** 
+*** Jira
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! org-jira)
 #+END_SRC
