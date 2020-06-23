@@ -661,8 +661,21 @@ If you use `org' and don't want your org files in the default location below, ch
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! org
-  (use-package! org-jira))
+  (use-package! org-jira
+    :init
+    (setq! jiralib-url "https://inindca.atlassian.net"
+           org-jira-working-dir (concat
+                                  (if (boundp 'doom-private-dir)
+                                      doom-private-dir
+                                    user-emacs-directory) "jira")))
+  (when (not (file-directory-p org-jira-working-dir))
+    (make-directory org-jira-working-dir)))
 #+END_SRC
+
+#+RESULTS:
+: #s(hash-table size 65 test eql rehash-size 1.5 rehash-threshold 0.8125 data (:use-package (24304 48648 678493 531000) :init (24304 48648 678489 300000) :config (24304 48648 678484 629000) :config-secs (0 0 175 571000) :init-secs (0 0 682 642000) :use-package-secs (0 0 690 304000)))
+
+***
 *** Projectile
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! org-projectile)
