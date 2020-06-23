@@ -664,11 +664,6 @@ If you use `org' and don't want your org files in the default location below, ch
   (when (not (file-directory-p org-jira-working-dir))
     (make-directory org-jira-working-dir)))
 #+END_SRC
-
-#+RESULTS:
-: #s(hash-table size 65 test eql rehash-size 1.5 rehash-threshold 0.8125 data (:use-package (24304 48648 678493 531000) :init (24304 48648 678489 300000) :config (24304 48648 678484 629000) :config-secs (0 0 175 571000) :init-secs (0 0 682 642000) :use-package-secs (0 0 690 304000)))
-
-***
 *** Projectile
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! org-projectile)
@@ -719,6 +714,23 @@ If you use `org' and don't want your org files in the default location below, ch
 (add-hook! 'org-mode-hook
            #'visual-line-mode
            #'org-indent-mode)
+#+END_SRC
+*** obtt
+obtt is an acronym for "org-babel-tangle templates".
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! obtt :recipe (:host github :repo "timotheosh/obtt"))
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (use-package! obtt
+    :init
+    (setq! obtt-templates-dir (concat
+                                  (if (boundp 'doom-private-dir)
+                                      doom-private-dir
+                                    user-emacs-directory) "obtt")
+           obtt-seed-name ".obtt")))
+(when (not (file-directory-p obtt-templates-dir))
+    (make-directory obtt-templates-dir))
 #+END_SRC
 ** Org-Roam
 #+BEGIN_SRC emacs-lisp
