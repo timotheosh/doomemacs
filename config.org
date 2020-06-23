@@ -601,6 +601,13 @@ Use Gmail in gnus
 #+BEGIN_SRC emacs-lisp
 (map! "<f3>" '+eshell/toggle)
 #+END_SRC
+* Deft
+#+BEGIN_SRC emacs-lisp
+(setq! deft-extensions '("org" "md" "txt" "tex"))
+(setq! deft-directory "~/Dropbox/notes")
+(setq! deft-recursive t)
+(map! "<f8>" 'deft)
+#+END_SRC
 * Org-mode
 ** Org files location
 If you use `org' and don't want your org files in the default location below, change `org-directory'. It must be set before org loads!
