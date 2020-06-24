@@ -108,6 +108,10 @@ docs/.jekyll-metadata
 resources/public/workspaces/*
 !resources/public/workspaces/index.html
 #+END_SRC
+** dir-locals
+#+BEGIN_SRC emacs-lisp :tangle ./.dir-locals.el
+((nil . ((cider-clojure-cli-parameters . "-A:dev -J-Dtrace -J-Dghostwheel.enabled=true -m nrepl.cmdline --middleware '%s'"))))
+#+END_SRC
 ** Makefile
 #+BEGIN_SRC Makefile :tangle ./Makefile
 test:
