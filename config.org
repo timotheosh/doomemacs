@@ -782,6 +782,7 @@ Settings for Elfeed rss feed reader
             ("http://pragmaticemacs.com/feed/" blog emacs)
             ("https://stackoverflow.com/feeds/tag?tagnames=emacs&sort=newest" stackoverflow emacs)
             ("https://www.reddit.com/r/emacs.rss" reddit technology emacs)
+            ("https://planet.emacslife.com/atom.xml" technology emacs)
             ("https://www.reddit.com/r/lisp.rss" reddit technology lisp)
             ("https://www.reddit.com/r/clojure.rss" reddit technology lisp clojure)
             ("https://www.reddit.com/r/Racket.rss" reddit technology lisp racket)
