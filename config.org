@@ -123,6 +123,15 @@ This will kill the buffer and return back to the last buffer visited, when you s
 #+END_SRC
 These are some convenience functions for programs I run often.
 #+BEGIN_SRC emacs-lisp
+(defun system-distribution()
+  (if (and (string= system-type "gnu/linux")
+           (executable-find "lsb_release"))
+      (replace-regexp-in-string ;; NixOS echos extraneous quotes in lsb_release
+       "\\W" ""
+       (car (split-string (shell-command-to-string "lsb_release -sd"))))
+    system-type))
+(setq! system-distro (system-distribution))
+
 (defun multi-term-program (program)
   "Make a multi-term buffer running program."
   (let ((multi-term-program program))
@@ -130,8 +139,8 @@ These are some convenience functions for programs I run often.
 
 (defun aptitude ()
   "Run Aptitude"
-    (interactive)
-    (multi-term-program "aptitude"))
+  (interactive)
+  (multi-term-program "aptitude"))
 
 (defun htop ()
   "Run Htop"
@@ -399,6 +408,8 @@ Use Gmail in gnus
 (package! multi-vterm)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
+(when (string= system-distro "NixOS")
+  (add-load-path! "~/.nix-profile/share/emacs/site-lisp/elpa/vterm-20200107.1419"))
 (after! vterm
   (use-package! multi-vterm)
   (map! "C-M-<right>" 'multi-vterm-next
