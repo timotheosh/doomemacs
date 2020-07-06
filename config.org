@@ -206,7 +206,7 @@ Utility functions for frame management. These find frames, suspend frames, raise
   "Returns a list of frames with frame-name."
   (remove-if-not
    (lambda (x)
-     (string= (frame-parameter x 'frame-name) frame-name))
+     (string= (frame-parameter x 'name) frame-name))
    (frame-list)))
 
 (defun efm/maximized-p (frame)
