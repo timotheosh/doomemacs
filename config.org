@@ -36,7 +36,7 @@ Doom exposes five (optional) variables for controlling fonts in Doom. Here are t
 They all accept either a font-spec, font string ("Input Mono-12"), or xlfd font string. You generally only need these two:
 #+BEGIN_SRC emacs-lisp
 ;;(setq doom-font (font-spec :family "Iosevka Term" :size 18))
-(setq doom-font (font-spec :family "Roboto Mono" :size 14))
+(setq doom-font (font-spec :family "Roboto Mono" :size 16))
 ;;(setq doom-variable-pitch-font (font-spec :family "Roboto Mono" :size 18))
 #+END_SRC
 ** Theme
@@ -1000,4 +1000,26 @@ Needed by Indium
 (after! js2-mode
   (use-package! websocket)
   (use-package! indium))
+#+END_SRC
+
+** Groovy
+Just for Jenkinsfile support
+*** package
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! groovy-mode)
+#+END_SRC
+
+** Jenkinsfile
+*** package
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! jenkinsfile-mode :recipe (:host github :repo "john2x/jenkinsfile-mode")
+  :pin "96a3927")
+#+END_SRC
+*** load
+#+BEGIN_SRC emacs-lisp
+(use-package! jenkinsfile-mode
+  :mode (("Jenkinsfile" . jenkinsfile-mode)
+         ("\\.jenkinsfile\\'" . jenkinsfile-mode))
+  :config
+  (setq! groovy-indent-offset 2))
 #+END_SRC
