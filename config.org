@@ -39,6 +39,18 @@ They all accept either a font-spec, font string ("Input Mono-12"), or xlfd font 
 (setq doom-font (font-spec :family "Roboto Mono" :size 16))
 ;;(setq doom-variable-pitch-font (font-spec :family "Roboto Mono" :size 18))
 #+END_SRC
+** Mixed-pitch Fonts
+*** Package
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! mixed-pitch)
+#+END_SRC
+*** Config
+#+BEGIN_SRC emacs-lisp
+(use-package! mixed-pitch
+  :config
+  (setq! mixed-pitched-variable-pitch-cursor 'bar))
+(add-hook! 'text-mode-hook #'mixed-pitch-mode)
+#+END_SRC
 ** Theme
 There are two ways to load a theme. Both assume the theme is installed and available. You can either set ~doom-theme~ or manually load a theme with the ~load-theme~ function. This is the default:
 #+BEGIN_SRC emacs-lisp
