@@ -49,7 +49,6 @@ only need these two:
 (use-package! mixed-pitch
   :config
   (setq! mixed-pitched-variable-pitch-cursor 'bar))
-(add-hook! 'org-mode-hook #'mixed-pitch-mode)
 #+END_SRC
 ** Olivetti Mode
 *** Package
@@ -59,7 +58,6 @@ only need these two:
 *** Config
 #+BEGIN_SRC emacs-lisp
 (use-package! olivetti)
-(add-hook! 'org-mode-hook #'olivetti-mode)
 #+END_SRC
 ** Theme
 There are two ways to load a theme. Both assume the theme is installed and available. You can either set ~doom-theme~ or manually load a theme with the ~load-theme~ function. This is the default:
@@ -136,6 +134,7 @@ To get information about any of these functions/macros, move the cursor over the
 
 You can also try 'gd' (or 'C-c g d') to jump to their definition and see how they are implemented.
 * My Functions/Macros
+** Terminal program ends
 This will kill the buffer and return back to the last buffer visited, when you stop running a program in a terminal.
 #+BEGIN_SRC emacs-lisp
 ;;(defadvice term-handle-exit
@@ -143,6 +142,7 @@ This will kill the buffer and return back to the last buffer visited, when you s
 ;;  (kill-buffer)
 ;;  (switch-to-buffer (car (car (window-prev-buffers)))))
 #+END_SRC
+** Programs I run
 These are some convenience functions for programs I run often.
 #+BEGIN_SRC emacs-lisp
 (defun system-distribution()
@@ -172,6 +172,11 @@ These are some convenience functions for programs I run often.
 (defun neofetch ()
   (interactive)
   (ansi-term "neofetch"))
+#+END_SRC
+** Disable line numbers function
+#+BEGIN_SRC emacs-lisp
+(defun disable-line-numbers ()
+  (display-line-numbers-mode -1))
 #+END_SRC
 * Run program
 This is for running arbitrary programs I don't run often.
@@ -752,9 +757,12 @@ If you use `org' and don't want your org files in the default location below, ch
 #+END_SRC
 *** Settings
 #+BEGIN_SRC emacs-lisp
+(setq! org-hide-emphasis-markers t)
 (add-hook! 'org-mode-hook
-           #'visual-line-mode
-           #'org-indent-mode)
+  #'disable-line-numbers
+  #'org-indent-mode
+  #'mixed-pitch-mode
+  #'olivetti-mode)
 #+END_SRC
 *** obtt
 obtt is an acronym for "org-babel-tangle templates".
