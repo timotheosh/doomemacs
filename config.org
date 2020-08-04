@@ -36,7 +36,6 @@ Doom exposes five (optional) variables for controlling fonts in Doom. Here are t
 They all accept either a font-spec, font string ("Input Mono-12"), or xlfd font string. You generally
 only need these two:
 #+BEGIN_SRC emacs-lisp
-;;(setq doom-font (font-spec :family "Iosevka Term" :size 18))
 (setq doom-font (font-spec :family "Iosevka Fixed" :size 18))
 (setq doom-variable-pitch-font (font-spec :family "ETBookOT"))
 #+END_SRC
@@ -50,7 +49,17 @@ only need these two:
 (use-package! mixed-pitch
   :config
   (setq! mixed-pitched-variable-pitch-cursor 'bar))
-(add-hook! 'text-mode-hook #'mixed-pitch-mode)
+(add-hook! 'org-mode-hook #'mixed-pitch-mode)
+#+END_SRC
+** Olivetti Mode
+*** Package
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! olivetti)
+#+END_SRC
+*** Config
+#+BEGIN_SRC emacs-lisp
+(use-package! olivetti)
+(add-hook! 'org-mode-hook #'olivetti-mode)
 #+END_SRC
 ** Theme
 There are two ways to load a theme. Both assume the theme is installed and available. You can either set ~doom-theme~ or manually load a theme with the ~load-theme~ function. This is the default:
