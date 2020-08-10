@@ -327,6 +327,26 @@ Use Gmail in gnus
    ("reddit\\.com" . browse-url-firefox)
    ("." . eww-browse-url)))
 #+END_SRC
+** Search Tools
+*** Google
+**** Package
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! google-this)
+#+END_SRC
+**** Config
+#+BEGIN_SRC emacs-lisp
+(use-package! google-this)
+(google-this-mode 1)
+#+END_SRC
+** UUID
+*** Package
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! uuidgen-el :recipe (:host github :repo "kanru/uuidgen-el"))
+#+END_SRC
+*** Config
+#+BEGIN_SRC emacs-lisp
+(use-package! uuidgen-el)
+#+END_SRC
 * Pcomplete
 ** apt
 #+BEGIN_SRC emacs-lisp
