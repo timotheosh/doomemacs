@@ -341,11 +341,11 @@ Use Gmail in gnus
 ** UUID
 *** Package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! uuidgen-el :recipe (:host github :repo "kanru/uuidgen-el"))
+(package! uuidgen :recipe (:host github :repo "kanru/uuidgen-el"))
 #+END_SRC
 *** Config
 #+BEGIN_SRC emacs-lisp
-(use-package! uuidgen-el)
+(use-package! uuidgen)
 #+END_SRC
 * Pcomplete
 ** apt
@@ -703,6 +703,7 @@ If you use `org' and don't want your org files in the default location below, ch
   (add-hook! 'org-mode-hook #'org-bullets-mode)))
 #+END_SRC
 *** Convert org to OpenOffice
+**** Config
 #+BEGIN_SRC emacs-lisp
 (use-package! ox-odt)
 #+END_SRC
@@ -790,14 +791,13 @@ obtt is an acronym for "org-babel-tangle templates".
 (package! obtt :recipe (:host github :repo "timotheosh/obtt"))
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
+(setq! obtt-templates-dir (concat
+                              (if (boundp 'doom-private-dir)
+                                  doom-private-dir
+                                user-emacs-directory) "obtt")
+       obtt-seed-name ".obtt")
 (after! org
-  (use-package! obtt
-    :init
-    (setq! obtt-templates-dir (concat
-                                  (if (boundp 'doom-private-dir)
-                                      doom-private-dir
-                                    user-emacs-directory) "obtt")
-           obtt-seed-name ".obtt")))
+  (use-package! obtt))
 (when (not (file-directory-p obtt-templates-dir))
     (make-directory obtt-templates-dir))
 #+END_SRC
