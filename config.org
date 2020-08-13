@@ -274,8 +274,9 @@ Utility functions for frame management. These find frames, suspend frames, raise
       (eval (list (intern command)))
     (efm/run-command "doom-buffer"))
   (when skip-taskbar
-    (modify-frame-parameters (car (efm/find-frame name)) '((skip-taskbar t)
-                                                           (undecorated t)))))
+    (modify-frame-parameters (car (efm/find-frame name))
+                             '((skip-taskbar t)
+                               (undecorated t)))))
 
 (defun efm/raise-or-start (name title &optional command toggle skip-taskbar)
   "If frame with name does not exist, create it, otherwise raise, focus and maximize the existing frame."
