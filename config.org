@@ -944,7 +944,10 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
              (cmucl ("~/programs/bin/ros" "-L" "cmu-bin" "-Q" "run"))
              (ecl ("~/programs/bin/ros" "-L" "ecl" "-Q" "run") :coding-system utf-8-unix)
              (abcl ("~/programs/bin/ros" "-L" "abcl-bin" "-Q" "run"))))
-    (add-hook! 'sly-mrepl-hook #'company-quickhelp-mode)))
+    (add-hook! 'sly-mrepl-hook #'company-quickhelp-mode)
+    (map! :map sly-mrepl-mode-map
+          (:g "<C-up>" #'comint-previous-input
+           :g "<C-down>" #'comint-next-input))))
 #+END_SRC
 **** Hyperspec lookup
 Open CL REPL and execute: ~(ql:quickload "clhs")~, then follow instructions.
