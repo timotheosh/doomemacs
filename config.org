@@ -985,6 +985,39 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
            #'lisp-extra-font-lock-mode
            #'company-quickhelp-mode)
 #+END_SRC
+** Gerbil Scheme
+*** Package
+Both Gambit and Gerbil modes are needed. Be sure to install the treadmill server package in order to use treadmill. From the shell, run:
+~gxpkg install github.com/thunknyc/gerbil-treadmill~
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! gambit :recipe
+  (:host github
+   :repo "gambit/gambit"
+   :files ("misc/gambit.el")))
+
+(package! gerbil-mode :recipe
+  (:host github
+   :repo "vyzo/gerbil"
+   :files ("etc/gerbil-mode.el")))
+
+(package! treadmill :recipe
+  (:host github
+         :repo "thunknyc/emacs-treadmill"))
+#+END_SRC
+*** Config
+#+BEGIN_SRC emacs-lisp
+(use-package! gerbil-mode)
+(use-package! gambit)
+(use-package! treadmill)
+(add-hook! 'inferior-scheme-mode-hook #'gambit-inferior-mode)
+(defvar gerbil-home
+  (string-trim (shell-command-to-string (format "dirname $(dirname %s)" (string-trim (shell-command-to-string "which gxi"))))))
+(defvar gerbil-program-name (string-trim (shell-command-to-string "which gxi")))
+(setq! scheme-program-name gerbil-program-name)
+(add-hook! 'gerbil-mode-hook #'treadmill-gerbil-mode)
+(visit-tags-table (concat gerbil-home "/src/TAGS"))
+(visit-tags-table "~/.gerbil/pkg/TAGS")
+#+END_SRC
 ** Python
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! auto-virtualenv)
