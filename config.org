@@ -1006,17 +1006,25 @@ Both Gambit and Gerbil modes are needed. Be sure to install the treadmill server
 #+END_SRC
 *** Config
 #+BEGIN_SRC emacs-lisp
-(use-package! gerbil-mode)
-(use-package! gambit)
-(use-package! treadmill)
-(add-hook! 'inferior-scheme-mode-hook #'gambit-inferior-mode)
-(defvar gerbil-home
-  (string-trim (shell-command-to-string (format "dirname $(dirname %s)" (string-trim (shell-command-to-string "which gxi"))))))
-(defvar gerbil-program-name (string-trim (shell-command-to-string "which gxi")))
-(setq! scheme-program-name gerbil-program-name)
-(add-hook! 'gerbil-mode-hook #'treadmill-gerbil-mode)
-(visit-tags-table (concat gerbil-home "/src/TAGS"))
-(visit-tags-table "~/.gerbil/pkg/TAGS")
+(use-package! gerbil-mode
+  :when (getenv "GERBIL_HOME")
+  :mode (("\\.ss\\'"  . gerbil-mode)
+         ("\\.pkg\\'" . gerbil-mode))
+  :init
+  (map! :map comint-mode-map
+        (:g "<C-up>" #'comint-previous-input
+         :g "<C-down>" #'comint-next-input))
+  (setf gerbil-home (getenv "GERBIL_HOME"))
+  :config
+  (use-package! gambit
+    :config
+    (setf gambit-home (getenv "GAMBIT_HOME"))
+    (add-hook! 'inferior-scheme-mode-hook #'gambit-inferior-mode))
+  (setq! gerbil-program-name (concat gerbil-home "/bin/gxi"))
+  (let ((tags (locate-dominating-file default-directory "TAGS")))
+    (when tags (visit-tags-table tags)))
+  (visit-tags-table (concat gerbil-home "/src/TAGS")))
+
 #+END_SRC
 ** Python
 #+BEGIN_SRC emacs-lisp :tangle packages.el
