@@ -63,8 +63,6 @@ only need these two:
 There are two ways to load a theme. Both assume the theme is installed and available. You can either set ~doom-theme~ or manually load a theme with the ~load-theme~ function. This is the default:
 #+BEGIN_SRC emacs-lisp
 (setq doom-theme 'doom-one)
-(custom-theme-set-faces! 'doom-one
-  '(default :background "#002b36")) ; solarized theme
 #+END_SRC
 ** Set Banner
 #+BEGIN_SRC emacs-lisp
