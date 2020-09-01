@@ -708,6 +708,10 @@ If you use `org' and don't want your org files in the default location below, ch
 #+BEGIN_SRC emacs-lisp
 (use-package! ox-odt)
 #+END_SRC
+*** Conert to s5
+#+BEGIN_SRC emacs-lisp
+(use-package! ox-s5)
+#+END_SRC
 *** Inline Racket
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! ob-racket :recipe (:host github :repo "wallyqs/ob-racket"))
