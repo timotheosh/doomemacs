@@ -708,9 +708,14 @@ If you use `org' and don't want your org files in the default location below, ch
 #+BEGIN_SRC emacs-lisp
 (use-package! ox-odt)
 #+END_SRC
-*** Conert to s5
+*** Convert to revealjs
+**** package
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! org-reveal :recipe (:host github :repo "yjwen/org-reveal"))
+#+END_SRC
+**** config
 #+BEGIN_SRC emacs-lisp
-(use-package! ox-s5)
+(use-package! ox-reveal)
 #+END_SRC
 *** Inline Racket
 #+BEGIN_SRC emacs-lisp :tangle packages.el
