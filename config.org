@@ -811,23 +811,6 @@ obtt is an acronym for "org-babel-tangle templates".
 (when (not (file-directory-p obtt-templates-dir))
     (make-directory obtt-templates-dir))
 #+END_SRC
-** Org-Roam
-#+BEGIN_SRC emacs-lisp
-(let ((roam-dir "~/org/roam"))
-  (when (not (file-exists-p roam-dir))
-    (make-directory roam-dir))
-  (setq! org-roam-directory roam-dir))
-(add-hook! 'after-init-hook 'org-roam-mode)
-(use-package! org-roam-protocol)
-(after! org-roam
-  (setq! org-roam-capture-templates
-         '(("d" "default" plain #'org-roam-capture--get-point
-            "%?"
-            :file-name "%<%Y%m%d%H%M%S>-${slug}"
-            :head "#+TITLE: ${title}"
-            "%i"
-            :unnarrowed t))))
-#+END_SRC
 * RSS Reader
 Settings for Elfeed rss feed reader
 #+BEGIN_SRC emacs-lisp
