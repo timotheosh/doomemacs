@@ -792,8 +792,7 @@ If you use `org' and don't want your org files in the default location below, ch
 (add-hook! 'org-mode-hook
   #'disable-line-numbers
   #'org-indent-mode
-  #'mixed-pitch-mode
-  #'olivetti-mode)
+  #'mixed-pitch-mode)
 #+END_SRC
 *** obtt
 obtt is an acronym for "org-babel-tangle templates".
