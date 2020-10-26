@@ -1043,7 +1043,6 @@ Both Gambit and Gerbil modes are needed. Be sure to install the treadmill server
   (map! :map 'python-mode-map
         :g "C-c C-c" #'py-execute-buffer-ipython))
 #+END_SRC
-**
 ** Clojure
 #+BEGIN_SRC emacs-lisp
 (add-hook! 'clojure-mode-hook #'lsp-deferred)
@@ -1064,6 +1063,16 @@ Both Gambit and Gerbil modes are needed. Be sure to install the treadmill server
 
 #+RESULTS:
 | impatient-mode | doom--enable-+javascript-npm-mode-in-css-mode-h |
+** Markdown
+*** Impatient mode for realtime editing of markdown
+#+BEGIN_SRC emacs-lisp
+(defun markdown-html-filter (buffer)
+  (princ (with-current-buffer buffer
+           (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
+         (current-buffer)))
+(add-hook! 'markdown-mode-hook #'impatient-mode
+  (lambda () (imp-set-user-filter #'markdown-html-filter)))     
+#+END_SRC
 
 ** Javascript
 *** Websocket
