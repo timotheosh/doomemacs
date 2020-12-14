@@ -725,6 +725,14 @@ If you use `org' and don't want your org files in the default location below, ch
 (after! org
   (use-package! ob-racket))
 #+END_SRC
+*** Ansible
+#+begin_src emacs-lisp :tangle packages.el
+(package! ob-ansible :recipe (:host github :repo "timotheosh/ob-ansible"))
+#+end_src
+#+begin_src emacs-lisp
+(after! org
+  (use-package! ob-ansible))
+#+end_src
 *** Jira
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! org-jira)
@@ -781,10 +789,6 @@ If you use `org' and don't want your org files in the default location below, ch
 (if (string= system-name "scholasticus")
     (setq! org-agenda-files (file-expand-wildcards "~/org/GTD/work/*.org"))
   (setq! org-agenda-files (file-expand-wildcards "~/org/GTD/home/*.org")))
-#+END_SRC
-*** Templates
-#+BEGIN_SRC emacs-lisp
-
 #+END_SRC
 *** Settings
 #+BEGIN_SRC emacs-lisp
@@ -868,6 +872,7 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
     :hook 'prog-mode-hook))
 #+END_SRC
 **** Smartparens for paredit functionality is many different programming language modes
+***** Config
 #+BEGIN_SRC emacs-lisp
 (after! prog-mode
   (use-package! smartparens-config
@@ -897,6 +902,56 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
       (sp-local-pair "\\left\\{" "\\right\\}" :trigger "\\l{" :post-handlers '(sp-latex-insert-spaces-inside-pair))
       (sp-local-pair "\\left|" "\\right|" :trigger "\\l|" :post-handlers '(sp-latex-insert-spaces-inside-pair)))))
 #+END_SRC
+***** Key Bindings
+#+begin_src emacs-lisp
+(map! :map smartparens-mode-map
+      (:g "C-M-a" #'sp-beginning-of-sexp
+       :g "C-M-e" #'sp-end-of-sexp
+
+       ;;:g "C-<down>" #'sp-down-sexp) ;; Conflicts with REPL bindings
+       ;;:g "C-<up>"   #'sp-up-sexp)   ;; Conflicts with REPL bindings
+       :g "M-<down>" #'sp-backward-down-sexp
+       :g "M-<up>"   #'sp-backward-up-sexp
+
+       :g "C-M-f" #'sp-forward-sexp
+       :g "C-M-b" #'sp-backward-sexp
+
+       :g "C-M-n" #'sp-next-sexp
+       :g "C-M-p" #'sp-previous-sexp
+
+       :g "C-S-f" #'sp-forward-symbol
+       :g "C-S-b" #'sp-backward-symbol
+
+       :g "C-<right>" #'sp-forward-slurp-sexp
+       :g "M-<right>" #'sp-forward-barf-sexp
+       :g "C-<left>"  #'sp-backward-slurp-sexp
+       :g "M-<left>"  #'sp-backward-barf-sexp
+
+       :g "C-M-t" #'sp-transpose-sexp
+       :g "C-M-k" #'sp-kill-sexp
+       :g "C-k"   #'sp-kill-hybrid-sexp
+       :g "M-k"   #'sp-backward-kill-sexp
+       :g "C-M-w" #'sp-copy-sexp
+
+       :g "C-M-d" #'delete-sexp
+
+       :g "M-<backspace>" #'backward-kill-word
+       :g "C-<backspace>" #'sp-backward-kill-word
+       :g [remap sp-backward-kill-word] #'backward-kill-word
+
+       :g "M-[" #'sp-backward-unwrap-sexp
+       :g "M-]" #'sp-unwrap-sexp
+
+       :g "C-x C-t" #'sp-transpose-hybrid-sexp
+
+       :g "C-c :g "  #'wrap-with-parens
+       :g "C-c ["  #'wrap-with-brackets
+       :g "C-c {"  #'wrap-with-braces
+       :g "C-c '"  #'wrap-with-single-quotes
+       :g "C-c \"" #'wrap-with-double-quotes
+       :g "C-c _"  #'wrap-with-underscores
+       :g "C-c `"  #'wrap-with-back-quotes))
+#+end_src
 **** Match parenthesis/brackets
 #+BEGIN_SRC emacs-lisp
 (after! prog-mode
@@ -1045,7 +1100,11 @@ Both Gambit and Gerbil modes are needed. Be sure to install the treadmill server
 #+END_SRC
 ** Clojure
 #+BEGIN_SRC emacs-lisp
-(add-hook! 'clojure-mode-hook #'lsp-deferred)
+(add-hook! 'clojure-mode-hook
+           #'lsp-deferred
+           #'smartparens-strict-mode
+           #'aggressive-indent-mode
+           #'lisp-extra-font-lock-mode)
 (add-hook! 'clojurescript-mode-hook #'lsp-deferred)
 #+END_SRC
 ** HTML
