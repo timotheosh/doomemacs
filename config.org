@@ -942,15 +942,7 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
        :g "M-[" #'sp-backward-unwrap-sexp
        :g "M-]" #'sp-unwrap-sexp
 
-       :g "C-x C-t" #'sp-transpose-hybrid-sexp
-
-       :g "C-c :g "  #'wrap-with-parens
-       :g "C-c ["  #'wrap-with-brackets
-       :g "C-c {"  #'wrap-with-braces
-       :g "C-c '"  #'wrap-with-single-quotes
-       :g "C-c \"" #'wrap-with-double-quotes
-       :g "C-c _"  #'wrap-with-underscores
-       :g "C-c `"  #'wrap-with-back-quotes))
+       :g "C-x C-t" #'sp-transpose-hybrid-sexp))
 #+end_src
 **** Match parenthesis/brackets
 #+BEGIN_SRC emacs-lisp
