@@ -213,12 +213,12 @@ When emacs runs in daemon mode under systemd, emacsclient can, and sometimes wil
   #+BEGIN_SRC emacs-lisp
 (defun efm/list-illegite-frames ()
   "Lists visible illegitimate frames. Essentially all frames not in the efm/legit-frames list and is visible."
-  (remove-if
+  (cl-remove-if
    (lambda (x)
      (seq-find (lambda (y)
                  (string= y
                           (frame-parameter x 'name))) efm/legit-frames))
-   (remove-if-not 'frame-visible-p (frame-list))))
+   (cl-remove-if-not 'frame-visible-p (frame-list))))
 
 (defun efm/kill-illegite-frames ()
   "Deletes the extra visible frames."
@@ -231,7 +231,7 @@ Utility functions for frame management. These find frames, suspend frames, raise
 
 (defun efm/find-frame (frame-name)
   "Returns a list of frames with frame-name."
-  (remove-if-not
+  (cl-remove-if-not
    (lambda (x)
      (string= (frame-parameter x 'name) frame-name))
    (frame-list)))
