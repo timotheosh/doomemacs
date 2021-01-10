@@ -22,7 +22,7 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
 #+END_SRC
 * Global
 #+BEGIN_SRC emacs-lisp
-;;(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
+(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
 (setq! show-paren-mode 1
        doom-scratch-initial-major-mode t)
 (setq! auth-sources '("~/.authinfo.gpg"))
