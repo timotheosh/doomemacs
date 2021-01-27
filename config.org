@@ -1068,11 +1068,14 @@ Both Gambit and Gerbil modes are needed. Be sure to install the treadmill server
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! auto-virtualenv)
 (package! anaconda-mode :ignore t)
-(package! python-mode)
+(package! elpy)
 (package! jedi)
 (package! pydoc)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
+(use-package! elpy
+  :init
+  (elpy-enable))
 (after! python
   (use-package! auto-virtualenv)
   (use-package! jedi
