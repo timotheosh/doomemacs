@@ -1,5 +1,6 @@
 # -*- mode: org -*-
 #+TITLE: obtt-lisp
+#+PROPERTY: header-args :tangle yes :mkdirp yes
 
 A slightly modified quickproject-ish template.
 

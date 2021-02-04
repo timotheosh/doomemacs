@@ -1,5 +1,6 @@
 # -*- mode: org -*-
 #+TITLE: obtt-fulcro
+#+PROPERTY: header-args :tangle yes :mkdirp yes
 
 Taken from the Fulcro project template in github.
 

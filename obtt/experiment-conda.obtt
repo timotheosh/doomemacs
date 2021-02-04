@@ -1,5 +1,6 @@
 # -*- mode: org -*-
 #+TITLE: obtt-experiment-conda
+#+PROPERTY: header-args :tangle yes :mkdirp yes
 
 This is a snakemake + conda based template for experimental projects. Heavily
 inspired by other /data science/ templates.

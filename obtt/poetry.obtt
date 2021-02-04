@@ -1,5 +1,6 @@
 # -*- mode: org -*-
 #+TITLE: obtt-poetry
+#+PROPERTY: header-args :tangle yes :mkdirp yes
 
 This is a template very similar to default project template in poetry. We will
 first setup few variables.
