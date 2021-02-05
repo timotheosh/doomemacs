@@ -1,0 +1,233 @@
+# -*- mode: org -*-
+#+TITLE: $1
+#+PROPERTY: header-args :tangle yes :mkdirp yes
+
+* Variables
+
+- Name :: $1
+- Description :: $2
+
+* README
+#+BEGIN_SRC org :tangle ./README.org
+#+TITLE: $1
+
+$2
+#+END_SRC
+
+* License
+I default to MIT
+#+BEGIN_SRC fundamental :tangle ./LICENSE
+MIT License
+
+Copyright (c) 2020 Fulcrologic, LLC
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+#+END_SRC
+
+* Project files
+** gitignore
+#+BEGIN_SRC fundamental :tangle ./.gitignore
+*~
+*.iml
+*.log
+*.sw?
+*.swp
+*jar
+.DS_Store
+.cljs_rhino_repl
+.idea
+.lein*
+.lein-deps-sum
+.lein-env
+.lein-failures
+.lein-plugins/
+.lein-repl-history
+.nrepl*
+.nrepl-port
+.repl
+bin/publish-local
+checkouts
+classes
+compiled
+datahub.log*
+docs/.asciidoctor/
+docs/basic-db.png
+docs/mutations.png
+examples/calendar/resources/public/js/specs
+examples/calendar/src/quiescent_model
+examples/todo/src/quiescent_model
+figwheel_server.log
+lib
+node_modules
+out
+pom.xml
+pom.xml*
+pom.xml.asc
+resources/private/js
+resources/public/js
+resources/public/js/cards
+resources/public/js/test
+target
+resources/public/getting-started.html
+resources/public/.asciidoctor/
+resources/public/*.png
+package-lock.json
+docs/_site
+docs/.sass-cache
+docs/Gemfile.lock
+docs/js/[a-fh-su-z]*
+docs/js/goog
+docs/js/garden
+old-docs/.asciidoctor
+old-docs/plumbing.png
+DevelopersGuide.html
+docs/.jekyll-metadata
+.floo
+.flooignore
+.asciidoctor
+/ReferenceGuide.html
+.cpcache
+.shadow-cljs
+resources/public/workspaces/*
+!resources/public/workspaces/index.html
+#+END_SRC
+** dir-locals
+#+BEGIN_SRC emacs-lisp :tangle ./.dir-locals.el
+((nil . ((cider-clojure-cli-parameters . "-A:dev -J-Dtrace -J-Dghostwheel.enabled=true -m nrepl.cmdline --middleware '%s'"))))
+#+END_SRC
+** Makefile
+#+BEGIN_SRC Makefile :tangle ./Makefile
+test:
+	npm install
+	npx shadow-cljs compile ci-tests
+	npx karma start --single-run
+	clj -A:dev:clj-tests
+
+.PHONY: test
+
+#+END_SRC
+** deps.edn
+#+BEGIN_SRC clojure :tangle ./deps.edn
+{:paths   ["src/main" "resources"]
+ :deps    {org.clojure/clojure    {:mvn/version "1.10.1"}
+           com.fulcrologic/fulcro {:mvn/version "3.4.14"}}
+
+ :aliases {:dev {:extra-paths ["src/dev"]
+                 :extra-deps  {org.clojure/clojurescript   {:mvn/version "1.10.742"}
+                               thheller/shadow-cljs        {:mvn/version "2.8.107"}
+                               binaryage/devtools          {:mvn/version "0.9.10"}}}}}
+#+END_SRC
+** shadow-cljs,edn
+#+BEGIN_SRC clojure :tangle ./shadow-cljs.edn
+{:deps     {:aliases [:dev]}
+ :dev-http {8000 "classpath:public"}
+ :builds   {:main {:target     :browser
+                   :output-dir "resources/public/js/main"
+                   :asset-path "/js/main"
+                   :modules    {:main {:init-fn app.client/init
+                                       :entries [app.client]}}
+                   :devtools   {:after-load app.client/refresh
+                                :preloads   [com.fulcrologic.fulcro.inspect.preload]}}}}
+#+END_SRC
+** package.json
+#+BEGIN_SRC json :tangle ./package.json
+{
+  "name": "$1",
+  "version": "1.0.0",
+  "description": "$2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "shadow-cljs": "^2.11.17"
+  }
+}
+#+END_SRC
+* Resources
+** favicon.ico
+#+BEGIN_SRC base64 :tangle ./resources/public/favicon.ico.b64
+AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABILAAASCwAAAAAA
+AAAAAAD/////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////7+/v/6+vr/+Pj4//f39//29vb/
+9vb2//X19f/19fX/9vb2//b29v/39/f/+Pj4//n5+f/9/f3///////7////9/v3//P38//z9/P/9
+/f3//f39//z7+//8/f3//Pz8//z8/P/9/f3//f39//39/P/9/Pz//v39/////v//////////////
+///+//7//v/////+/v///////v39///+/v///////////////////v7/////////////////+f36
+/3nMmP9xyZL/8/v2///+////////8ePc/8WMbv/Wrpn///////7+/f////7//vz7/9WtmP/RpIz/
++/b0/9rx4v8nrFj/IqpU/2LBhP/3//3/8+Pd/7+DYv+3cUv/wYZm//37+v///////v38/9Gljf+4
+c07/tnBL/+za0f//////mNiw/yqsWP8jsVz/da53/8mCZf+1dlD/vX9d/+7c0////////vz8/9Gl
+jf+5dVH/uXVR/9exnP///////v7+//////+P2K3/OqBS/8emi//Kj3T/yH9h//Dd1f///////vz8
+/9Gljf+5dVH/uXVR/9Wtl/////////////7////+/f3//v///7TBof/jva3/zKaN/3qqdP/y//3/
+//3+/9Gljf+5dVH/uXVR/9WtmP///////v79///+/v////////////z+/f//////t8Ch/z+eUv8f
+slv/ZsKG/9SjjP+5dlL/uXVR/9WtmP///////v79///+/v/////////////////+/////f79////
+//+P2K3/JahT/5Kcbf/Jim3/tnFM/9WtmP///////v79///+/v//////////////////////////
+///////+/f3//////6PGoP/YtaH/3rmo/9Gmjv///////v79///+/v//////////////////////
+//////////////////////3+/f//////3cKx/9u6qP/+/v3///7+///+/v//////////////////
+////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAA==
+#+END_SRC
+** index.html
+#+BEGIN_SRC html :tangle ./resources/public/index.html
+<html>
+ <meta charset="utf-8">
+  <body>
+    <div id="app"></div>
+    <script src="/js/main/main.js"></script>
+  </body>
+</html>
+#+END_SRC
+* Sources
+*** App
+**** App
+***** client.cljs
+#+BEGIN_SRC clojure :tangle ./src/main/app/client.cljs
+(ns app.client
+  (:require
+    [com.fulcrologic.fulcro.application :as app]
+    [com.fulcrologic.fulcro.components :as comp :refer [defsc]]
+    [com.fulcrologic.fulcro.dom :as dom]))
+
+(defonce app (app/fulcro-app))
+
+(defsc Root [this props]
+  (dom/div "TODO"))
+
+(defn ^:export init
+  "Shadow-cljs sets this up to be our entry-point function. See shadow-cljs.edn `:init-fn` in the modules of the main build."
+  []
+  (app/mount! app Root "app")
+  (js/console.log "Loaded"))
+
+(defn ^:export refresh
+  "During development, shadow-cljs will call this on every hot reload of source. See shadow-cljs.edn"
+  []
+  ;; re-mounting will cause forced UI refresh, update internals, etc.
+  (app/mount! app Root "app")
+  ;; As of Fulcro 3.3.0, this addition will help with stale queries when using dynamic routing:
+  (comp/refresh-dynamic-queries! app)
+  (js/console.log "Hot reload"))
+#+END_SRC
