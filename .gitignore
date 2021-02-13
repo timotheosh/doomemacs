@@ -24,3 +24,6 @@ modules/
 
 # Directories managed by Emacs
 jira/
+
+# Lua LSP
+EmmyLua-LS-all.jar

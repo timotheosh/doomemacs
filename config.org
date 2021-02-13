@@ -1064,6 +1064,36 @@ Both Gambit and Gerbil modes are needed. Be sure to install the treadmill server
   (visit-tags-table (concat gerbil-home "/src/TAGS")))
 
 #+END_SRC
+** Lua
+*** Love2d Minor-mode
+**** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! love-minor-mode :recipe
+  (:host github
+   :repo "ejmr/love-minor-mode"))
+#+end_src
+**** Config
+#+begin_src emacs-lisp
+(use-package! love-minor-mode)
+#+end_src
+*** LSP server
+#+begin_src emacs-lisp
+(setq my-emmy-jar-path "/home/thawes/.config/doom/EmmyLua-LS-all.jar")
+(if (file-exists-p my-emmy-jar-path)
+    (setq! lsp-clients-emmy-lua-jar-path my-emmy-jar-path)
+  (message "Need to install EmmyLua-LS-all.jar at " my-emmy-jar-path))
+#+end_src
+** Fennel
+Fennel, a Lisp that compiles to Lua
+*** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! fennel-mode :recipe (:host gitlab :repo "technomancy/fennel-mode"))
+#+end_src
+*** Config
+#+begin_src emacs-lisp
+(use-package! fennel-mode
+  :mode (("\\.fnl\\'"  . fennel-mode)))
+#+end_src
 ** Python
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! auto-virtualenv)
