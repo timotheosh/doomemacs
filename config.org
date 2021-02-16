@@ -685,6 +685,19 @@ If you use `org' and don't want your org files in the default location below, ch
         :g (kbd "<C-down-mouse-1>") #'org-open-at-point))
 #+END_SRC
 ** Org modules
+*** Convert to BBCode
+**** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! ox-bb :recipe
+  (:host github
+   :repo "timotheosh/ox-bb"
+   :branch "world-anvil-bbcode"))
+#+end_src
+**** Config
+#+begin_src emacs-lisp
+(after! org
+  (use-package! ox-bb))
+#+end_src
 *** Github Flavored Markdown
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! ox-gfm)
