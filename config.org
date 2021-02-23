@@ -1149,12 +1149,34 @@ Fennel, a Lisp that compiles to Lua
 *** Impatience mode for realtime editing of html
 **** Package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! web-mode)
 ;;(package! impatient-mode :recipe '(:host github :repo "skeeto/impatient-mode"))
 (package! impatient-mode)
 #+END_SRC
 **** Hooks
 #+BEGIN_SRC emacs-lisp
-(add-hook! 'mhtml-mode-hook #'impatient-mode)
+(use-package! web-mode
+  :mode (("\\.html"        . web-mode)
+         ("\\.htm"         . web-mode)
+         ("\\.mustache\\'" . web-mode)
+         ("\\.phtml\\'"    . web-mode)
+         ("\\.as[cp]x\\'"  . web-mode))
+  :config
+  (setq! web-mode-markup-indent-offset 2)
+  (setq! web-mode-css-indent-offset 2)
+  (setq! web-mode-code-indent-offset 2)
+  (setq! web-mode-comment-style 2)
+  ;;(setq! web-mode-enable-auto-indentation nil)
+  (setq! web-mode-enable-css-colorization t)
+  (setq! web-mode-enable-block-face t)
+  (setq! web-mode-enable-comment-keywords t)
+  (setq! web-mode-enable-heredoc-fontification t)
+
+  (setq! web-mode-enable-auto-quoting t)
+  (setq! web-mode-enable-auto-pairing t)
+  (setq! web-mode-tag-auto-close-style 2))
+
+(add-hook! 'web-mode-hook #'impatient-mode)
 (add-hook! 'css-mode-hook #'impatient-mode)
 #+END_SRC
 
