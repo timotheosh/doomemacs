@@ -122,6 +122,15 @@ explain-pause-mode is very lightweight; you can leave it running all the time. Y
 #+BEGIN_SRC emacs-lisp
 ;;(explain-pause-mode t)
 #+END_SRC
+** Spell-fu
+*** Install
+#+begin_src emacs-lisp :tangle packages.el
+(package! spell-fu)
+#+end_src
+*** Config
+#+begin_src emacs-lisp
+(use-package! spell-fu)
+#+end_src
 * Additional Macros
 Here are some additional functions/macros that could help you configure Doom:
 - ~load!~ for loading external *.el files relative to this one
@@ -1223,6 +1232,12 @@ Just for Jenkinsfile support
 (package! groovy-mode)
 #+END_SRC
 
+** Yaml
+#+begin_src emacs-lisp
+(add-hook! yaml-mode-hook
+  (lambda ()
+    (prettify-symbols-mode 1)))
+#+end_src
 ** Jenkinsfile
 *** package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
