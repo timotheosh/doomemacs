@@ -357,6 +357,21 @@ Use Gmail in gnus
 #+BEGIN_SRC emacs-lisp
 (use-package! uuidgen)
 #+END_SRC
+** Magit
+*** Settings
+**** git path
+Because nix is now installing git from my package choices, I need to make sure my system git is preferred. I will need to change for nonstandard git installs.
+#+begin_src emacs-lisp
+(let ((git-path (split-string (executable-find "git") "/")))
+  (when (member ".nix-profile" git-path)
+    (cond
+     ((file-executable-p "/usr/bin/git") (setq! magit-git-executable "/usr/bin/git"))
+     ((file-executable-p "/user/local/bin/git") (setq! magit-git-executable "/usr/local/bin/git"))
+     ((file-executable-p "/usr/pkg/bin/git") (setq! magit-git-executable "/usr/pkg/bin/git"))
+     (t "default"))))
+#+end_src
+
+
 * Pcomplete
 ** apt
 #+BEGIN_SRC emacs-lisp
