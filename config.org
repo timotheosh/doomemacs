@@ -879,6 +879,16 @@ Settings for Elfeed rss feed reader
             ("https://planet.kde.org/global/atom.xml/" blog desktop kde)
             ("https://www.kdevelop.org/rss.xml" blog desktop kde kdevelop)))))
 #+END_SRC
+* Httpd Server
+We use simple-httpd for emacs, since that comes with impatient-mode.
+** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! simple-httpd)
+#+end_src
+** Config
+#+begin_src emacs-lisp
+(use-package! simple-httpd)
+#+end_src
 * Programming Languages
 ** General
 *** Settings
