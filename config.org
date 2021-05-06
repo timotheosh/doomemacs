@@ -187,6 +187,20 @@ These are some convenience functions for programs I run often.
 (defun disable-line-numbers ()
   (display-line-numbers-mode -1))
 #+END_SRC
+** Functions for xdg desktop environment
+#+begin_src emacs-lisp
+(defun my/xdg-data-dirs ()
+  "Returns a list of xdg-data-dirs. There's a similar function in counsel."
+  (split-string (getenv "XDG_DATA_DIRS") ":"))
+
+(defun my/find-soundfile (file)
+  "Returns the path for a sound file if it is in xdg-data-dirs"
+  (let ((xdg-path (car (seq-filter (lambda (x)
+                                     (file-exists-p (concat x "/sounds/" file)))
+                                   (my/xdg-data-dirs)))))
+    (when xdg-path
+      (concat xdg-path "/sounds/" file))))
+#+end_src
 * Run program
 This is for running arbitrary programs I don't run often.
 #+BEGIN_SRC emacs-lisp
@@ -370,8 +384,6 @@ Because nix is now installing git from my package choices, I need to make sure m
      ((file-executable-p "/usr/pkg/bin/git") (setq! magit-git-executable "/usr/pkg/bin/git"))
      (t "default"))))
 #+end_src
-
-
 * Pcomplete
 ** apt
 #+BEGIN_SRC emacs-lisp
