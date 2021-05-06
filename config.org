@@ -1261,7 +1261,26 @@ Needed by Indium
   (use-package! websocket)
   (use-package! indium))
 #+END_SRC
-
+*** Node-REPL
+**** COMMENT Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! nodejs-repl :recipe (:host github :repo "abicky/nodejs-repl.el"))
+#+end_src
+**** Config
+#+begin_src emacs-lisp
+(after! js2-mode
+  (use-package! nodejs-repl))
+(map! :map js2-mode-map
+      :prefix "C-x"
+      :g "C-e" #'nodejs-repl-send-last-expression)
+(map! :map js2-mode-map
+      :prefix "C-c"
+      :g "C-j" #'nodejs-repl-send-line
+      :g "C-r" #'nodejs-repl-send-region
+      :g "C-c" #'nodejs-repl-send-buffer
+      :g "C-k" #'nodejs-repl-load-file
+      :g "C-z" #'nodejs-repl-switch-to-repl)
+#+end_src
 ** Groovy
 Just for Jenkinsfile support
 *** package
