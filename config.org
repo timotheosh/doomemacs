@@ -905,17 +905,25 @@ We use simple-httpd for emacs, since that comes with impatient-mode.
 ** General
 *** Settings
 **** [[https://github.com/Malabarba/aggressive-indent-mode][Aggressive indent]] for better formatting of code.
+***** Package
 Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! aggressive-indent)
 #+END_SRC
+***** Config
+#+begin_src emacs-lisp
+(after! prog-mode
+  (use-package! aggressive-indent))
+#+end_src
 **** [[https://github.com/company-mode/company-quickhelp][Company-quickhelp]] for on the fly documentation.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! company-quickhelp)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! company
-  (setq! company-quickhelp-delay nil))
+  (use-package! company-quickhelp
+    :init
+    (setq! company-quickhelp-delay nil)))
 (map! :map company-active-map
       :g "C-c h" #'company-quickhelp-manual-begin)
 #+END_SRC
@@ -1011,9 +1019,9 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
     (interactive "p")
     (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
           ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
-          (t (self-insert-command (or arg 1))))))
-(map! :map prog-mode-map
-      :g "<backtab>" 'my/match-paren)
+          (t (self-insert-command (or arg 1)))))
+  (map! :map prog-mode-map
+        :g "<backtab>" 'my/match-paren))
 #+END_SRC
 **** Lisp extra fontlock
 #+BEGIN_SRC emacs-lisp :tangle packages.el
@@ -1022,30 +1030,40 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 #+BEGIN_SRC emacs-lisp
 (after! prog-mode (use-package! lisp-extra-font-lock))
 #+END_SRC
+** Clojure
+#+BEGIN_SRC emacs-lisp
+(add-hook! 'clojure-mode-hook
+           #'lsp-deferred
+           #'smartparens-strict-mode
+           #'aggressive-indent-mode
+           #'lisp-extra-font-lock-mode)
+(add-hook! 'clojurescript-mode-hook #'lsp-deferred)
+#+END_SRC
 ** Common Lisp
 *** Settings
 #+BEGIN_SRC emacs-lisp
-(after! prog-mode
-  (use-package! aggressive-indent)
-  (use-package! company-quickhelp)
-  (add-hook! 'lisp-mode-hook
-             #'smartparens-strict-mode
-             #'aggressive-indent-mode
-             #'lisp-extra-font-lock-mode
-             #'company-quickhelp-mode)
-  (after! sly
-    (setq! sly-lisp-implementations
-           '((sbcl ("~/programs/bin/ros" "-L" "sbcl" "-Q" "run") :coding-system utf-8-unix)
-             (clisp ("~/programs/bin/ros" "-L" "clisp" "-Q" "run"))
-             (clozure-cl ("~/programs/bin/ros" "-L" "ccl-bin" "-Q" "run"))
-             (cmucl ("~/programs/bin/ros" "-L" "cmu-bin" "-Q" "run"))
-             (ecl ("~/programs/bin/ros" "-L" "ecl" "-Q" "run") :coding-system utf-8-unix)
-             (abcl ("~/programs/bin/ros" "-L" "abcl-bin" "-Q" "run"))))
-    (add-hook! 'sly-mrepl-hook #'company-quickhelp-mode)
-    (map! :map sly-mrepl-mode-map
-          (:g "<C-up>" #'comint-previous-input
-           :g "<C-down>" #'comint-next-input))))
+(add-hook! 'lisp-mode-hook
+           #'smartparens-strict-mode
+           #'aggressive-indent-mode
+           #'lisp-extra-font-lock-mode
+           #'company-quickhelp-mode)
+(after! sly
+  (setq! sly-lisp-implementations
+         '((sbcl ("~/programs/bin/ros" "-L" "sbcl" "-Q" "run") :coding-system utf-8-unix)
+           (clisp ("~/programs/bin/ros" "-L" "clisp" "-Q" "run"))
+           (clozure-cl ("~/programs/bin/ros" "-L" "ccl-bin" "-Q" "run"))
+           (cmucl ("~/programs/bin/ros" "-L" "cmu-bin" "-Q" "run"))
+           (ecl ("~/programs/bin/ros" "-L" "ecl" "-Q" "run") :coding-system utf-8-unix)
+           (abcl ("~/programs/bin/ros" "-L" "abcl-bin" "-Q" "run"))))
+  (add-hook! 'sly-mrepl-hook #'company-quickhelp-mode)
+  (map! :map sly-mrepl-mode-map
+        (:g "<C-up>" #'comint-previous-input
+         :g "<C-down>" #'comint-next-input)))
+
 #+END_SRC
+
+#+RESULTS:
+
 **** Hyperspec lookup
 Open CL REPL and execute: ~(ql:quickload "clhs")~, then follow instructions.
 ~C-c C-d h~ on common lisp directive, and it should open the definition in the default web browser.
@@ -1082,6 +1100,18 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
            #'lisp-extra-font-lock-mode
            #'company-quickhelp-mode)
 #+END_SRC
+** Fennel
+Fennel, a Lisp that compiles to Lua
+*** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! fennel-mode :recipe (:host gitlab :repo "technomancy/fennel-mode"))
+#+end_src
+*** Config
+#+begin_src emacs-lisp
+(use-package! fennel-mode
+  :mode (("\\.fnl\\'"  . fennel-mode)))
+#+end_src
+** GDScript
 ** Gerbil Scheme
 *** Package
 Both Gambit and Gerbil modes are needed. Be sure to install the treadmill server package in order to use treadmill. From the shell, run:
@@ -1123,74 +1153,13 @@ Both Gambit and Gerbil modes are needed. Be sure to install the treadmill server
   (visit-tags-table (concat gerbil-home "/src/TAGS")))
 
 #+END_SRC
-** Lua
-*** Love2d Minor-mode
-**** Package
-#+begin_src emacs-lisp :tangle packages.el
-(package! love-minor-mode :recipe
-  (:host github
-   :repo "ejmr/love-minor-mode"))
-#+end_src
-**** Config
-#+begin_src emacs-lisp
-(use-package! love-minor-mode)
-#+end_src
-*** LSP server
-#+begin_src emacs-lisp
-(setq my-emmy-jar-path "/home/thawes/.config/doom/EmmyLua-LS-all.jar")
-(if (file-exists-p my-emmy-jar-path)
-    (setq! lsp-clients-emmy-lua-jar-path my-emmy-jar-path)
-  (message "Need to install EmmyLua-LS-all.jar at " my-emmy-jar-path))
-#+end_src
-** Fennel
-Fennel, a Lisp that compiles to Lua
-*** Package
-#+begin_src emacs-lisp :tangle packages.el
-(package! fennel-mode :recipe (:host gitlab :repo "technomancy/fennel-mode"))
-#+end_src
-*** Config
-#+begin_src emacs-lisp
-(use-package! fennel-mode
-  :mode (("\\.fnl\\'"  . fennel-mode)))
-#+end_src
-** Python
+** Groovy
+Just for Jenkinsfile support
+*** package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! auto-virtualenv)
-(package! anaconda-mode :ignore t)
-(package! elpy)
-(package! jedi)
-(package! pydoc)
+(package! groovy-mode)
 #+END_SRC
-#+BEGIN_SRC emacs-lisp
-(use-package! elpy
-  :init
-  (elpy-enable))
-(after! python
-  (use-package! auto-virtualenv)
-  (use-package! jedi
-    :commands jedi:setup)
-  (use-package! lsp-pyls)
-  (use-package! pydoc
-    :config
-    (map! :map 'python-mode-map
-          :g "C-c C-h" #'pydoc-at-point))
-  (add-hook! 'python-mode-hook
-             #'auto-virtualenv-set-virtualenv
-             #'lsp-deferred)
-  (setq! py-ipython-command-args '("--automagic" "--simple-prompt")
-         jedi:complete-on-dot t)
-  (map! :map 'python-mode-map
-        :g "C-c C-c" #'py-execute-buffer-ipython))
-#+END_SRC
-** Clojure
-#+BEGIN_SRC emacs-lisp
-(add-hook! 'clojure-mode-hook
-           #'lsp-deferred
-           #'smartparens-strict-mode
-           #'aggressive-indent-mode
-           #'lisp-extra-font-lock-mode)
-(add-hook! 'clojurescript-mode-hook #'lsp-deferred)
-#+END_SRC
+
 ** HTML
 *** Impatience mode for realtime editing of html
 **** Package
@@ -1228,17 +1197,8 @@ Fennel, a Lisp that compiles to Lua
 
 #+RESULTS:
 | impatient-mode | doom--enable-+javascript-npm-mode-in-css-mode-h |
-** Markdown
-*** Impatient mode for realtime editing of markdown
-#+BEGIN_SRC emacs-lisp
-(defun markdown-html-filter (buffer)
-  (princ (with-current-buffer buffer
-           (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
-         (current-buffer)))
-(add-hook! 'markdown-mode-hook #'impatient-mode
-  (lambda () (imp-set-user-filter #'markdown-html-filter)))     
-#+END_SRC
 
+** Java
 ** Javascript
 *** Websocket
 Needed by Indium
@@ -1281,19 +1241,6 @@ Needed by Indium
       :g "C-k" #'nodejs-repl-load-file
       :g "C-z" #'nodejs-repl-switch-to-repl)
 #+end_src
-** Groovy
-Just for Jenkinsfile support
-*** package
-#+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! groovy-mode)
-#+END_SRC
-
-** Yaml
-#+begin_src emacs-lisp
-(add-hook! yaml-mode-hook
-  (lambda ()
-    (prettify-symbols-mode 1)))
-#+end_src
 ** Jenkinsfile
 *** package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
@@ -1308,3 +1255,84 @@ Just for Jenkinsfile support
   :config
   (setq! groovy-indent-offset 2))
 #+END_SRC
+** Lua
+*** Love2d Minor-mode
+**** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! love-minor-mode :recipe
+  (:host github
+   :repo "ejmr/love-minor-mode"))
+#+end_src
+**** Config
+#+begin_src emacs-lisp
+(use-package! love-minor-mode)
+#+end_src
+*** LSP server
+#+begin_src emacs-lisp
+(setq my-emmy-jar-path "/home/thawes/.config/doom/EmmyLua-LS-all.jar")
+(if (file-exists-p my-emmy-jar-path)
+    (setq! lsp-clients-emmy-lua-jar-path my-emmy-jar-path)
+  (message "Need to install EmmyLua-LS-all.jar at " my-emmy-jar-path))
+#+end_src
+** Markdown
+*** Impatient mode for realtime editing of markdown
+#+BEGIN_SRC emacs-lisp
+(defun markdown-html-filter (buffer)
+  (princ (with-current-buffer buffer
+           (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
+         (current-buffer)))
+(add-hook! 'markdown-mode-hook #'impatient-mode
+  (lambda () (imp-set-user-filter #'markdown-html-filter)))
+#+END_SRC
+
+** Python
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! auto-virtualenv)
+(package! anaconda-mode :ignore t)
+(package! elpy)
+(package! jedi)
+(package! pydoc)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package! elpy
+  :init
+  (elpy-enable))
+(after! python
+  (use-package! auto-virtualenv)
+  (use-package! jedi
+    :commands jedi:setup)
+  (use-package! lsp-pyls)
+  (use-package! pydoc
+    :config
+    (map! :map 'python-mode-map
+          :g "C-c C-h" #'pydoc-at-point))
+  (add-hook! 'python-mode-hook
+             #'auto-virtualenv-set-virtualenv
+             #'lsp-deferred)
+  (setq! py-ipython-command-args '("--automagic" "--simple-prompt")
+         jedi:complete-on-dot t)
+  (map! :map 'python-mode-map
+        :g "C-c C-c" #'py-execute-buffer-ipython))
+#+END_SRC
+
+** Racket
+*** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! racket-mode :recipe (:host github :repo "greghendershott/racket-mode"))
+#+end_src
+*** Config
+#+begin_src emacs-lisp
+(use-package! racket-mode
+  :config
+  (add-hook! 'racket-mode-hook
+           #'smartparens-strict-mode
+           #'aggressive-indent-mode
+           #'lisp-extra-font-lock-mode
+           #'company-quickhelp-mode))
+#+end_src
+** Yaml
+#+begin_src emacs-lisp
+(add-hook! yaml-mode-hook
+  (lambda ()
+    (prettify-symbols-mode 1)))
+#+end_src
