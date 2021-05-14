@@ -1033,13 +1033,13 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 ** Exercism.io
 *** Package
 #+begin_src emacs-lisp :tangle packages.el
-(package! exercism-mode :recipe (:host github :repo "timotheosh/exercism-mode"))
+;;(package! exercism-mode :recipe (:host github :repo "timotheosh/exercism-mode"))
 #+end_src
 *** Config
 #+begin_src emacs-lisp
-(after! projectile
-  (use-package! exercism-mode)
-  (add-hook! 'prog-mode #'exercism-mode))
+;;(after! projectile
+;;  (use-package! exercism-mode)
+;;  (add-hook! 'prog-mode #'exercism-mode))
 #+end_src
 ** Clojure
 #+BEGIN_SRC emacs-lisp
