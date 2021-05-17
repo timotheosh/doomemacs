@@ -930,13 +930,15 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 **** Code folding
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! origami)
+(package! lsp-origami :recipe (:host github :repo "emacs-lsp/lsp-origami"))
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! prog-mode
-  (use-package! origami
-    :bind (("C-<tab>" . origami-recursively-toggle-node)
-           ("C-<iso-lefttab>" . origami-toggle-all-nodes))
-    :hook 'prog-mode-hook))
+  (map! :map origami-mode-map
+        (:g "C-<tab>" #'origami-recursively-toggle-node
+         :g "C-<iso-lefttab>" #'origami-toggle-all-nodes))
+  (add-hook! 'prog-mode-hook #'origami-mode)
+  (add-hook! 'lsp-after-open-hook #'lsp-origami-try-enable))
 #+END_SRC
 **** Smartparens for paredit functionality is many different programming language modes
 ***** Config
