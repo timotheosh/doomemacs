@@ -21,6 +21,7 @@ eshell/z
 config.el
 packages.el
 modules/
+scripts/
 
 # Directories managed by Emacs
 jira/

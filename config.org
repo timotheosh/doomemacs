@@ -1369,3 +1369,33 @@ Needed by Indium
   (lambda ()
     (prettify-symbols-mode 1)))
 #+end_src
+* Scripts
+** FreeBSD Server Script
+#+begin_src shell :shebang "#!/bin/sh" :tangle scripts/emacsd
+# PROVIDE: emacsd
+# REQUIRE: login # after login
+
+# Emacs daemon
+#
+# Define emacsd_user and emacd_socket in your /etc/rc.conf file
+. /etc/rc.subr
+
+name="emacsd"
+rcvar=emacsd_enable
+
+start_cmd="${name}_start"
+stop_cmd="${name}_stop"
+load_rc_config $name
+: ${emacsd_enable:=no}
+: ${_msg="Emacs daemon started."}
+
+emacsd_start()
+{
+    su ${emacsd_user:=nobody} -c "env HOME=/home/alex /usr/local/bin/emacs --daemon=${emacsd_socket:=server}"
+}
+emacsd_stop()
+{
+    su ${emacsd_user:nobody} -c "/usr/local/bin/emacsclient --socket ${emacsd_socket:=server} --eval \"(kill-emacs)\""
+}
+run_rc_command "$1"
+#+end_src
