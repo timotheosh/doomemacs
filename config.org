@@ -95,6 +95,11 @@ This determines the style of line numbers in effect. If set to `nil', line numbe
 (setq display-line-numbers-type t)
 #+END_SRC
 * Key Maps
+** Global keys
+~overwrite-mode~ in Emacs is a huge nuissasnce to me. It is a trap, not a feature. So disable its key.
+#+begin_src emacs-lisp
+(global-unset-key (kbd "<insert>"))
+#+end_src
 ** Centaur Tabs
 #+BEGIN_SRC emacs-lisp
 (map! :map centaur-tabs-mode-map
