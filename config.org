@@ -776,11 +776,14 @@ If you use `org' and don't want your org files in the default location below, ch
 #+END_SRC
 **** config
 #+BEGIN_SRC emacs-lisp
-(use-package! ox-reveal)
+(add-hook! org-mode-hook #'ox-reveal
+  (use-package! ox-reveal))
 #+END_SRC
 *** Inline Racket
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! ob-racket :recipe (:host github :repo "wallyqs/ob-racket"))
+(package! ob-racket :recipe
+  (:host github :repo "hasu/emacs-ob-racket")
+  :pin "da3526c") ;; Commit date 2021/3/4
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! org
@@ -788,7 +791,9 @@ If you use `org' and don't want your org files in the default location below, ch
 #+END_SRC
 *** Ansible
 #+begin_src emacs-lisp :tangle packages.el
-(package! ob-ansible :recipe (:host github :repo "timotheosh/ob-ansible"))
+(package! ob-ansible :recipe
+  (:host github :repo "timotheosh/ob-ansible")
+  :pin "a95914c") ;; Commit date 2017/8/18
 #+end_src
 #+begin_src emacs-lisp
 (after! org
@@ -796,7 +801,9 @@ If you use `org' and don't want your org files in the default location below, ch
 #+end_src
 *** Jira
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! org-jira)
+(package! org-jira :recipe
+  (:host github :repo "ahungry/org-jira")
+  :pin "2136470") ;; Commit date 2021/5/14
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! org
@@ -812,7 +819,9 @@ If you use `org' and don't want your org files in the default location below, ch
 #+END_SRC
 *** Projectile
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! org-projectile)
+(package! org-projectile :recipe
+  (:host github :repo "IvanMalison/org-projectile")
+  :pin "96a57a4")
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! org
@@ -830,7 +839,9 @@ If you use `org' and don't want your org files in the default location below, ch
 #+END_SRC
 *** org2blog
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! org2blog)
+(package! org2blog :recipe
+  (:host github :repo "org2blog/org2blog")
+  :pin "c1b386f") ;; Commit date 2021/4/21
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! org
@@ -862,7 +873,9 @@ If you use `org' and don't want your org files in the default location below, ch
 *** obtt
 obtt is an acronym for "org-babel-tangle templates".
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! obtt :recipe (:host github :repo "timotheosh/obtt"))
+(package! obtt :recipe
+  (:host github :repo "timotheosh/obtt")
+  :pin "0285efb") ;; Commit date 2020/6/23
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (setq! obtt-templates-dir (concat
@@ -878,40 +891,36 @@ obtt is an acronym for "org-babel-tangle templates".
 * RSS Reader
 Settings for Elfeed rss feed reader
 #+BEGIN_SRC emacs-lisp
-(after! elfeed
-  (use-package! elfeed
-    :config
-    (setq elfeed-feeds
-          '(("http://www.garynorth.com/mysite.xml" economics)
-            ("http://feeds.fee.org/FEE-Freeman" economics)
-            ("https://www.eff.org/rss" technology politics)
-            ("https://emacsredux.com/feed.xml" blog emacs)
-            ("http://emacsrocks.com/atom.xml" blog emacs)
-            ("http://pragmaticemacs.com/feed/" blog emacs)
-            ("https://stackoverflow.com/feeds/tag?tagnames=emacs&sort=newest" stackoverflow emacs)
-            ("https://www.reddit.com/r/emacs.rss" reddit technology emacs)
-            ("https://planet.emacslife.com/atom.xml" technology emacs)
-            ("https://www.reddit.com/r/lisp.rss" reddit technology lisp)
-            ("https://www.reddit.com/r/clojure.rss" reddit technology lisp clojure)
-            ("https://www.reddit.com/r/Racket.rss" reddit technology lisp racket)
-            ("https://stevelosh.com/rss.xml" blog technology lisp)
-            ("http://planet.lisp.org/rss20.xml" blog technology lisp)
-            ("https://lispblog.xach.com/rss" blog technology lisp)
-            ("https://lispnews.wordpress.com/rss.xml" blog technology lisp)
-            ("https://borretti.me/feed.xml" blog technology)
-            ("https://stackoverflow.com/feeds/tag?tagnames=common-lisp&sort=newest" stackoverflow lisp)
-            ("https://planet.kde.org/global/atom.xml/" blog desktop kde)
-            ("https://www.kdevelop.org/rss.xml" blog desktop kde kdevelop)))))
+(setq! elfeed-feeds
+       '(("http://www.garynorth.com/mysite.xml" economics)
+         ("http://feeds.fee.org/FEE-Freeman" economics)
+         ("https://www.eff.org/rss" technology politics)
+         ("https://emacsredux.com/feed.xml" blog emacs)
+         ("http://emacsrocks.com/atom.xml" blog emacs)
+         ("http://pragmaticemacs.com/feed/" blog emacs)
+         ("https://stackoverflow.com/feeds/tag?tagnames=emacs&sort=newest" stackoverflow emacs)
+         ("https://www.reddit.com/r/emacs.rss" reddit technology emacs)
+         ("https://planet.emacslife.com/atom.xml" technology emacs)
+         ("https://www.reddit.com/r/lisp.rss" reddit technology lisp)
+         ("https://www.reddit.com/r/clojure.rss" reddit technology lisp clojure)
+         ("https://www.reddit.com/r/Racket.rss" reddit technology lisp racket)
+         ("https://stevelosh.com/rss.xml" blog technology lisp)
+         ("http://planet.lisp.org/rss20.xml" blog technology lisp)
+         ("https://lispblog.xach.com/rss" blog technology lisp)
+         ("https://lispnews.wordpress.com/rss.xml" blog technology lisp)
+         ("https://borretti.me/feed.xml" blog technology)
+         ("https://stackoverflow.com/feeds/tag?tagnames=common-lisp&sort=newest" stackoverflow lisp)
+         ("https://planet.kde.org/global/atom.xml/" blog desktop kde)
+         ("https://www.kdevelop.org/rss.xml" blog desktop kde kdevelop)))
+
 #+END_SRC
 * Httpd Server
 We use simple-httpd for emacs, since that comes with impatient-mode.
 ** Package
 #+begin_src emacs-lisp :tangle packages.el
-(package! simple-httpd)
-#+end_src
-** Config
-#+begin_src emacs-lisp
-(use-package! simple-httpd)
+(package! simple-httpd :recipe
+  (:host github :repo "skeeto/emacs-web-server")
+  :pin "22ce66e") ;; Commit date 2019/11/3
 #+end_src
 * Programming Languages
 ** General
@@ -920,29 +929,36 @@ We use simple-httpd for emacs, since that comes with impatient-mode.
 ***** Package
 Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! aggressive-indent)
+(package! aggressive-indent :recipe
+  (:host github :repo "Malabarba/aggressive-indent-mode")
+  :pin "b0ec004") ;; Commit date 2020/8/24
 #+END_SRC
 ***** Config
 #+begin_src emacs-lisp
-(after! prog-mode
-  (use-package! aggressive-indent))
+(add-hook! 'prog-mode-hook #'aggressive-indent-mode)
 #+end_src
 **** [[https://github.com/company-mode/company-quickhelp][Company-quickhelp]] for on the fly documentation.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! company-quickhelp)
+(package! company-quickhelp :recipe
+  (:host github :repo "company-mode/company-quickhelp")
+  :pin "530b293") ;; Commit date 2021/5/15
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! company
-  (use-package! company-quickhelp
-    :init
-    (setq! company-quickhelp-delay nil)))
+  (add-hook! 'company-mode-hook #'company-quickhelp-mode)
+  (setq! company-quickhelp-delay nil))
 (map! :map company-active-map
       :g "C-c h" #'company-quickhelp-manual-begin)
 #+END_SRC
 **** Code folding
+Origami is a minor mode that enables code folding. Learn more [[https://github.com/gregsexton/origami.el][here]]. ~lsp-origami~ uses ~lsp~ to inform Origami. Learn more [[https://github.com/emacs-lsp/lsp-origami][here]].
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! origami)
-(package! lsp-origami :recipe (:host github :repo "emacs-lsp/lsp-origami"))
+(package! origami :recipe
+  (:host github :repo "gregsexton/origami.el")
+  :pin "e558710") ;; Commit date 2020/3/31
+(package! lsp-origami :recipe
+  (:host github :repo "emacs-lsp/lsp-origami")
+  :pin "bedea3d") ;; Commit date 2021/1/26
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! prog-mode
@@ -956,32 +972,30 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 ***** Config
 #+BEGIN_SRC emacs-lisp
 (after! prog-mode
-  (use-package! smartparens-config
-    :config
-    ;; For lisp modes
-    (sp-with-modes sp--lisp-modes
-      ;; disable ', it's the quote character!
-      (sp-local-pair "'" nil :actions nil)
-      ;; also only use the pseudo-quote inside strings where it serve as
-      ;; hyperlink.
-      (sp-local-pair "`" "'" :when '(sp-in-string-p sp-in-comment-p))
-      (sp-local-pair "`" nil
-                     :skip-match
-                     (lambda (ms mb me)
-                       (cond
-                        ((equal ms "'")
-                         (or (sp--org-skip-markup ms mb me)
-                             (not (sp-point-in-string-or-comment))))
-                        (t (not (sp-point-in-string-or-comment)))))))
-    (sp-with-modes 'org-mode
-      (sp-local-pair "\\[" "\\]")
-      (sp-local-pair "$" "$")
-      (sp-local-pair "'" "'" :actions '(rem))
-      (sp-local-pair "=" "=" :actions '(rem))
-      (sp-local-pair "\\left(" "\\right)" :trigger "\\l(" :post-handlers '(sp-latex-insert-spaces-inside-pair))
-      (sp-local-pair "\\left[" "\\right]" :trigger "\\l[" :post-handlers '(sp-latex-insert-spaces-inside-pair))
-      (sp-local-pair "\\left\\{" "\\right\\}" :trigger "\\l{" :post-handlers '(sp-latex-insert-spaces-inside-pair))
-      (sp-local-pair "\\left|" "\\right|" :trigger "\\l|" :post-handlers '(sp-latex-insert-spaces-inside-pair)))))
+  (sp-with-modes sp--lisp-modes
+    ;; disable ', it's the quote character!
+    (sp-local-pair "'" nil :actions nil)
+    ;; also only use the pseudo-quote inside strings where it serve as
+    ;; hyperlink.
+    (sp-local-pair "`" "'" :when '(sp-in-string-p sp-in-comment-p))
+    (sp-local-pair "`" nil
+                   :skip-match
+                   (lambda (ms mb me)
+                     (cond
+                      ((equal ms "'")
+                       (or (sp--org-skip-markup ms mb me)
+                           (not (sp-point-in-string-or-comment))))
+                      (t (not (sp-point-in-string-or-comment))))))))
+(after! org
+  (sp-with-modes 'org-mode
+    (sp-local-pair "\\[" "\\]")
+    (sp-local-pair "$" "$")
+    (sp-local-pair "'" "'" :actions '(rem))
+    (sp-local-pair "=" "=" :actions '(rem))
+    (sp-local-pair "\\left(" "\\right)" :trigger "\\l(" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+    (sp-local-pair "\\left[" "\\right]" :trigger "\\l[" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+    (sp-local-pair "\\left\\{" "\\right\\}" :trigger "\\l{" :post-handlers '(sp-latex-insert-spaces-inside-pair))
+    (sp-local-pair "\\left|" "\\right|" :trigger "\\l|" :post-handlers '(sp-latex-insert-spaces-inside-pair))))
 #+END_SRC
 ***** Key Bindings
 #+begin_src emacs-lisp
@@ -1038,11 +1052,11 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
         :g "<backtab>" 'my/match-paren))
 #+END_SRC
 **** Lisp extra fontlock
+***** Package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! lisp-extra-font-lock)
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
-(after! prog-mode (use-package! lisp-extra-font-lock))
+(package! lisp-extra-font-lock :recipe
+  (:host github :repo "Lindydancer/lisp-extra-font-lock")
+  :pin "4605ecc") ;; Commit date 2018/10/8
 #+END_SRC
 ** Exercism.io
 *** Package
@@ -1079,16 +1093,12 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
            (clozure-cl ("~/programs/bin/ros" "-L" "ccl-bin" "-Q" "run"))
            (cmucl ("~/programs/bin/ros" "-L" "cmu-bin" "-Q" "run"))
            (ecl ("~/programs/bin/ros" "-L" "ecl" "-Q" "run") :coding-system utf-8-unix)
-           (abcl ("~/programs/bin/ros" "-L" "abcl-bin" "-Q" "run"))))
-  (add-hook! 'sly-mrepl-hook #'company-quickhelp-mode)
-  (map! :map sly-mrepl-mode-map
-        (:g "<C-up>" #'comint-previous-input
-         :g "<C-down>" #'comint-next-input)))
+           (abcl ("~/programs/bin/ros" "-L" "abcl-bin" "-Q" "run")))))
+(map! :map sly-mrepl-mode-map
+      (:g "<C-up>" #'comint-previous-input
+       :g "<C-down>" #'comint-next-input))
 
 #+END_SRC
-
-#+RESULTS:
-
 **** Hyperspec lookup
 Open CL REPL and execute: ~(ql:quickload "clhs")~, then follow instructions.
 ~C-c C-d h~ on common lisp directive, and it should open the definition in the default web browser.
@@ -1116,7 +1126,7 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
 ** Emacs Lisp
 *** Settings
 #+BEGIN_SRC emacs-lisp
-(after! emacs-lisp
+(after! company
   (add-to-list 'company-backends 'company-elisp))
 (add-hook! 'emacs-lisp-mode-hook
            #'eldoc-mode
@@ -1129,35 +1139,41 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
 Fennel, a Lisp that compiles to Lua
 *** Package
 #+begin_src emacs-lisp :tangle packages.el
-(package! fennel-mode :recipe (:host gitlab :repo "technomancy/fennel-mode"))
+(package! fennel-mode :recipe
+  (:host gitlab :repo "technomancy/fennel-mode")
+  :pin "59ab0234") ;; Commit date 2021/4/9
 #+end_src
 *** Config
+TODO: FIXME: There is a conflict between fennel bound keys and Sly.
 #+begin_src emacs-lisp
-(use-package! fennel-mode
-  :mode (("\\.fnl\\'"  . fennel-mode)))
+(add-to-list 'auto-mode-alist '("\\.fnl\\'" . fennel-mode))
 #+end_src
 ** GDScript
 ** Gerbil Scheme
+This is a work in progress, and currently inop.
 *** Package
 Both Gambit and Gerbil modes are needed. Be sure to install the treadmill server package in order to use treadmill. From the shell, run:
 ~gxpkg install github.com/thunknyc/gerbil-treadmill~
-#+BEGIN_SRC emacs-lisp :tangle packages.el
+#+BEGIN_SRC emacs-lisp :tangle no
 (package! gambit :recipe
   (:host github
    :repo "gambit/gambit"
-   :files ("misc/gambit.el")))
+   :files ("misc/gambit.el"))
+  :pin "baf7de6") ;; This is version 4.9.3
 
 (package! gerbil-mode :recipe
   (:host github
    :repo "vyzo/gerbil"
-   :files ("etc/gerbil-mode.el")))
+   :files ("etc/gerbil-mode.el"))
+  :pin "4189bec") ;; This is version 0.16
 
 (package! treadmill :recipe
   (:host github
-         :repo "thunknyc/emacs-treadmill"))
+   :repo "thunknyc/emacs-treadmill")
+  :pin "271d117") ;; Commit date 2019/1/7
 #+END_SRC
 *** Config
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package! gerbil-mode
   :when (getenv "GERBIL_HOME")
   :mode (("\\.ss\\'"  . gerbil-mode)
@@ -1182,16 +1198,22 @@ Both Gambit and Gerbil modes are needed. Be sure to install the treadmill server
 Just for Jenkinsfile support
 *** package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! groovy-mode)
+(package! groovy-mode :recipe
+  (:host github :repo "Groovy-Emacs-Modes/groovy-emacs-modes")
+  :pin "99eaf70") ;; Commit date 2021/5/9
 #+END_SRC
 
 ** HTML
 *** Impatience mode for realtime editing of html
 **** Package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! web-mode)
+(package! web-mode :recipe
+  (:host github :repo "fxbois/web-mode")
+  :pin "8ef4793") ;; Commit date 2021/1/31
 ;;(package! impatient-mode :recipe '(:host github :repo "skeeto/impatient-mode"))
-(package! impatient-mode)
+(package! impatient-mode :recipe
+  (:host github :repo "skeeto/impatient-mode")
+  :pin "cbddfd5") ;; Commit date 2020/7/23
 #+END_SRC
 **** Hooks
 #+BEGIN_SRC emacs-lisp
@@ -1219,10 +1241,6 @@ Just for Jenkinsfile support
 (add-hook! 'web-mode-hook #'impatient-mode)
 (add-hook! 'css-mode-hook #'impatient-mode)
 #+END_SRC
-
-#+RESULTS:
-| impatient-mode | doom--enable-+javascript-npm-mode-in-css-mode-h |
-
 ** Java
 ** Javascript
 *** Websocket
@@ -1230,31 +1248,25 @@ Needed by Indium
 **** Package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! websocket :recipe
-  '(:host github :repo "ahyatt/emacs-websocket")
-  :pin "491a60b")
+  (:host github :repo "ahyatt/emacs-websocket")
+  :pin "34e1112") ;; Commit date 2021/1/9  Old: :pin "491a60b"
 #+END_SRC
 *** Indium
 **** Package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! indium :recipe
   '(:host github :repo "NicolasPetton/Indium")
-  :pin "9614d63")
-#+END_SRC
-**** Configuration
-#+BEGIN_SRC emacs-lisp
-(after! js2-mode
-  (use-package! websocket)
-  (use-package! indium))
+  :pin "8499e15") ;; Commit date 2021/3/9
 #+END_SRC
 *** Node-REPL
-**** COMMENT Package
+**** Package
 #+begin_src emacs-lisp :tangle packages.el
-(package! nodejs-repl :recipe (:host github :repo "abicky/nodejs-repl.el"))
+(package! nodejs-repl :recipe
+  (:host github :repo "abicky/nodejs-repl.el")
+  :pin "3b84105") ;; Commit date 2020/8/2
 #+end_src
 **** Config
 #+begin_src emacs-lisp
-(after! js2-mode
-  (use-package! nodejs-repl))
 (map! :map js2-mode-map
       :prefix "C-x"
       :g "C-e" #'nodejs-repl-send-last-expression)
@@ -1269,35 +1281,27 @@ Needed by Indium
 ** Jenkinsfile
 *** package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! jenkinsfile-mode :recipe (:host github :repo "john2x/jenkinsfile-mode")
-  :pin "96a3927")
+(package! jenkinsfile-mode :recipe
+  (:host github :repo "john2x/jenkinsfile-mode")
+  :pin "65bf392") ;; Commit date 2020/9/29
 #+END_SRC
-*** load
+*** config
 #+BEGIN_SRC emacs-lisp
-(use-package! jenkinsfile-mode
-  :mode (("Jenkinsfile" . jenkinsfile-mode)
-         ("\\.jenkinsfile\\'" . jenkinsfile-mode))
-  :config
-  (setq! groovy-indent-offset 2))
+(add-to-list 'auto-mode-alist '("/Jenkinsfile" . jenkinsfile-mode))
+(add-to-list 'auto-mode-alist '("/jenkinsfile" . jenkinsfile-mode))
+(add-hook! 'jenkinsfile-mode (lambda () (setq! groovy-indent-offset 2)))
 #+END_SRC
 ** Lua
 *** Love2d Minor-mode
 **** Package
 #+begin_src emacs-lisp :tangle packages.el
 (package! love-minor-mode :recipe
-  (:host github
-   :repo "ejmr/love-minor-mode"))
+  (:host github :repo "ejmr/love-minor-mode")
+  :pin "3ca8f34") ;; Commit date 2017/7/27
 #+end_src
 **** Config
 #+begin_src emacs-lisp
-(use-package! love-minor-mode)
-#+end_src
-*** LSP server
-#+begin_src emacs-lisp
-(setq my-emmy-jar-path "/home/thawes/.config/doom/EmmyLua-LS-all.jar")
-(if (file-exists-p my-emmy-jar-path)
-    (setq! lsp-clients-emmy-lua-jar-path my-emmy-jar-path)
-  (message "Need to install EmmyLua-LS-all.jar at " my-emmy-jar-path))
+(add-hook! 'lua-mode-hook #'love-minor-mode)
 #+end_src
 ** Markdown
 *** Impatient mode for realtime editing of markdown
@@ -1311,55 +1315,69 @@ Needed by Indium
 #+END_SRC
 
 ** Python
+*** Elpy
+**** Package
+I have found anaconda-mode to be inferior ro elpy.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! auto-virtualenv)
 (package! anaconda-mode :ignore t)
-(package! elpy)
-(package! jedi)
-(package! pydoc)
+(package! elpy :recipe
+  (:host github :repo "jorgenschaefer/elpy")
+  :pin "2203597") ;; Commit date 2021/3/28
 #+END_SRC
-#+BEGIN_SRC emacs-lisp
-(use-package! elpy
-  :init
-  (elpy-enable))
-(after! python
-  (use-package! auto-virtualenv)
-  (use-package! jedi
-    :commands jedi:setup)
-  (use-package! lsp-pyls)
-  (use-package! pydoc
-    :config
-    (map! :map 'python-mode-map
-          :g "C-c C-h" #'pydoc-at-point))
-  (add-hook! 'python-mode-hook
-             #'auto-virtualenv-set-virtualenv
+**** Config
+#+begin_src emacs-lisp
+(add-hook! 'python-mode-hook (lambda ()
+                               (elpy-enable)))
+#+end_src
+*** Auto-virtualenv
+**** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! auto-virtualenv :recipe
+  (:host github :repo "marcwebbie/auto-virtualenv")
+  :pin "214604e") ;; Commit date 2020/7/29
+#+end_src
+**** Config
+#+begin_src emacs-lisp
+(add-hook! 'python-mode-hook #'auto-virtualenv-set-virtualenv)
+#+end_src
+*** Pydoc
+**** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! pydoc :recipe
+  (:host github :repo "statmobile/pydoc")
+  :pin "4459aa1");; Commit date 2020/10/30
+#+end_src
+**** Config
+#+begin_src emacs-lisp
+(map! :map 'python-mode-map
+      :g "C-c C-h" #'pydoc-at-point)
+#+end_src
+*** Python LSP
+#+begin_src emacs-lisp
+(add-hook! 'python-mode-hook
              #'lsp-deferred)
-  (setq! py-ipython-command-args '("--automagic" "--simple-prompt")
-         jedi:complete-on-dot t)
-  (map! :map 'python-mode-map
-        :g "C-c C-c" #'py-execute-buffer-ipython))
-#+END_SRC
+#+end_src
 
 ** Racket
 *** Package
 #+begin_src emacs-lisp :tangle packages.el
-(package! racket-mode :recipe (:host github :repo "greghendershott/racket-mode"))
+(package! racket-mode :recipe
+  (:host github :repo "greghendershott/racket-mode")
+  :pin "abd59fd") ;; Commit date 2021/5/17
 #+end_src
 *** Config
 #+begin_src emacs-lisp
-(use-package! racket-mode
-  :config
-  (add-hook! 'racket-mode-hook
+(add-hook! 'racket-mode-hook
            #'smartparens-strict-mode
            #'aggressive-indent-mode
            #'lisp-extra-font-lock-mode
-           #'company-quickhelp-mode))
+           #'company-mode)
 #+end_src
 ** Yaml
 #+begin_src emacs-lisp
 (add-hook! yaml-mode-hook
   (lambda ()
-    (prettify-symbols-mode 1)))
+    (prettify-symbols-mode -1)))
 #+end_src
 * Scripts
 ** FreeBSD Server Script
