@@ -357,7 +357,7 @@ Use Gmail in gnus
 ** Web browser
 *** Settings
 #+BEGIN_SRC emacs-lisp
-(setq! browse-url-generic-program "/usr/local/bin/next")
+(setq! browse-url-generic-program "/usr/bin/nyxt")
 (setq! browse-url-default-browser 'eww-browse-url)
 ;;(setq shr-external-browser 'browse-url-generic)
 (setq!
@@ -376,18 +376,17 @@ Use Gmail in gnus
 (package! google-this)
 #+END_SRC
 **** Config
+Default mapping is "C-c / t"
 #+BEGIN_SRC emacs-lisp
-(use-package! google-this)
 (google-this-mode 1)
 #+END_SRC
 ** UUID
+Allows you to generate a UUID in a writable buffer, with ~M-x uuidgen~.
 *** Package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! uuidgen :recipe (:host github :repo "kanru/uuidgen-el"))
-#+END_SRC
-*** Config
-#+BEGIN_SRC emacs-lisp
-(use-package! uuidgen)
+(package! uuidgen :recipe
+  (:host github :repo "kanru/uuidgen-el")
+  :pin "b50e6fe") ;; Commit date 2020/08/16
 #+END_SRC
 ** Magit
 *** Settings
@@ -507,7 +506,9 @@ Because nix is now installing git from my package choices, I need to make sure m
 * Shells
 ** Multi-vterm
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! multi-vterm)
+(package! multi-vterm :recipe
+  (:host github :repo "suonlight/multi-vterm")
+  :pin "8f385a0") ;; Commit date 2020/12/3
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (when (string= system-distro "NixOS")
@@ -518,16 +519,19 @@ Because nix is now installing git from my package choices, I need to make sure m
           "C-M-<left>" 'multi-vterm-prev))
 ;;(defalias 'multi-term 'multi-vterm)
 #+END_SRC
+
+#+RESULTS:
+
 ** Eshell
 *** Packages
 **** [[https://github.com/tom-tan/esh-help][esh-help]] for Eshell help
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! fish-completion :disable t)
-(package! esh-help)
+(package! esh-help :recipe
+  (:host github :repo "tom-tan/esh-help") :pin "417673e") ;;Commit date 2019/9/4
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! eshell
-  (use-package! esh-help)
   (setup-esh-help-eldoc))
 #+END_SRC
 **** [[https://github.com/emacsmirror/multi-eshell][Multiple eshell]] Original blog seems to be missing, but available on marmalade.
@@ -540,11 +544,13 @@ Because nix is now installing git from my package choices, I need to make sure m
 **** [[https://github.com/porterjamesj/virtualenvwrapper.el][Virtualenvwrapper]] for Emacs
 [[https://virtualenvwrapper.readthedocs.io/en/latest/][Virtualenvwrapper]] is a set of extensions for more easily managing multiple virtualenv's for Python. It is available on Debian and Ubuntu systems. This is an Emacs module that interfaces with that system, making it easy to use in Eshell and Emacs proper.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! virtualenvwrapper)
+(package! virtualenvwrapper :recipe
+  (:host github :repo "porterjamesj/virtualenvwrapper.el")
+  :pin "c7e8450") ;; Commit date 2021/4/7
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
-(use-package! virtualenvwrapper)
-(setq! venv-location "~/.virtualenvs/")
+(after! virtualenvwrapper
+  (setq! venv-location "~/.virtualenvs/"))
 #+END_SRC
 *** Settings
 **** Directory path for eshell-directory-name
@@ -622,14 +628,11 @@ Because nix is now installing git from my package choices, I need to make sure m
       (setq eshell-ask-to-save-history 'always))
 )
 #+END_SRC
-**** Tramp settings for eshell
-#+BEGIN_SRC emacs-lisp
-(after! eshell
-  (use-package! esh-module)) ;; load tramp functions into eshell
-#+END_SRC
 **** Custom prompt
 #+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! eshell-prompt-extras)
+(package! eshell-prompt-extras :recipe
+  (:host github :repo "zwild/eshell-prompt-extras")
+  :pin "d7d874c") ;;Commit date 2020/11/14
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! eshell
@@ -702,15 +705,6 @@ Because nix is now installing git from my package choices, I need to make sure m
   (dolist (cmd '("tmux" "aptitude" "aws-shell" "neofetch" "htop" "radeontop"))
     (add-to-list 'eshell-visual-commands cmd)))
 #+END_SRC
-*** Use Emacs completion package for Eshell
-#+BEGIN_SRC emacs-lisp
-;; Uses the default Emacs completion package for tab-complete in eshell.
-;;(after! eshell
-;;  (add-hook! 'eshell-mode-hook
-;;            (lambda ()
-;;              (define-key eshell-mode-map (kbd "<tab>")
-;;                (lambda () (interactive) (pcomplete-std-complete))))))
-#+END_SRC
 ** Shell-pop
 #+BEGIN_SRC emacs-lisp
 (map! "<f3>" '+eshell/toggle)
@@ -718,7 +712,7 @@ Because nix is now installing git from my package choices, I need to make sure m
 * Deft
 #+BEGIN_SRC emacs-lisp
 (setq! deft-extensions '("org" "md" "txt" "tex"))
-(setq! deft-directory "~/Dropbox/notes")
+(setq! deft-directory "~/org-files/deft")
 (setq! deft-recursive t)
 (map! "<f8>" 'deft)
 #+END_SRC
@@ -1396,4 +1390,22 @@ emacsd_stop()
     su ${emacsd_user:nobody} -c "/usr/local/bin/emacsclient --socket ${emacsd_socket:=server} --eval \"(kill-emacs)\""
 }
 run_rc_command "$1"
+#+end_src
+* Pending Packages
+These are packages I find cool, and might use in the future. I place them here so I can easily find them in the future.
+** Aweshell
+*** Package
+From the make of multi-term, this is eshell on steroids with multi-eshell capability
+#+begin_src emacs-lisp :tangle no
+(package! aweshell :recipe (:host github :repo "manateelazycat/aweshell")
+  :pin "31004dd") ;;Commit date 2020/6/23
+#+end_src
+*** Config
+Details found [[https://github.com/manateelazycat/aweshell][here]].
+** Selectrum
+A smart replacement for ivy, helm, and ido. You'll need to disable ivy in your init.el before using this. You'll probably have to remap many keys as well. More details found [[https://github.com/raxod502/selectrum][here]].
+*** Package
+#+begin_src emacs-lisp :tangle no
+(package! selectrum :recipe
+  (:host github :repo "raxod502/selectrum") :pin "909f614") ;;Commit date 2021/5/17
 #+end_src
