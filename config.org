@@ -1326,8 +1326,8 @@ I have found anaconda-mode to be inferior ro elpy.
 #+END_SRC
 **** Config
 #+begin_src emacs-lisp
-(add-hook! 'python-mode-hook (lambda ()
-                               (elpy-enable)))
+(after! python
+  (elpy-enable))
 #+end_src
 *** Auto-virtualenv
 **** Package
@@ -1349,13 +1349,22 @@ I have found anaconda-mode to be inferior ro elpy.
 #+end_src
 **** Config
 #+begin_src emacs-lisp
+(setq! elpy-rpc-virtualenv-path 'current)
 (map! :map 'python-mode-map
       :g "C-c C-h" #'pydoc-at-point)
 #+end_src
 *** Python LSP
 #+begin_src emacs-lisp
 (add-hook! 'python-mode-hook
-             #'lsp-deferred)
+           #'lsp-deferred)
+#+end_src
+*** Python REPL
+#+begin_src emacs-lisp
+(after! python
+  (when (executable-find "ipython")
+    (setq! python-shell-interpreter "ipython")
+    (setq! python-shell-interpreter-interactive-arg "-i")
+    (setq! python-shell-interpreter-args "-i --no-ignore-cwd --no-banner")))
 #+end_src
 
 ** Racket
@@ -1426,4 +1435,23 @@ A smart replacement for ivy, helm, and ido. You'll need to disable ivy in your i
 #+begin_src emacs-lisp :tangle no
 (package! selectrum :recipe
   (:host github :repo "raxod502/selectrum") :pin "909f614") ;;Commit date 2021/5/17
+#+end_src
+** Purpose
+Once upon a time, I worked on some parts of a large project. I found myself using all kinds of buffers - python files, python interpreter, bash terminal, grep, dired, ibuffer. When I navigated the code, Emacs opened all sorts of buffers in all sorts of windows, and when I finally discovered what variable or function I needed, the window layout was messed up and I had to look for the original file I was working on.
+What I was missing was a way to limit which buffers can be displayed in which windows. E2WM helped me somewhat, but wasn't flexible enough. Enter Purpose.
+
+What Purpose does, is assign a purpose to each window and each buffer. This way, any window can display only a certain kind of buffers. Also, Purpose lets the user decide which windows can be used for any purpose, and which windows should stick to one purpose.
+What this all should mean, if Purpose is successful, is less time spent fighting Emacs over the window layout and where to display buffers, a pleasant user experience and more time for fun or important work.
+
+Purpose is not meant to be as extensive as E2WM. It has three main goals:
+
+1. provide an easy and reliable way for the user to maintain a consistent window layout
+2. provide a framework for extensions that make use of the window layout
+3. hopefully, be a step towards IDE-like packages in the future (seriously)
+
+More [[https://github.com/bmag/emacs-purpose/wiki][here]].
+#+begin_src emacs-lisp :tangle no
+(package! purpose :recipe
+  (:host github :repo "bmag/emacs-purpose")
+  :pin "1a55629") ;; Commit date 2021/4/23
 #+end_src
