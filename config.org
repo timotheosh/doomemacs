@@ -926,6 +926,7 @@ We use simple-httpd for emacs, since that comes with impatient-mode.
 ** General
 *** Settings
 **** [[https://github.com/Malabarba/aggressive-indent-mode][Aggressive indent]] for better formatting of code.
+Package should be explicitly added on a per programming language basis. It is especially effective with lisp languages.
 ***** Package
 Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
@@ -933,10 +934,6 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
   (:host github :repo "Malabarba/aggressive-indent-mode")
   :pin "b0ec004") ;; Commit date 2020/8/24
 #+END_SRC
-***** Config
-#+begin_src emacs-lisp
-(add-hook! 'prog-mode-hook #'aggressive-indent-mode)
-#+end_src
 **** [[https://github.com/company-mode/company-quickhelp][Company-quickhelp]] for on the fly documentation.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! company-quickhelp :recipe
@@ -1147,6 +1144,9 @@ Fennel, a Lisp that compiles to Lua
 TODO: FIXME: There is a conflict between fennel bound keys and Sly.
 #+begin_src emacs-lisp
 (add-to-list 'auto-mode-alist '("\\.fnl\\'" . fennel-mode))
+(add-hook! 'fennel-mode
+           #'aggressive-indent-mode
+           #'smartparens-global-strict-mode)
 #+end_src
 ** GDScript
 ** Gerbil Scheme
