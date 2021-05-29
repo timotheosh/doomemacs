@@ -1055,16 +1055,37 @@ Origami is a minor mode that enables code folding. Learn more [[https://github.c
   (:host github :repo "Lindydancer/lisp-extra-font-lock")
   :pin "4605ecc") ;; Commit date 2018/10/8
 #+END_SRC
+** Emacs-epc
+For talking with other languages. The main docs start [[https://github.com/kiwanami/emacs-epc][here]].
+*** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! epc :recipe
+  (:host github :repo "kiwanami/emacs-epc")
+  :pin "e1bfa5c")
+#+end_src
 ** Exercism.io
+Personal project for projectile to understand exercism.io projects. The project is in [[https://github.com/timotheosh/exercism-mode][github]].
 *** Package
 #+begin_src emacs-lisp :tangle packages.el
 ;;(package! exercism-mode :recipe (:host github :repo "timotheosh/exercism-mode"))
 #+end_src
 *** Config
 #+begin_src emacs-lisp
-;;(after! projectile
-;;  (use-package! exercism-mode)
-;;  (add-hook! 'prog-mode #'exercism-mode))
+(use-package! exercism-mode
+  :after projectile
+  :load-path "~/src/projects/exercism-mode"
+  :config (exercism-mode +1))
+(map! :map exercism-mode-map
+      :leader
+      (:prefix ("x" . "exercism")
+       :desc "Exercism: Submit current file"      "s" #'exercism-submit-file
+       :desc "Exercism: Download a new exercise"  "d" #'exercism-download-exercise
+       :desc "Exercism: Paste a download command" "p" #'exercism-download-command
+       :desc "Exercism: Refresh current exercise" "r" #'exercism-refresh-exercise))
+(map! :map ranger-mode-map
+      :leader
+      (:prefix ("x" . "exercism")
+       :desc "Exercism: Submit marked files"      "x" #'exercism-dired-submit-marked-files))
 #+end_src
 ** Clojure
 #+BEGIN_SRC emacs-lisp
