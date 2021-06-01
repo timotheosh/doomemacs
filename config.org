@@ -925,6 +925,12 @@ We use simple-httpd for emacs, since that comes with impatient-mode.
 * Programming Languages
 ** General
 *** Settings
+**** Safe variables for Projectile configurations
+Predefining ahead of time. Each language can ~add-to-list~ to get their specific commands added.
+#+begin_src emacs-lisp
+(setq safe-local-variable-values '())
+(setq enable-local-variables :all)
+#+end_src
 **** [[https://github.com/Malabarba/aggressive-indent-mode][Aggressive indent]] for better formatting of code.
 Package should be explicitly added on a per programming language basis. It is especially effective with lisp languages.
 ***** Package
@@ -1077,15 +1083,16 @@ Personal project for projectile to understand exercism.io projects. The project 
   :config (exercism-mode +1))
 (map! :map exercism-mode-map
       :leader
-      (:prefix ("x" . "exercism")
-       :desc "Exercism: Submit current file"      "s" #'exercism-submit-file
-       :desc "Exercism: Download a new exercise"  "d" #'exercism-download-exercise
-       :desc "Exercism: Paste a download command" "p" #'exercism-download-command
-       :desc "Exercism: Refresh current exercise" "r" #'exercism-refresh-exercise))
+      (:prefix ("x" . "Exercism")
+       :desc "Submit current file"       "s" #'exercism-submit-file
+       :desc "Download exercise"         "d" #'exercism-download-exercise
+       :desc "Paste download command"    "p" #'exercism-download-command
+       :desc "Refresh current exercise"  "r" #'exercism-refresh-exercise
+       :desc "Open exercise description" "w" #'exercism-open-exercise-web))
 (map! :map ranger-mode-map
       :leader
       (:prefix ("x" . "exercism")
-       :desc "Exercism: Submit marked files"      "x" #'exercism-dired-submit-marked-files))
+       :desc "Submit marked files"      "x" #'exercism-dired-submit-marked-files))
 #+end_src
 ** Clojure
 #+BEGIN_SRC emacs-lisp
@@ -1153,6 +1160,11 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
            #'lisp-extra-font-lock-mode
            #'company-quickhelp-mode)
 #+END_SRC
+*** Safe-variables
+#+begin_src emacs-lisp
+(mapc (lambda (cmd) (add-to-list 'safe-local-variable-values cmd))
+      '((projectile-project-test-cmd . #'stringp)))
+#+end_src
 ** Fennel
 Fennel, a Lisp that compiles to Lua
 *** Package
@@ -1280,6 +1292,12 @@ Needed by Indium
   :pin "8499e15") ;; Commit date 2021/3/9
 #+END_SRC
 *** Node-REPL
+**** Default hooks
+#+begin_src emacs-lisp
+(add-hook! 'js2-mode-hook
+           #'aggressive-indent-mode
+           #'smartparens-strict-mode)
+#+end_src
 **** Package
 #+begin_src emacs-lisp :tangle packages.el
 (package! nodejs-repl :recipe
@@ -1298,6 +1316,13 @@ Needed by Indium
       :g "C-c" #'nodejs-repl-send-buffer
       :g "C-k" #'nodejs-repl-load-file
       :g "C-z" #'nodejs-repl-switch-to-repl)
+#+end_src
+*** Safe-variables
+#+begin_src emacs-lisp
+(mapc (lambda (cmd) (add-to-list 'safe-local-variable-values cmd))
+      '((projectile-project-configure-cmd . "npm install")
+        (projectile-project-test-cmd . "npm run test")
+        (projectile-project-test-cmd . "npm test")))
 #+end_src
 ** Jenkinsfile
 *** package
