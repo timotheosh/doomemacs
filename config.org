@@ -57,7 +57,9 @@ They all accept either a font-spec, font string ("Input Mono-12"), or xlfd font 
 only need these two:
 #+BEGIN_SRC emacs-lisp
 (setq doom-font (font-spec :family "Iosevka" :size 18))
-(setq doom-variable-pitch-font (font-spec :family "ETBookOT"))
+;;(setq doom-variable-pitch-font (font-spec :family "ETBookOT"))
+;;Mostly works
+(setq doom-variable-pitch-font (font-spec :family "FreeSerif"))
 #+END_SRC
 ** Mixed-pitch Fonts
 *** Package
@@ -1101,7 +1103,11 @@ Personal project for projectile to understand exercism.io projects. The project 
            #'smartparens-strict-mode
            #'aggressive-indent-mode
            #'lisp-extra-font-lock-mode)
-(add-hook! 'clojurescript-mode-hook #'lsp-deferred)
+(add-hook! 'clojurescript-mode-hook
+           #'lsp-deferred
+           #'smartparens-strict-mode
+           #'aggressive-indent-mode
+           #'lisp-extra-font-lock-mode)
 #+END_SRC
 ** Common Lisp
 *** Settings
@@ -1408,9 +1414,11 @@ I have found anaconda-mode to be inferior ro elpy.
 #+begin_src emacs-lisp
 (after! python
   (when (executable-find "ipython")
-    (setq! python-shell-interpreter "ipython")
-    (setq! python-shell-interpreter-interactive-arg "-i")
-    (setq! python-shell-interpreter-args "-i --no-ignore-cwd --no-banner")))
+    (setq! python-shell-interpreter "ipython"
+           python-shell-interpreter-interactive-arg "-i"
+           python-shell-interpreter-args "-i --no-ignore-cwd --no-banner"
+           python-shell-prompt-regexp "In \[[0-9]+\]: "
+           python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: ")))
 #+end_src
 
 ** Racket
