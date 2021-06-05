@@ -506,24 +506,6 @@ Because nix is now installing git from my package choices, I need to make sure m
         (mapconcat #'expand-file-name file-list "\" \""))))))
 #+END_SRC
 * Shells
-** Multi-vterm
-#+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! multi-vterm :recipe
-  (:host github :repo "suonlight/multi-vterm")
-  :pin "8f385a0") ;; Commit date 2020/12/3
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
-(when (string= system-distro "NixOS")
-  (add-load-path! "~/.nix-profile/share/emacs/site-lisp/elpa/vterm-20200107.1419"))
-(after! vterm
-  (use-package! multi-vterm)
-  (map! "C-M-<right>" 'multi-vterm-next
-          "C-M-<left>" 'multi-vterm-prev))
-;;(defalias 'multi-term 'multi-vterm)
-#+END_SRC
-
-#+RESULTS:
-
 ** Eshell
 *** Packages
 **** [[https://github.com/tom-tan/esh-help][esh-help]] for Eshell help
