@@ -112,17 +112,9 @@ This determines the style of line numbers in effect. If set to `nil', line numbe
         :g "TAB" #'ivy-partial))
 #+END_SRC
 ** Projectile-find-file
-If we are inside a project, ~C-x C-f~ should use ~counsel-projectile-find-file~, else use ~counsel-find-file~.
+F4 gives us ~counsel-projectile-find-file~
 #+BEGIN_SRC emacs-lisp
-(defun my/find-file ()
-  (interactive)
-  (let ((project-root (projectile-project-root)))
-    (if (and project-root
-             (not (equal (split-string project-root "/" t) (split-string (getenv "HOME") "/" t))))
-        (counsel-projectile-find-file)
-      (counsel-find-file))))
-
-(global-set-key (kbd "C-x C-f") 'my/find-file)
+(global-set-key (kbd "<F4>") 'counsel-projectile-find-file)
 #+END_SRC
 * Additional Modules
 ** Swiper
