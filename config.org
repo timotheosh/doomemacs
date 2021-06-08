@@ -707,14 +707,50 @@ If you use `org' and don't want your org files in the default location below, ch
 (setq! org-directory "~/org-files")
 #+END_SRC
 ** Basic Config
+*** Variables
+**** For all
+#+begin_src emacs-lisp
+(setq! org-startup-folded t
+       org-hide-emphasis-markers t)
+#+end_src
+**** Separate org-work from org-home
+#+begin_src emacs-lisp
+(if (string= system-name "scholasticus")
+    (setq! org-directory "~/org-files/GTD/work"
+           org-agenda-files (file-expand-wildcards "~/org/GTD/work/*.org"))
+  (setq org-directory "~/org-files/GTD/home"
+        org-agenda-files (file-expand-wildcards "~/org/GTD/home/*.org")))
+#+end_src
+*** Hooks
 #+BEGIN_SRC emacs-lisp
-(setq! org-startup-folded t)
+(add-hook! 'org-mode-hook
+           #'disable-line-numbers
+           #'org-indent-mode
+           #'mixed-pitch-mode)
 #+END_SRC
-** Keymap for org-mode
+*** Keymap for org-mode
 #+BEGIN_SRC emacs-lisp
 (after! org
   (map! :map org-mode-map
         :g (kbd "<C-down-mouse-1>") #'org-open-at-point))
+#+END_SRC
+** Jira
+#+BEGIN_SRC emacs-lisp :tangle packages.el
+(package! org-jira :recipe
+  (:host github :repo "ahungry/org-jira")
+  :pin "2136470") ;; Commit date 2021/5/14
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (use-package! org-jira
+    :init
+    (setq! jiralib-url "https://inindca.atlassian.net"
+           org-jira-working-dir (concat
+                                  (if (boundp 'doom-private-dir)
+                                      doom-private-dir
+                                    user-emacs-directory) "jira")))
+  (when (not (file-directory-p org-jira-working-dir))
+    (make-directory org-jira-working-dir)))
 #+END_SRC
 ** Org modules
 *** Convert to BBCode
@@ -783,24 +819,6 @@ If you use `org' and don't want your org files in the default location below, ch
 (after! org
   (use-package! ob-ansible))
 #+end_src
-*** Jira
-#+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! org-jira :recipe
-  (:host github :repo "ahungry/org-jira")
-  :pin "2136470") ;; Commit date 2021/5/14
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
-(after! org
-  (use-package! org-jira
-    :init
-    (setq! jiralib-url "https://inindca.atlassian.net"
-           org-jira-working-dir (concat
-                                  (if (boundp 'doom-private-dir)
-                                      doom-private-dir
-                                    user-emacs-directory) "jira")))
-  (when (not (file-directory-p org-jira-working-dir))
-    (make-directory org-jira-working-dir)))
-#+END_SRC
 *** Projectile
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! org-projectile :recipe
@@ -839,20 +857,6 @@ If you use `org' and don't want your org files in the default location below, ch
 *** org-protocol
 #+BEGIN_SRC emacs-lisp
 ;;(use-package! org-protocol)
-#+END_SRC
-*** Agenda files
-#+BEGIN_SRC emacs-lisp
-(if (string= system-name "scholasticus")
-    (setq! org-agenda-files (file-expand-wildcards "~/org/GTD/work/*.org"))
-  (setq! org-agenda-files (file-expand-wildcards "~/org/GTD/home/*.org")))
-#+END_SRC
-*** Settings
-#+BEGIN_SRC emacs-lisp
-(setq! org-hide-emphasis-markers t)
-(add-hook! 'org-mode-hook
-  #'disable-line-numbers
-  #'org-indent-mode
-  #'mixed-pitch-mode)
 #+END_SRC
 *** obtt
 obtt is an acronym for "org-babel-tangle templates".
