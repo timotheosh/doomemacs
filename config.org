@@ -20,6 +20,38 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
       user-mail-address "trhawes@gmail.com"
       github-account-name "timotheosh")
 #+END_SRC
+* Emacs-lisp libraries
+These are essential libraries that make programming in elisp much better (and consistent). I am trying to be picky, and hope the chosen libraries are something that are being considered for use in emacs-core in the future. One can dream, can't they?
+** dash: A modern list API for Emacs.
+Dash is included in Doom Emacs, so this is not tangled by default. All libraries Doom uses is pinned to specific versions.
+#+begin_src emacs-lisp :tangle no
+;; Dash is maintained regularly, so check the pinned version before enabling.
+;; The specified pin might be too old.
+(package! dash :recipe (:host github :repo "magnars/dash.el") :pin "aab346e") ;; Commit data 2021-6-2
+#+end_src
+** ht for better hash-map manipulation
+[[https://www.emacswiki.org/emacs/HashMap][EmacsWiki references]] this library as a "more consistent and extensive interfave to hash-tables".
+
+*** Why?
+From the [[https://github.com/Wilfred/ht.el#why][project page]]:
+Libraries like [[https://github.com/magnars/s.el][s.el]] (strings) and [[https://github.com/magnars/dash.el][dash.el]] (lists) have shown how much nicer Emacs lisp programming can be with good libraries. ht.el aims to similarly simplify working with hash tables.
+
+Common operations with hash tables (e.g. enumerate the keys) are too difficult in Emacs lisp.
+
+ht.el offers:
+- A consistent naming scheme (contrast make-hash-table with puthash)
+- A more natural argument ordering
+- Mutation functions always return nil
+- A more comprehensive range of hash table operations, including a conventional map (ht-map returns a list, elisp's maphash returns nil).
+#+begin_src emacs-lisp :tangle packages.el
+(package! ht :recipe (:host github :repo "Wilfred/ht.el") :pin "c4c1be4") ;; Commit date 2021-1-19
+#+end_src
+** s.el for string manipulations
+I like this, but have not yet decided to use it. I have seen it used a lot in various melpa packages.
+#+begin_src emacs-lisp :tangle no
+(package! s :recipe (:host github :repo "magnars/s.el") :pin "e1710af") ;;Commit date 2021-6-3
+#+end_src
+
 * Global
 ** Disable global smartparens-mode
 Smartparens is awesome, but we don't want it everywhere.
@@ -701,11 +733,6 @@ Because nix is now installing git from my package choices, I need to make sure m
 (map! "<f8>" 'deft)
 #+END_SRC
 * Org-mode
-** Org files location
-If you use `org' and don't want your org files in the default location below, change `org-directory'. It must be set before org loads!
-#+BEGIN_SRC emacs-lisp
-(setq! org-directory "~/org-files")
-#+END_SRC
 ** Basic Config
 *** Variables
 **** For all
