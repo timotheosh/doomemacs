@@ -1092,22 +1092,23 @@ Personal project for projectile to understand exercism.io projects. The project 
 #+end_src
 *** Config
 #+begin_src emacs-lisp
-(use-package! exercism-mode
-  :after projectile
-  :load-path "~/src/projects/exercism-mode"
-  :config (exercism-mode +1))
-(map! :map exercism-mode-map
-      :leader
-      (:prefix ("x" . "Exercism")
-       :desc "Submit current file"       "s" #'exercism-submit-file
-       :desc "Download exercise"         "d" #'exercism-download-exercise
-       :desc "Paste download command"    "p" #'exercism-download-command
-       :desc "Refresh current exercise"  "r" #'exercism-refresh-exercise
-       :desc "Open exercise description" "w" #'exercism-open-exercise-web))
-(map! :map ranger-mode-map
-      :leader
-      (:prefix ("x" . "exercism")
-       :desc "Submit marked files"      "x" #'exercism-dired-submit-marked-files))
+(when (file-directory-p (expand-file-name "~/src/projects/exercism-mode"))
+  (use-package! exercism-mode
+    :after projectile
+    :load-path "~/src/projects/exercism-mode"
+    :config (exercism-mode +1))
+  (map! :map exercism-mode-map
+        :leader
+        (:prefix ("x" . "Exercism")
+         :desc "Submit current file"       "s" #'exercism-submit-file
+         :desc "Download exercise"         "d" #'exercism-download-exercise
+         :desc "Paste download command"    "p" #'exercism-download-command
+         :desc "Refresh current exercise"  "r" #'exercism-refresh-exercise
+         :desc "Open exercise description" "w" #'exercism-open-exercise-web))
+  (map! :map ranger-mode-map
+        :leader
+        (:prefix ("x" . "exercism")
+         :desc "Submit marked files"      "x" #'exercism-dired-submit-marked-files)))
 #+end_src
 ** Clojure
 #+BEGIN_SRC emacs-lisp
