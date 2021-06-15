@@ -91,7 +91,7 @@ only need these two:
 (setq doom-font (font-spec :family "Iosevka" :size 18))
 ;;(setq doom-variable-pitch-font (font-spec :family "ETBookOT"))
 ;;Mostly works
-(setq doom-variable-pitch-font (font-spec :family "FreeSans" :size 20))
+(setq doom-variable-pitch-font (font-spec :family "Source Sans Variable" :size 18))
 #+END_SRC
 ** Mixed-pitch Fonts
 *** Package
