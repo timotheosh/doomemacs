@@ -91,7 +91,7 @@ only need these two:
 (setq doom-font (font-spec :family "Iosevka" :size 18))
 ;;(setq doom-variable-pitch-font (font-spec :family "ETBookOT"))
 ;;Mostly works
-(setq doom-variable-pitch-font (font-spec :family "FreeSerif"))
+(setq doom-variable-pitch-font (font-spec :family "FreeSans" :size 20))
 #+END_SRC
 ** Mixed-pitch Fonts
 *** Package
@@ -540,23 +540,25 @@ Because nix is now installing git from my package choices, I need to make sure m
 * Shells
 ** Eshell
 *** Packages
-**** [[https://github.com/tom-tan/esh-help][esh-help]] for Eshell help
-#+BEGIN_SRC emacs-lisp :tangle packages.el
+**** Completion
+Because I would much rather define my own completions using elisp and pcomplete.
+#+begin_src emacs-lisp :tangle packages.el
 (package! fish-completion :disable t)
+#+end_src
+**** [[https://github.com/tom-tan/esh-help][esh-help]] for Eshell help
+Shows help in minibuffer when typing an elisp command in eshell.
+***** Package
+#+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! esh-help :recipe
   (:host github :repo "tom-tan/esh-help") :pin "417673e") ;;Commit date 2019/9/4
 #+END_SRC
-#+BEGIN_SRC emacs-lisp
+***** Config
+#+begin_src emacs-lisp
 (after! eshell
   (setup-esh-help-eldoc))
-#+END_SRC
-**** [[https://github.com/emacsmirror/multi-eshell][Multiple eshell]] Original blog seems to be missing, but available on marmalade.
-#+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! multi-eshell)
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
-(use-package! multi-eshell)
-#+END_SRC
+(map! :map eshell-mode-map
+      :desc "Elisp Command Help" :g "C-h h" #'esh-help-run-help)
+#+end_src
 **** [[https://github.com/porterjamesj/virtualenvwrapper.el][Virtualenvwrapper]] for Emacs
 [[https://virtualenvwrapper.readthedocs.io/en/latest/][Virtualenvwrapper]] is a set of extensions for more easily managing multiple virtualenv's for Python. It is available on Debian and Ubuntu systems. This is an Emacs module that interfaces with that system, making it easy to use in Eshell and Emacs proper.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
@@ -645,12 +647,15 @@ Because nix is now installing git from my package choices, I need to make sure m
 )
 #+END_SRC
 **** Custom prompt
-#+BEGIN_SRC emacs-lisp :tangle packages.el
+No longer desired with aweshell now enabled.
+***** Packages
+#+BEGIN_SRC emacs-lisp :tangle no
 (package! eshell-prompt-extras :recipe
   (:host github :repo "zwild/eshell-prompt-extras")
   :pin "d7d874c") ;;Commit date 2020/11/14
 #+END_SRC
-#+BEGIN_SRC emacs-lisp
+***** Config
+#+BEGIN_SRC emacs-lisp :tangle no
 (after! eshell
   (use-package! eshell-prompt-extras
     :config
@@ -721,10 +726,25 @@ Because nix is now installing git from my package choices, I need to make sure m
   (dolist (cmd '("tmux" "aptitude" "aws-shell" "neofetch" "htop" "radeontop"))
     (add-to-list 'eshell-visual-commands cmd)))
 #+END_SRC
+** Aweshell
+*** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! aweshell :recipe (:host github :repo "manateelazycat/aweshell")
+  :pin "31004dd") ;;Commit date 2020/6/23
+#+end_src
+*** Config
+#+begin_src emacs-lisp
+(use-package! aweshell)
+#+end_src
 ** Shell-pop
-#+BEGIN_SRC emacs-lisp
+Default Doom eshell (disabled, but left for reference).
+#+BEGIN_SRC emacs-lisp :tangle no
 (map! "<f3>" '+eshell/toggle)
 #+END_SRC
+Aweshell toggle.
+#+begin_src emacs-lisp
+(map! "<f3>" 'aweshell-dedicated-toggle)
+#+end_src
 * Deft
 #+BEGIN_SRC emacs-lisp
 (setq! deft-extensions '("org" "md" "txt" "tex"))
@@ -1500,6 +1520,7 @@ From the make of multi-term, this is eshell on steroids with multi-eshell capabi
 Details found [[https://github.com/manateelazycat/aweshell][here]].
 ** Selectrum
 A smart replacement for ivy, helm, and ido. You'll need to disable ivy in your init.el before using this. You'll probably have to remap many keys as well. More details found [[https://github.com/raxod502/selectrum][here]].
+*UPDATE*: Tried using package. Really was not impressed enough by it to use over ivy. I don't think an overhauled completion library excites me much. Plus still missing icons for display.
 *** Package
 #+begin_src emacs-lisp :tangle no
 (package! selectrum :recipe
@@ -1519,6 +1540,8 @@ Purpose is not meant to be as extensive as E2WM. It has three main goals:
 3. hopefully, be a step towards IDE-like packages in the future (seriously)
 
 More [[https://github.com/bmag/emacs-purpose/wiki][here]].
+
+*UPDATE:* Actually looks like it has less features than ~perspective-mode~, which I have not fully explored yet.
 #+begin_src emacs-lisp :tangle no
 (package! purpose :recipe
   (:host github :repo "bmag/emacs-purpose")
