@@ -88,10 +88,17 @@ Doom exposes five (optional) variables for controlling fonts in Doom. Here are t
 They all accept either a font-spec, font string ("Input Mono-12"), or xlfd font string. You generally
 only need these two:
 #+BEGIN_SRC emacs-lisp
-(setq doom-font (font-spec :family "Iosevka" :size 18))
+(cond ((font-info (font-spec :family "Iosevka" :size 18))    (setq my-fixed-font (font-spec :family "Iosevka" :size 18)))
+      ((font-info (font-spec :family "Fira Mono" :size 18)   (setq my-fixed-font (font-spec :family "Fira Mono" :size 18))))
+      ((font-info (font-spec :family "Ubuntu Mono" :size 18) (setq my-fixed-font (font-spec :family "Ubuntu Mono" :size 18))))
+      (t                                                     (setq my-fixed-font (font-spec :family "Courier 10 Pitch" :size 18))))
+(setq doom-font my-fixed-font)
 ;;(setq doom-variable-pitch-font (font-spec :family "ETBookOT"))
-;;Mostly works
-(setq doom-variable-pitch-font (font-spec :family "Source Sans Variable" :size 18))
+(cond ((font-info (font-spec :family "Source Sans Variable" :size 18)) (setq my-variable-font (font-spec :family "Source Sans Variable" :size 18)))
+      ((font-info (font-spec :family "Source Sans Pro" :size 18))      (setq my-variable-font (font-spec :family "Source Sans Pro" :size 18)))
+      ((font-info (font-spec :family "Tahoma" :size 18))               (setq my-variable-font (font-spec :family "Tahoma" :size 18)))
+      (t                                                               (setq my-variable-font (font-spec :family "Courier 10 Pitch" :size 18))))
+(setq doom-variable-pitch-font my-variable-font)
 #+END_SRC
 ** Mixed-pitch Fonts
 *** Package
