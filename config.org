@@ -90,10 +90,10 @@ only need ~doom-font~ and ~doom-variable-pitch-font~:
 *** Fixed Font
 #+name: fixed-font
 #+BEGIN_SRC emacs-lisp :tangle no
-(cond ((font-info (font-spec :family "Iosevka" :size 18))    '(font-spec :family "Iosevka" :size 18))
-      ((font-info (font-spec :family "Fira Mono" :size 18)   '(font-spec :family "Fira Mono" :size 18)))
-      ((font-info (font-spec :family "Ubuntu Mono" :size 18) '(font-spec :family "Ubuntu Mono" :size 18)))
-      (t                                                     '(font-spec :family "Courier 10 Pitch" :size 18)))
+(cond ((font-info (font-spec :family "Iosevka" :size 14.0))    '(font-spec :family "Iosevka" :size 14.0))
+      ((font-info (font-spec :family "Fira Mono" :size 14.0)   '(font-spec :family "Fira Mono" :size 14.0)))
+      ((font-info (font-spec :family "Ubuntu Mono" :size 14.0) '(font-spec :family "Ubuntu Mono" :size 14.0)))
+      (t                                                     '(font-spec :family "Courier 10 Pitch" :size 14.0)))
 #+END_SRC
 #+begin_src emacs-lisp :noweb yes
 (setq doom-font <<fixed-font()>>)
@@ -101,10 +101,10 @@ only need ~doom-font~ and ~doom-variable-pitch-font~:
 *** Variable Font
 #+name: variable-font
 #+begin_src emacs-lisp :tangle no
-(cond ((font-info (font-spec :family "Source Sans Variable" :size 18)) '(font-spec :family "Source Sans Variable" :size 18))
-      ((font-info (font-spec :family "Source Sans Pro" :size 18))      '(font-spec :family "Source Sans Pro" :size 18))
-      ((font-info (font-spec :family "Tahoma" :size 18))               '(font-spec :family "Tahoma" :size 18))
-      (t                                                               '(font-spec :family "Courier 10 Pitch" :size 18)))
+(cond ((font-info (font-spec :family "Source Sans Variable" :size 18.0)) '(font-spec :family "Source Sans Variable" :size 18.0))
+      ((font-info (font-spec :family "Source Sans Pro" :size 18.0))      '(font-spec :family "Source Sans Pro" :size 18.0))
+      ((font-info (font-spec :family "Tahoma" :size 18.0))               '(font-spec :family "Tahoma" :size 18.0))
+      (t                                                               '(font-spec :family "Courier 10 Pitch" :size 18.0)))
 #+end_src
 #+begin_src emacs-lisp :noweb yes
 (setq doom-variable-pitch-font <<variable-font()>>)
