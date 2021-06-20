@@ -1520,7 +1520,7 @@ load_rc_config $name
 
 emacsd_start()
 {
-    su ${emacsd_user:=nobody} -c "env HOME=/home/alex /usr/local/bin/emacs --daemon=${emacsd_socket:=server}"
+    su ${emacsd_user:=nobody} -c "env HOME=/home/${emacsd_user:=nobody} /usr/local/bin/emacs --daemon=${emacsd_socket:=server}"
 }
 emacsd_stop()
 {
