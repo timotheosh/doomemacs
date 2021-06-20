@@ -98,7 +98,7 @@ This will fail with doom sync
           (t                                                     '(font-spec :family "Courier 10 Pitch" :size 14.0)))
   '(font-spec :family "Iosevka" :size 14.0))
 #+END_SRC
-#+begin_src emacs-lisp :tangle no :noweb yes
+#+begin_src emacs-lisp :noweb yes
 (setq doom-font <<fixed-font()>>)
 #+end_src
 *** Variable Font
