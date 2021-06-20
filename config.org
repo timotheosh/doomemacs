@@ -944,6 +944,40 @@ obtt is an acronym for "org-babel-tangle templates".
 (when (not (file-directory-p obtt-templates-dir))
     (make-directory obtt-templates-dir))
 #+END_SRC
+* Book Readers
+** Calibre
+*** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! calibredb :recipe
+  (:host github :repo "chenyanming/calibredb.el")
+  :pin "cb93563") ;; Commit date 2021/6/4
+#+end_src
+*** Config
+#+begin_src emacs-lisp
+(use-package! calibredb
+  :config
+  (setq calibredb-root-dir "~/CalibreBooks"
+        calibredb-db-dir (expand-file-name "metadata.db" calibredb-root-dir)))
+#+end_src
+** Epub Reader
+*** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! nov :recipe (:host nil :repo "https://depp.brause.cc/nov.el.git") :pin "b3c7cc28e9") ;; Commit date 2021/3/23
+(package! visual-fill-column :recipe (:host github :repo "joostkremers/visual-fill-column") :pin "6fa9e79") ;;Commit date 2021/4/19
+#+end_src
+*** Config
+#+begin_src emacs-lisp
+(defun my-nov-font-setup ()
+  (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
+                                           :height 1.0))
+(add-hook 'nov-mode-hook 'my-nov-font-setup)
+
+(setq nov-text-width t)
+(setq visual-fill-column-center-text t)
+(add-hook 'nov-mode-hook 'visual-line-mode)
+(add-hook 'nov-mode-hook 'visual-fill-column-mode)
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+#+end_src
 * RSS Reader
 Settings for Elfeed rss feed reader
 #+BEGIN_SRC emacs-lisp
