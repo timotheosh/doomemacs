@@ -112,7 +112,8 @@ This will fail with doom sync
   '(font-spec :family "Source Sans Variable" :size 18.0))
 #+end_src
 #+begin_src emacs-lisp :noweb yes
-(setq doom-variable-pitch-font <<variable-font()>>)
+(cond ((string= system-type "berkeley-unix") (setq doom-variable-pitch-font (font-spec :family "Source Sans 3" :size 18.0)))
+      (t                                     (setq doom-variable-pitch-font <<variable-font()>>)))
 #+end_src
 ** Mixed-pitch Fonts
 *** Package
