@@ -457,6 +457,34 @@ Because nix is now installing git from my package choices, I need to make sure m
      ((file-executable-p "/usr/pkg/bin/git") (setq! magit-git-executable "/usr/pkg/bin/git"))
      (t "default"))))
 #+end_src
+** Emacs Application framework
+*** Package
+There is no package file for eaf, so dependencies have to be manually managed.
+- ~epc~: is managed below in the programming section.
+- ~deferred~: is included in Doom Emacs
+#+begin_src emacs-lisp :tangle packages.el
+(package! ctable :recipe
+  (:host github :repo "kiwanami/emacs-ctable")
+  :pin "48b7374") ;; Commit date 2021/1/28
+
+(package! s :recipe
+  (:host github :repo "magnars/s.el")
+  :pin "08661ef") ;; Commit date 2021/6/16
+#+end_src
+*** Config
+#+begin_src emacs-lisp
+(when (file-directory-p "~/programs/share/emacs/emacs-application-framework")
+  (use-package! eaf
+    :load-path "~/programs/share/emacs/emacs-application-framework"
+    :custom
+    (eaf-browser-continue-where-left-off t)
+    :config
+    (eaf-setq eaf-browser-enable-adblocker "true")
+    (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+    (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+    (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+    (eaf-bind-key nil "M-q" eaf-browser-keybinding))) ;; unbind, see more in the Wiki)
+#+end_src
 * Pcomplete
 ** apt
 #+BEGIN_SRC emacs-lisp
