@@ -459,7 +459,7 @@ Because nix is now installing git from my package choices, I need to make sure m
 #+end_src
 ** Emacs Application framework
 *** Package
-There is no package file for eaf, so dependencies have to be manually managed.
+There is no package file for eaf, so dependencies have to be manually managed. Download Emacs Application Framework [[https://github.com/manateelazycat/emacs-application-framework.git][here]].
 - ~epc~: is managed below in the programming section.
 - ~deferred~: is included in Doom Emacs
 #+begin_src emacs-lisp :tangle packages.el
