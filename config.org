@@ -215,6 +215,23 @@ To get information about any of these functions/macros, move the cursor over the
 
 You can also try 'gd' (or 'C-c g d') to jump to their definition and see how they are implemented.
 * My Functions/Macros
+** Some snippets for detecting system
+*** Detect System
+#+begin_src emacs-list :tangle no
+system-type
+#+end_src
+Will return these among others:
+~gnu/linux~
+~windows-nt~
+~darwin~
+~FreeBSD~
+*** Detect WSL under Windows
+#+begin_src emacs-lisp :tangle no
+(string-match "-[Mm]icrosoft" operating-system-release)
+#+end_src
+Will return nil if not present, or an integer representing the string index.
+~operating-system-release~ will return the Microsoft kernel under WSL, but will
+return nil under system type windows-nt.
 ** Terminal program ends
 This will kill the buffer and return back to the last buffer visited, when you stop running a program in a terminal.
 #+BEGIN_SRC emacs-lisp
