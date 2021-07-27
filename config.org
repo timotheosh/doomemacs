@@ -852,7 +852,7 @@ Aweshell toggle.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! org-jira :recipe
   (:host github :repo "ahungry/org-jira")
-  :pin "2136470") ;; Commit date 2021/5/14
+  :pin "c8b0580") ;; Commit date 2021/7/27
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! org
