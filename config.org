@@ -1229,20 +1229,62 @@ Personal project for projectile to understand exercism.io projects. The project 
 #+END_SRC
 ** Common Lisp
 *** Settings
-#+BEGIN_SRC emacs-lisp
+**** Find available Lisp implementations
+#+name: available-lisps
+#+begin_src emacs-lisp :tangle no
+;; This will all be nil if roswell is not iunstalled.
+(defvar ros-path (executable-find "ros")
+  "Path ro ros program.")
+(when ros-path
+  
+  (defun ros-filter (text)
+    "Filter for finding all the lisp implementations ros manages."
+    (string= (substring text 0 9) "Installed"))
+
+  (defun is-sbcl? (impl)
+    "Returns true if impl is sbcl-based"
+    (and (> (length impl) 3)
+         (string= (substring impl 0 4) "sbcl")))
+
+  (defun is-ecl? (impl)
+    "Returns true if impl is sbcl-based"
+    (and (> (length impl) 2)
+         (string= (substring impl 0 3) "ecl")))
+
+  (defun ros-config (impl)
+    (let ((retval (list  ros-path "-L" impl "-Q" "run")))
+      (if (or (is-sbcl? impl)
+              (is-ecl? impl))
+          (list (intern impl) retval :coding-system 'utf-8-unix)
+        (list (intern impl) retval))))
+
+  (defvar *lisp-impl*
+    '("sbcl"
+      "sbcl-bin"
+      "ecl"
+      "abcl-bin")
+    "Preferred lisp implementations to setup within Emacs by order of
+priority. The first value will be the default implementation.")
+
+  (defvar *setup-lisp*
+    (let ((output (shell-command-to-string "ros list installed")))
+      (let ((result (mapcar (lambda (text) (first (split-string text "/" t)))
+                            (cl-remove-if #'ros-filter (split-string output "\n" t)))))
+        (dolist (impl (reverse *lisp-impl*) result)
+          (when (cl-position impl result :test #'string=)
+            (setq result (cons impl (remove impl result))))))))
+
+  (mapcar #'ros-config *setup-lisp*))
+#+end_src
+****   Config
+#+BEGIN_SRC emacs-lisp :noweb yes
 (add-hook! 'lisp-mode-hook
            #'smartparens-strict-mode
            #'aggressive-indent-mode
            #'lisp-extra-font-lock-mode
            #'company-quickhelp-mode)
 (after! sly
-  (setq! sly-lisp-implementations
-         '((sbcl ("~/programs/bin/ros" "-L" "sbcl" "-Q" "run") :coding-system utf-8-unix)
-           (clisp ("~/programs/bin/ros" "-L" "clisp" "-Q" "run"))
-           (clozure-cl ("~/programs/bin/ros" "-L" "ccl-bin" "-Q" "run"))
-           (cmucl ("~/programs/bin/ros" "-L" "cmu-bin" "-Q" "run"))
-           (ecl ("~/programs/bin/ros" "-L" "ecl" "-Q" "run") :coding-system utf-8-unix)
-           (abcl ("~/programs/bin/ros" "-L" "abcl-bin" "-Q" "run")))))
+  (setq! sly-lisp-implementations '<<available-lisps()>>))
 (map! :map sly-mrepl-mode-map
       (:g "<C-up>" #'comint-previous-input
        :g "<C-down>" #'comint-next-input))
