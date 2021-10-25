@@ -105,8 +105,7 @@ This will fail with doom sync
 #+name: variable-font
 #+begin_src emacs-lisp :tangle no
 (if window-system
-    (cond ((font-info (font-spec :family "Source Sans Variable" :size 18.0)) '(font-spec :family "Source Sans Variable" :size 18.0))
-          ((font-info (font-spec :family "Source Sans Pro" :size 18.0))      '(font-spec :family "Source Sans Pro" :size 18.0))
+    (cond ((font-info (font-spec :family "Source Sans Pro" :size 18.0))      '(font-spec :family "Source Sans Pro" :size 18.0))
           ((font-info (font-spec :family "Tahoma" :size 18.0))               '(font-spec :family "Tahoma" :size 18.0))
           (t                                                               '(font-spec :family "Courier 10 Pitch" :size 18.0)))
   '(font-spec :family "Source Sans Variable" :size 18.0))
