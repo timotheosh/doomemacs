@@ -202,6 +202,16 @@ explain-pause-mode is very lightweight; you can leave it running all the time. Y
               (setq spell-fu-faces-exclude '(org-meta-line org-link org-code))
               (spell-fu-mode))))
 #+end_src
+** Lorem Ipsum Generator
+*** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! lorem-ipsum :recipe (:host github :repo "jschaf/emacs-lorem-ipsum")
+  :pin "da75c15") ;; Aug 19, 2019
+#+end_src
+*** Config
+#+begin_src emacs-lisp
+(use-package! lorem-ipsum)
+#+end_src
 * Additional Macros
 Here are some additional functions/macros that could help you configure Doom:
 - ~load!~ for loading external *.el files relative to this one
