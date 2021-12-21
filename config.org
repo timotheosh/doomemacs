@@ -975,6 +975,9 @@ Aweshell toggle.
     (setq! org2blog/wp-blog-alist
            '(("timhawes"
               :url "https://timhawes.wordpress.com/xmlrpc.php"
+              :username "timotheosh")
+             ("desktopstability"
+              :url "https://desktopstability.wordpress.com/xmlrpc.php"
               :username "timotheosh")))))
 #+END_SRC
 *** org-protocol
