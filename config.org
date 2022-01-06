@@ -170,6 +170,20 @@ F4 gives us ~counsel-projectile-find-file~
 (global-set-key (kbd "<F4>") 'counsel-projectile-find-file)
 #+END_SRC
 * Additional Modules
+** Perspective.el
+*** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! perspective :recipe (:host github :repo "nex3/perspective-el")
+  :pin "d8211a8") ;; Commit Date Dec 12, 2021
+#+end_src
+*** Config
+#+begin_src emacs-lisp
+(use-package! perspective
+  :bind (("C-x b" . persp-counsel-switch-buffer)
+         ("C-x x s" . persp-switch))
+  :config
+  (persp-mode))
+#+end_src
 ** Swiper
 Better isearch replacement
 #+BEGIN_SRC emacs-lisp :tangle packages.el
@@ -1491,7 +1505,8 @@ Needed by Indium
 #+begin_src emacs-lisp
 (add-hook! 'js2-mode-hook
            #'aggressive-indent-mode
-           #'smartparens-strict-mode)
+           #'smartparens-strict-mode
+           #'tide-mode)
 #+end_src
 **** Package
 #+begin_src emacs-lisp :tangle packages.el
@@ -1518,6 +1533,17 @@ Needed by Indium
       '((projectile-project-configure-cmd . "npm install")
         (projectile-project-test-cmd . "npm run test")
         (projectile-project-test-cmd . "npm test")))
+#+end_src
+*** npm.el (npm-mode)
+**** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! npm :recipe
+  (:host github :repo "shaneikennedy/npm.el")
+  :pin "2bd5441") ;; Commit date Sep 30, 2021
+#+end_src
+**** Config
+#+begin_src emacs-lisp
+(add-hook! 'js2-mode-hook #'npm-mode)
 #+end_src
 ** Jenkinsfile
 *** package
