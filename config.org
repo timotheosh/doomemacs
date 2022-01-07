@@ -1,6 +1,7 @@
 #+title: Emacs Config (Doom Emacs)
 #+author: Tim Hawes
 #+property: header-args :tangle yes :mkdirp yes
+#+startup: overview
 
 * Headings
 ** Packages File
@@ -161,6 +162,14 @@ This determines the style of line numbers in effect. If set to `nil', line numbe
   (map! :map ivy-minibuffer-map
         :g "TAB" #'ivy-partial))
 (after! counsel
+  (setq! counsel-projectile-preview-buffers t
+         counsel-switch-buffer-preview-virtual-buffers t)
+
+  (map! "C-c b"
+        #'(lambda (arg)
+            (counsel-projectile-switch-to-buffer arg)))
+
+  (map! "C-c B" #'counsel-switch-buffer)
   (map! :map counsel-M-x-map
         :g "TAB" #'ivy-partial))
 #+END_SRC
@@ -172,12 +181,12 @@ F4 gives us ~counsel-projectile-find-file~
 * Additional Modules
 ** Perspective.el
 *** Package
-#+begin_src emacs-lisp :tangle packages.el
+#+begin_src emacs-lisp :tangle no
 (package! perspective :recipe (:host github :repo "nex3/perspective-el")
   :pin "d8211a8") ;; Commit Date Dec 12, 2021
 #+end_src
 *** Config
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package! perspective
   :bind (("C-x b" . persp-counsel-switch-buffer)
          ("C-x x s" . persp-switch))
