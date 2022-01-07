@@ -160,16 +160,14 @@ This determines the style of line numbers in effect. If set to `nil', line numbe
 #+BEGIN_SRC emacs-lisp
 (after! ivy
   (map! :map ivy-minibuffer-map
-        :g "TAB" #'ivy-partial))
-(after! counsel
+        :g "TAB" #'ivy-partial)
   (setq! counsel-projectile-preview-buffers t
          counsel-switch-buffer-preview-virtual-buffers t)
 
-  (map! "C-c b"
-        #'(lambda (arg)
-            (counsel-projectile-switch-to-buffer arg)))
+  (map! "C-x b"
+        #'counsel-projectile-switch-to-buffer)
 
-  (map! "C-c B" #'counsel-switch-buffer)
+  (map! "C-x B" #'counsel-switch-buffer)
   (map! :map counsel-M-x-map
         :g "TAB" #'ivy-partial))
 #+END_SRC
@@ -1553,6 +1551,15 @@ Needed by Indium
 **** Config
 #+begin_src emacs-lisp
 (add-hook! 'js2-mode-hook #'npm-mode)
+#+end_src
+*** COMMENT projectile settings
+#+begin_src emacs-lisp
+(projectile-register-project-type 'npm '("package.json")
+                                  :project-file "package.json"
+                                  :compile "npm install"
+                                  :test "npm test"
+                                  :run "npm start"
+                                  :test-suffix ".spec")
 #+end_src
 ** Jenkinsfile
 *** package
