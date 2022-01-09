@@ -1492,6 +1492,13 @@ Just for Jenkinsfile support
 #+END_SRC
 ** Java
 ** Javascript
+*** Default hooks
+#+begin_src emacs-lisp
+(add-hook! 'js2-mode-hook
+           #'aggressive-indent-mode
+           #'smartparens-strict-mode
+           #'tide-mode)
+#+end_src
 *** Websocket
 Needed by Indium
 **** Package
@@ -1508,13 +1515,6 @@ Needed by Indium
   :pin "8499e15") ;; Commit date 2021/3/9
 #+END_SRC
 *** Node-REPL
-**** Default hooks
-#+begin_src emacs-lisp
-(add-hook! 'js2-mode-hook
-           #'aggressive-indent-mode
-           #'smartparens-strict-mode
-           #'tide-mode)
-#+end_src
 **** Package
 #+begin_src emacs-lisp :tangle packages.el
 (package! nodejs-repl :recipe
@@ -1552,7 +1552,7 @@ Needed by Indium
 #+begin_src emacs-lisp
 (add-hook! 'js2-mode-hook #'npm-mode)
 #+end_src
-*** COMMENT projectile settings
+*** projectile settings
 #+begin_src emacs-lisp
 (projectile-register-project-type 'npm '("package.json")
                                   :project-file "package.json"
