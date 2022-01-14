@@ -953,6 +953,30 @@ Aweshell toggle.
 (after! org
   (use-package! ob-racket))
 #+END_SRC
+*** Javascript
+#+begin_src emacs-lisp
+(use-package! ob-js)
+(add-to-list 'org-babel-load-languages '(js . t))
+(org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
+(add-to-list 'org-babel-tangle-lang-exts '("js" . "js"))
+
+(defun ob-js-insert-session-header-arg (session)
+  "Insert ob-js `SESSION' header argument.
+- `js-comint'
+- `skewer-mode'
+- `Indium'
+"
+  (interactive (list (completing-read "ob-js session: "
+                                      '("js-comint" "skewer-mode" "indium"))))
+  (org-babel-insert-header-arg
+   "session"
+   (pcase session
+     ("js-comint" "\"*Javascript REPL*\"")
+     ("skewer-mode" "\"*skewer-repl*\"")
+     ("indium" "\"*JS REPL*\""))))
+
+(define-key org-babel-map (kbd "J") 'ob-js-insert-session-header-arg)
+#+end_src
 *** Ansible
 #+begin_src emacs-lisp :tangle packages.el
 (package! ob-ansible :recipe
@@ -1498,6 +1522,14 @@ Just for Jenkinsfile support
            #'aggressive-indent-mode
            #'smartparens-strict-mode
            #'tide-mode)
+#+end_src
+*** Packages for org-mode
+This is needed for org-mode babel.
+**** package
+#+begin_src emacs-lisp :tangle packages.el
+(package! js-comint :recipe
+  (:host github :repo "redguardtoo/js-comint")
+  :pin "7920252") ;; Commit Date Dec 19, 2021
 #+end_src
 *** Websocket
 Needed by Indium
