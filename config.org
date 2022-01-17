@@ -1342,7 +1342,7 @@ priority. The first value will be the default implementation.")
 
   (defvar *setup-lisp*
     (let ((output (shell-command-to-string "ros list installed")))
-      (let ((result (mapcar (lambda (text) (first (split-string text "/" t)))
+      (let ((result (mapcar (lambda (text) (car (split-string text "/" t)))
                             (cl-remove-if #'ros-filter (split-string output "\n" t)))))
         (dolist (impl (reverse *lisp-impl*) result)
           (when (cl-position impl result :test #'string=)
