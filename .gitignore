@@ -22,6 +22,7 @@ config.el
 packages.el
 modules/
 scripts/
+snippets/
 
 # Directories managed by Emacs
 jira/

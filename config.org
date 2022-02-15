@@ -10,6 +10,7 @@ Create the packages.el file.
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 #+END_SRC
+** Config file header
 #+BEGIN_SRC emacs-lisp
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
@@ -1592,6 +1593,24 @@ Needed by Indium
                                   :test "npm test"
                                   :run "npm start"
                                   :test-suffix ".spec")
+#+end_src
+*** Snippets
+**** React
+***** Component
+#+begin_src snippet :tangle snippets/rjsx-mode/rsc.yasnippet
+# -*- mode: snippet -*-
+# name: React#Component
+# key: rsc
+# --
+import React from 'react';
+
+export default function ${`(file-name-nondirectory (file-name-sans-extension buffer-file-name))`}() {
+    return (
+        <div>
+          $0
+        </div>
+    )
+}
 #+end_src
 ** Jenkinsfile
 *** package
