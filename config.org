@@ -1694,8 +1694,8 @@ I have found anaconda-mode to be inferior ro elpy.
   (setq! python-indent-offset 4)
   (elpy-enable)
   (use-package! pyenv-mode)
-  (when (executable-find "ipython")
-    (setq! python-shell-interpreter "ipython"
+  (when (executable-find (expand-file-name "~/.pyenv/shims/ipython"))
+    (setq! python-shell-interpreter (expand-file-name "~/.pyenv/shims/ipython")
            python-shell-interpreter-interactive-arg "-i"
            python-shell-interpreter-args "-i --no-banner --simple-prompt --pprint"
            python-shell-prompt-regexp "In \[[0-9]+\]: "
