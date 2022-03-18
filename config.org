@@ -1659,6 +1659,16 @@ I have found anaconda-mode to be inferior ro elpy.
   :pin "758c1ab") ;; Commit date 2022/2/20
 #+END_SRC
 **** pyenv-mode
+Create a file in ~~/.pyenv/plugins/pyenv-virtualenv/etc/pyenv.d/virtualenv/after.bash~ with the following:
+#+begin_src shell :tangle no
+#!/bin/bash
+# This hook is sourced after a new virtualenv is activated.
+upgrade_packages() {
+  PYENV_VERSION=$VIRTUALENV_NAME pyenv-exec pip install --upgrade pip
+  PYENV_VERSION=$VIRTUALENV_NAME pyenv-exec pip install ipython==7.* python-lsp-server elpy jedi==0.17.2 autopep8 yapf flake8 pipenv nose pytest black tox
+}
+#+end_src
+
 #+begin_src emacs-lisp :tangle packages.el
 (package! pyenv-mode :recipe
   (:host github :repo "pythonic-emacs/pyenv-mode")
