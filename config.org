@@ -1649,61 +1649,59 @@ export default function ${`(file-name-nondirectory (file-name-sans-extension buf
 #+END_SRC
 
 ** Python
-*** Elpy
-**** Package
+*** Packages
+**** Elpy
 I have found anaconda-mode to be inferior ro elpy.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! anaconda-mode :ignore t)
 (package! elpy :recipe
   (:host github :repo "jorgenschaefer/elpy")
-  :pin "2203597") ;; Commit date 2021/3/28
+  :pin "758c1ab") ;; Commit date 2022/2/20
 #+END_SRC
-**** Config
-#+begin_src emacs-lisp
-(after! python
-  (elpy-enable))
+**** pyenv-mode
+#+begin_src emacs-lisp :tangle packages.el
+(package! pyenv-mode :recipe
+  (:host github :repo "pythonic-emacs/pyenv-mode")
+  :pin "b818901") ;; Commit Date 2020/09/04
 #+end_src
-*** Auto-virtualenv
-**** Package
+**** Auto-virtualenv
 #+begin_src emacs-lisp :tangle packages.el
 (package! auto-virtualenv :recipe
   (:host github :repo "marcwebbie/auto-virtualenv")
-  :pin "214604e") ;; Commit date 2020/7/29
+  :pin "07064e0") ;; Commit date 2021/12/15
 #+end_src
-**** Config
-#+begin_src emacs-lisp
-(add-hook! 'python-mode-hook #'auto-virtualenv-set-virtualenv)
-#+end_src
-*** Pydoc
-**** Package
+**** Pydoc
 #+begin_src emacs-lisp :tangle packages.el
 (package! pydoc :recipe
   (:host github :repo "statmobile/pydoc")
   :pin "4459aa1");; Commit date 2020/10/30
 #+end_src
-**** Config
+*** Config
 #+begin_src emacs-lisp
-(setq! elpy-rpc-virtualenv-path 'current)
-(map! :map 'python-mode-map
-      :g "C-c C-h" #'pydoc-at-point)
-#+end_src
-*** Python LSP
-#+begin_src emacs-lisp
+(defun projectile-pyenv-mode-set ()
+  "Set pyenv version matching project name."
+  (let ((project (projectile-project-name)))
+    (if (member project (pyenv-mode-versions))
+        (pyenv-mode-set project)
+      (pyenv-mode-unset))))
+
+(add-hook! 'projectile-after-switch-project-hook #'projectile-pyenv-mode-set)
 (add-hook! 'python-mode-hook
+           #'auto-virtualenv-set-virtualenv
            #'lsp-deferred)
-#+end_src
-*** Python REPL
-Virtualenv should have ~ipython==5.*~ which is the latest LTS version of IPython.
-#+begin_src emacs-lisp
+
 (after! python
+  (setq! python-indent-offset 4)
+  (elpy-enable)
+  (use-package! pyenv-mode)
   (when (executable-find "ipython")
     (setq! python-shell-interpreter "ipython"
            python-shell-interpreter-interactive-arg "-i"
-           python-shell-interpreter-args "-i --no-banner"
+           python-shell-interpreter-args "-i --no-banner --simple-prompt --pprint"
            python-shell-prompt-regexp "In \[[0-9]+\]: "
            python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: ")))
-#+end_src
 
+#+end_src
 ** Racket
 *** Package
 #+begin_src emacs-lisp :tangle packages.el
