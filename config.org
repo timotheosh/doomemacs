@@ -521,9 +521,9 @@ There is no package file for eaf, so dependencies have to be manually managed. D
 #+end_src
 *** Config
 #+begin_src emacs-lisp
-(when (file-directory-p "~/programs/share/emacs/emacs-application-framework")
+(when (file-directory-p "~/.local/share/emacs/emacs-application-framework")
   (use-package! eaf
-    :load-path "~/programs/share/emacs/emacs-application-framework"
+    :load-path "~/.local/share/emacs/emacs-application-framework"
     :custom
     (eaf-browser-continue-where-left-off t)
     :config
