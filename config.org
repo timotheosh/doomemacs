@@ -1778,7 +1778,7 @@ emacsd_start()
 }
 emacsd_stop()
 {
-    su ${emacsd_user} -c "/usr/local/bin/emacsclient --socket=/var/run/user/$(id ${emacsd_user}|sed -e 's/uid=\([0-9]*\).*/\1/')/emacs/${emacsd_socket} --eval \"(kill-emacs)\""
+    su ${emacsd_user} -c "/usr/local/bin/emacsclient --socket=${emacsd_socket} --eval \"(kill-emacs)\""
 }
 run_rc_command "$1"
 #+end_src
