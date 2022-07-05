@@ -324,6 +324,22 @@ These are some convenience functions for programs I run often.
     (when xdg-path
       (concat xdg-path "/sounds/" file))))
 #+end_src
+** Neofetch
+My attempt at writing a neofetch interface for Emacs
+#+begin_src emacs-lisp
+(defun my/get-image ()
+  "/usr/src/stand/images/freebsd-logo-rev.png")
+
+(defun my-neofetch ()
+  (interactive)
+  (if (executable-find "neofetch")
+      (let ((sys-data (shell-command-to-string "neofetch --stdout")))
+        (switch-to-buffer (get-buffer-create "*my-neofetch*"))
+        (erase-buffer)
+        (insert-image (create-image (my/get-image)))
+        (insert sys-data))
+    (message "ERROR: Need neofetch on your path for this to work.")))
+#+end_src
 * Run program
 This is for running arbitrary programs I don't run often.
 #+BEGIN_SRC emacs-lisp
@@ -1758,11 +1774,11 @@ load_rc_config $name
 
 emacsd_start()
 {
-    su ${emacsd_user:=nobody} -c "env HOME=/home/${emacsd_user} /usr/local/bin/emacs ${emacsd_args} --daemon=${emacsd_socket}"
+    su ${emacsd_user} -c "env HOME=/home/${emacsd_user} /usr/local/bin/emacs ${emacsd_args} --daemon=${emacsd_socket}"
 }
 emacsd_stop()
 {
-    su ${emacsd_user:nobody} -c "/usr/local/bin/emacsclient --socket ${emacsd_socket} --eval \"(kill-emacs)\""
+    su ${emacsd_user} -c "/usr/local/bin/emacsclient --socket=/var/run/user/$(id ${emacsd_user}|sed -e 's/uid=\([0-9]*\).*/\1/')/emacs/${emacsd_socket} --eval \"(kill-emacs)\""
 }
 run_rc_command "$1"
 #+end_src
