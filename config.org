@@ -82,39 +82,15 @@ Disable this and use ~find-file-literally~ instead, if you don't want this globa
 ;;    (global-so-long-mode 1))
 #+end_src
 * Appearance
-** Fonts
-Doom exposes five (optional) variables for controlling fonts in Doom. Here are the three important ones:
-- ~doom-font~
-- ~doom-variable-pitch-font~
-- ~doom-big-font~ -- used for ~doom-big-font-mode~ Use this for presentations or streaming.
-They all accept either a font-spec, font string ("Input Mono-12"), or xlfd font string. You generally
-only need ~doom-font~ and ~doom-variable-pitch-font~:
 *** Fixed Font
-This will fail with doom sync
-#+name: fixed-font
-#+BEGIN_SRC emacs-lisp :tangle no
-(if window-system
-    (cond ((font-info (font-spec :family "Iosevka" :size 14.0))    '(font-spec :family "Iosevka" :size 14.0))
-          ((font-info (font-spec :family "Fira Mono" :size 14.0)   '(font-spec :family "Fira Mono" :size 14.0)))
-          ((font-info (font-spec :family "Ubuntu Mono" :size 14.0) '(font-spec :family "Ubuntu Mono" :size 14.0)))
-          (t                                                     '(font-spec :family "Courier 10 Pitch" :size 14.0)))
-  '(font-spec :family "Iosevka" :size 14.0))
-#+END_SRC
-#+begin_src emacs-lisp :noweb yes
-(setq doom-font <<fixed-font()>>)
+#+begin_src emacs-lisp
+  (if (and window-system (font-info (font-spec :family "Iosevka" :size 14.0)))
+	  (setq doom-font (font-spec :family "Iosevka" :size 14.0)))
 #+end_src
 *** Variable Font
-#+name: variable-font
-#+begin_src emacs-lisp :tangle no
-(if window-system
-    (cond ((font-info (font-spec :family "Source Sans Pro" :size 18.0))      '(font-spec :family "Source Sans Pro" :size 18.0))
-          ((font-info (font-spec :family "Tahoma" :size 18.0))               '(font-spec :family "Tahoma" :size 18.0))
-          (t                                                               '(font-spec :family "Courier 10 Pitch" :size 18.0)))
-  '(font-spec :family "Source Sans Pro" :size 18.0))
-#+end_src
-#+begin_src emacs-lisp :noweb yes
-(cond ((string= system-type "berkeley-unix") (setq doom-variable-pitch-font (font-spec :family "Source Sans 3" :size 18.0)))
-      (t                                     (setq doom-variable-pitch-font <<variable-font()>>)))
+#+begin_src emacs-lisp
+  (if (and window-system (font-info (font-spec :family "ETBookOT" :size 18.0)))
+      (setq doom-variable-pitch-font (font-spec :family "ETBookOT" :size 18.0)))
 #+end_src
 ** Mixed-pitch Fonts
 *** Package
@@ -1672,7 +1648,7 @@ I have found anaconda-mode to be inferior ro elpy.
 (package! anaconda-mode :ignore t)
 (package! elpy :recipe
   (:host github :repo "jorgenschaefer/elpy")
-  :pin "758c1ab") ;; Commit date 2022/2/20
+  :pin "de31d30") ;; Commit date 2022/06/27
 #+END_SRC
 **** pyenv-mode
 Create a file in ~~/.pyenv/plugins/pyenv-virtualenv/etc/pyenv.d/virtualenv/after.bash~ with the following:
@@ -1694,13 +1670,13 @@ upgrade_packages() {
 #+begin_src emacs-lisp :tangle packages.el
 (package! auto-virtualenv :recipe
   (:host github :repo "marcwebbie/auto-virtualenv")
-  :pin "07064e0") ;; Commit date 2021/12/15
+  :pin "1e1542f") ;; Commit date 2022/07/13
 #+end_src
 **** Pydoc
 #+begin_src emacs-lisp :tangle packages.el
 (package! pydoc :recipe
   (:host github :repo "statmobile/pydoc")
-  :pin "4459aa1");; Commit date 2020/10/30
+  :pin "c8b667e");; Commit date 2022/05/31
 #+end_src
 *** Config
 #+begin_src emacs-lisp
