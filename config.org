@@ -84,13 +84,28 @@ Disable this and use ~find-file-literally~ instead, if you don't want this globa
 * Appearance
 *** Fixed Font
 #+begin_src emacs-lisp
+(if (and window-system (font-info (font-spec :family "Iosevka" :size 14.0)))
+      (setq doom-font (font-spec :family "Iosevka" :size 14.0)))
+;; In case we are runnning in daemon mode
+(defun my/set-fixed-font (frame)
+  (select-frame frame)
   (if (and window-system (font-info (font-spec :family "Iosevka" :size 14.0)))
-	  (setq doom-font (font-spec :family "Iosevka" :size 14.0)))
+      (setq doom-font (font-spec :family "Iosevka" :size 14.0))))
 #+end_src
 *** Variable Font
 #+begin_src emacs-lisp
-  (if (and window-system (font-info (font-spec :family "ETBookOT" :size 18.0)))
+(if (and window-system (font-info (font-spec :family "ETBookOT" :size 18.0)))
       (setq doom-variable-pitch-font (font-spec :family "ETBookOT" :size 18.0)))
+;; In case we are runnning in daemon mode
+(defun my/set-variable-font (frame)
+  (select-frame frame)
+  (if (and window-system (font-info (font-spec :family "ETBookOT" :size 18.0)))
+      (setq doom-variable-pitch-font (font-spec :family "ETBookOT" :size 18.0))))
+#+end_src
+*** Set fonts on frame creation
+#+begin_src emacs-lisp
+(push 'my/set-variable-font after-make-frame-functions)
+(push 'my/set-fixed-font after-make-frame-functions)
 #+end_src
 ** Mixed-pitch Fonts
 *** Package
@@ -1682,10 +1697,11 @@ upgrade_packages() {
 #+begin_src emacs-lisp
 (defun projectile-pyenv-mode-set ()
   "Set pyenv version matching project name."
-  (let ((project (projectile-project-name)))
-    (if (member project (pyenv-mode-versions))
-        (pyenv-mode-set project)
-      (pyenv-mode-unset))))
+  (when (= major-mode "python-mode")
+    (let ((project (projectile-project-name)))
+      (if (member project (pyenv-mode-versions))
+          (pyenv-mode-set project)
+        (pyenv-mode-unset)))))
 
 (add-hook! 'projectile-after-switch-project-hook #'projectile-pyenv-mode-set)
 (add-hook! 'python-mode-hook
