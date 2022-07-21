@@ -1523,6 +1523,13 @@ Just for Jenkinsfile support
 (add-hook! 'css-mode-hook #'impatient-mode)
 #+END_SRC
 ** Java
+*** Springboot Initializer
+#+begin_src emacs-lisp
+(defun springboot-quickstart ()
+  (interactive)
+  (use-package! lsp-java)
+  (lsp-java-spring-initializr))
+#+end_src
 ** Javascript
 *** Default hooks
 #+begin_src emacs-lisp
@@ -1697,13 +1704,13 @@ upgrade_packages() {
 #+begin_src emacs-lisp
 (defun projectile-pyenv-mode-set ()
   "Set pyenv version matching project name."
-  (when (= major-mode "python-mode")
+  (when (= major-mode 'python-mode)
     (let ((project (projectile-project-name)))
       (if (member project (pyenv-mode-versions))
           (pyenv-mode-set project)
         (pyenv-mode-unset)))))
 
-(add-hook! 'projectile-after-switch-project-hook #'projectile-pyenv-mode-set)
+;;(add-hook! 'projectile-after-switch-project-hook #'projectile-pyenv-mode-set)
 (add-hook! 'python-mode-hook
            #'auto-virtualenv-set-virtualenv
            #'lsp-deferred)
