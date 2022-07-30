@@ -1297,6 +1297,7 @@ Personal project for projectile to understand exercism.io projects. The project 
          :desc "Submit marked files"      "x" #'exercism-dired-submit-marked-files)))
 #+end_src
 ** Clojure
+*** defaults
 #+BEGIN_SRC emacs-lisp
 (add-hook! 'clojure-mode-hook
            #'lsp-deferred
@@ -1309,6 +1310,10 @@ Personal project for projectile to understand exercism.io projects. The project 
            #'aggressive-indent-mode
            #'lisp-extra-font-lock-mode)
 #+END_SRC
+*** Bugfix for cider and Emacs 28
+#+begin_src emacs-lisp :tangle packages.el
+(package! map :pin "bb50dba")
+#+end_src
 ** Common Lisp
 *** Settings
 **** Find available Lisp implementations
