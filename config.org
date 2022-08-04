@@ -53,6 +53,17 @@ I like this, but have not yet decided to use it. I have seen it used a lot in va
 #+begin_src emacs-lisp :tangle no
 (package! s :recipe (:host github :repo "magnars/s.el") :pin "e1710af") ;;Commit date 2021-6-3
 #+end_src
+** term-keys
+To get the GUI key memory activbe in the terminal.
+*** package
+#+begin_src emacs-lisp :tangle packages.el
+(package! term-keys :recipe (:host github :repo "CyberShadow/term-keys")
+  :pin "25b6316") ;; Commit date Jun 13, 2022
+#+end_src
+*** config
+#+begin_src emacs-lisp
+(term-keys-mode t)
+#+end_src
 
 * Global
 ** Disable global smartparens-mode
