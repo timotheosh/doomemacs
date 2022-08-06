@@ -1374,7 +1374,7 @@ priority. The first value will be the default implementation.")
 
   (mapcar #'ros-config *setup-lisp*))
 #+end_src
-****   Config
+**** Config
 #+BEGIN_SRC emacs-lisp :noweb yes
 (add-hook! 'lisp-mode-hook
            #'smartparens-strict-mode
