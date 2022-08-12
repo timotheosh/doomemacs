@@ -62,7 +62,11 @@ To get the GUI key memory activbe in the terminal.
 #+end_src
 *** config
 #+begin_src emacs-lisp
-(term-keys-mode t)
+(when (not window-system)
+  (term-keys-mode t)
+  (after! smartparens-mode
+    (map! "<prior>" #'scroll-up-command)
+    (map! "<next>" #'scroll-down-command)))
 #+end_src
 
 * Global
@@ -72,7 +76,6 @@ Smartparens is awesome, but we don't want it everywhere.
 (remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
 (setq! show-paren-mode 1
        doom-scratch-initial-major-mode t)
-(setq! auth-sources '("~/.authinfo.gpg"))
 #+END_SRC
 ** Long lines
 *** Bidirectional Editing
@@ -91,6 +94,10 @@ Disable this and use ~find-file-literally~ instead, if you don't want this globa
 #+begin_src emacs-lisp
 ;;(if (version<= "27.1" emacs-version)
 ;;    (global-so-long-mode 1))
+#+end_src
+** auth-sources (authinfo)
+#+begin_src emacs-lisp
+(setq! auth-sources '("~/.authinfo.gpg"))
 #+end_src
 * Appearance
 *** Fixed Font
