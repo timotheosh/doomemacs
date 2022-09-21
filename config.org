@@ -1514,7 +1514,7 @@ Just for Jenkinsfile support
 (package! web-mode :recipe
   (:host github :repo "fxbois/web-mode")
   :pin "8ef4793") ;; Commit date 2021/1/31
-;;(package! impatient-mode :recipe '(:host github :repo "skeeto/impatient-mode"))
+
 (package! impatient-mode :recipe
   (:host github :repo "skeeto/impatient-mode")
   :pin "cbddfd5") ;; Commit date 2020/7/23
@@ -1581,7 +1581,7 @@ Needed by Indium
 **** Package
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! indium :recipe
-  '(:host github :repo "NicolasPetton/Indium")
+  (:host github :repo "NicolasPetton/Indium")
   :pin "8499e15") ;; Commit date 2021/3/9
 #+END_SRC
 *** Node-REPL
