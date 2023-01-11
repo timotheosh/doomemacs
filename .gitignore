@@ -23,6 +23,7 @@ packages.el
 modules/
 scripts/
 snippets/
+custom.el
 
 # Directories managed by Emacs
 jira/
