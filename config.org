@@ -219,12 +219,6 @@ explain-pause-mode is very lightweight; you can leave it running all the time. Y
 ;;(explain-pause-mode t)
 #+END_SRC
 ** Spell-fu
-*** Install
-#+begin_src emacs-lisp :tangle packages.el
-(package! spell-fu :recipe
-  (:host gitlab :repo "ideasman42/emacs-spell-fu")
-  :pin "fae15427") ; Commit date 2021/04/14
-#+end_src
 *** Config
 #+begin_src emacs-lisp
 (after! org-mode
