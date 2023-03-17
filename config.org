@@ -1328,14 +1328,30 @@ Personal project for projectile to understand exercism.io projects. The project 
 #+end_src
 ** Common Lisp
 *** Settings
-**** Find available Lisp implementations
+**** Config
+#+begin_src emacs-lisp
+(add-hook! 'lisp-mode-hook
+           #'smartparens-strict-mode
+           #'aggressive-indent-mode
+           #'lisp-extra-font-lock-mode
+           #'company-quickhelp-mode)
+
+(map! :map sly-mrepl-mode-map
+      (:g "<C-up>" #'comint-previous-input
+       :g "<C-down>" #'comint-next-input))
+
+#+end_src
+**** Config Lisp Implementations
+***** Find available Lisp implementations
+The last implementation searched for will be the first (default) choice in sly. The roswell implementations should be treated separately in this case as their priorities are based on the ~*lisp-impl*~ variable below. Evaluate roswell last if you want their implementations listed first.
 #+name: available-lisps
 #+begin_src emacs-lisp :tangle no
-;; This will all be nil if roswell is not iunstalled.
+(defvar *implementations* '())
+;; This will all be nil if roswell is not installed.
 (defvar ros-path (executable-find "ros")
   "Path ro ros program.")
 (when ros-path
-  
+
   (defun ros-filter (text)
     "Filter for finding all the lisp implementations ros manages."
     (string= (substring text 0 9) "Installed"))
@@ -1354,8 +1370,8 @@ Personal project for projectile to understand exercism.io projects. The project 
     (let ((retval (list  ros-path "-L" impl "-Q" "run")))
       (if (or (is-sbcl? impl)
               (is-ecl? impl))
-          (list (intern impl) retval :coding-system 'utf-8-unix)
-        (list (intern impl) retval))))
+          (list (intern (concat "roswell-" impl)) retval :coding-system 'utf-8-unix)
+        (list (intern (concat "roswell-" impl)) retval))))
 
   (defvar *lisp-impl*
     '("sbcl"
@@ -1372,22 +1388,19 @@ priority. The first value will be the default implementation.")
         (dolist (impl (reverse *lisp-impl*) result)
           (when (cl-position impl result :test #'string=)
             (setq result (cons impl (remove impl result))))))))
+  (setq *implementations* (mapcar #'ros-config *setup-lisp*)))
 
-  (mapcar #'ros-config *setup-lisp*))
+;; Look for sbcl
+(defvar sbcl-path (executable-find "sbcl"))
+
+(when sbcl-path
+  (push (list 'sbcl (list sbcl-path) :coding-system 'utf-8-unix) *implementations*))
+
+,*implementations*
 #+end_src
-**** Config
 #+BEGIN_SRC emacs-lisp :noweb yes
-(add-hook! 'lisp-mode-hook
-           #'smartparens-strict-mode
-           #'aggressive-indent-mode
-           #'lisp-extra-font-lock-mode
-           #'company-quickhelp-mode)
 (after! sly
   (setq! sly-lisp-implementations '<<available-lisps()>>))
-(map! :map sly-mrepl-mode-map
-      (:g "<C-up>" #'comint-previous-input
-       :g "<C-down>" #'comint-next-input))
-
 #+END_SRC
 **** Hyperspec lookup
 Open CL REPL and execute: ~(ql:quickload "clhs")~, then follow instructions.
