@@ -70,6 +70,14 @@ To get the GUI key memory activbe in the terminal.
 #+end_src
 
 * Global
+** COMMENT Personal functions
+~system-type~ is too vague when it comes to BSD UNIX. We'll run uname -s to get the system name.
+#+begin_src emacs-lisp
+(if (executable-find "uname")
+    (setq uname-system (intern (string-trim (shell-command-to-string "uname -s"))))
+  (setq uname-system nil))
+
+#+end_src
 ** Disable global smartparens-mode
 Smartparens is awesome, but we don't want it everywhere.
 #+BEGIN_SRC emacs-lisp
@@ -97,7 +105,8 @@ Disable this and use ~find-file-literally~ instead, if you don't want this globa
 #+end_src
 ** auth-sources (authinfo)
 #+begin_src emacs-lisp
-(setq! auth-sources '("~/.authinfo.gpg"))
+(setq! auth-sources '("~/.authinfo.gpg")
+       epg-gpg-program "gpg2")
 #+end_src
 * Appearance
 *** Fixed Font
@@ -466,7 +475,7 @@ Use Gmail in gnus
  message-send-mail-function 'smtpmail-send-it
  user-mail-address "trhawes@gmail.com"
  smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil))
- smtpmail-auth-credentials (expand-file-name "~/.authinfo")
+ smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg")
  smtpmail-default-smtp-server "smtp.gmail.com"
  smtpmail-smtp-server "smtp.gmail.com"
  smtpmail-smtp-service 587
@@ -577,7 +586,7 @@ There is no package file for eaf, so dependencies have to be manually managed. D
 ** exercism
 #+BEGIN_SRC emacs-lisp
 (defconst pcmpl-exercism-commands
-  '("configure" "help" "submit" "upgrade" "workspace"
+  '("configure" "help" "submit" "upgrade" "workspace" "prepare"
     "download" "open" "troubleshoot" "version")
   "List of `exercism' commands")
 (defun pcomplete/exercism ()
@@ -661,6 +670,20 @@ There is no package file for eaf, so dependencies have to be manually managed. D
 Because I would much rather define my own completions using elisp and pcomplete.
 #+begin_src emacs-lisp :tangle packages.el
 (package! fish-completion :disable t)
+#+end_src
+**** Emulate a Terminal
+***** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! emacs-eat :recipe (:type git :repo "https://codeberg.org/akib/emacs-eat.git" :branch "master")
+  :pin "d85744b48a") ;; Commit date May 15, 2023
+#+end_src
+***** Config
+#+begin_src emacs-lisp
+(use-package eat
+  :config
+  (add-hook! 'eshell-load-hook #'eat-eshell-mode)
+  ;;(add-hook! 'eshell-load-hook #'eat-eshell-visual-command-mode)
+  )
 #+end_src
 **** [[https://github.com/tom-tan/esh-help][esh-help]] for Eshell help
 Shows help in minibuffer when typing an elisp command in eshell.
@@ -749,7 +772,7 @@ Shows help in minibuffer when typing an elisp command in eshell.
 (after! eshell
   (setq eshell-history-size 1024)
 
-  ; So the history vars are defined
+                                        ; So the history vars are defined
   (load "em-hist")
 
   ;; Don't ask, just save
@@ -759,11 +782,10 @@ Shows help in minibuffer when typing an elisp command in eshell.
 
   ;; For older(?) version
   ;;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
-  (if (boundp 'eshell-ask-to-save-history)
-      (setq eshell-ask-to-save-history 'always))
-)
+  (when (boundp 'eshell-ask-to-save-history)
+    (setq eshell-ask-to-save-history 'always)))
 #+END_SRC
-**** Custom prompt
+**** COMMENT Custom prompt
 No longer desired with aweshell now enabled.
 ***** Packages
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -795,8 +817,7 @@ No longer desired with aweshell now enabled.
 *** Preferred functions and variables
 #+BEGIN_SRC emacs-lisp
 (after! eshell
-  (setq eshell-prefer-lisp-functions t)
-  (setq eshell-prefer-lisp-variables t))
+  (setq eshell-prefer-lisp-functions t))
 #+END_SRC
 *** Password caching
 #+BEGIN_SRC emacs-lisp
@@ -831,8 +852,7 @@ No longer desired with aweshell now enabled.
     (message
      (replace-regexp-in-string
       "%" "%%"
-      (ansi-color-apply progress))))
-)
+      (ansi-color-apply progress)))))
 #+END_SRC
 *** Visual commands
 #+BEGIN_SRC emacs-lisp
@@ -855,12 +875,12 @@ No longer desired with aweshell now enabled.
 #+end_src
 ** Shell-pop
 Default Doom eshell (disabled, but left for reference).
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
 (map! "<f3>" '+eshell/toggle)
 #+END_SRC
 Aweshell toggle.
 #+begin_src emacs-lisp
-(map! "<f3>" 'aweshell-dedicated-toggle)
+;;(map! "<f3>" 'aweshell-dedicated-toggle)
 #+end_src
 * Deft
 #+BEGIN_SRC emacs-lisp
