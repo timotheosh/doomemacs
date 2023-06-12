@@ -586,7 +586,7 @@ There is no package file for eaf, so dependencies have to be manually managed. D
 ** exercism
 #+BEGIN_SRC emacs-lisp
 (defconst pcmpl-exercism-commands
-  '("configure" "help" "submit" "upgrade" "workspace"
+  '("configure" "help" "submit" "upgrade" "workspace" "prepare"
     "download" "open" "troubleshoot" "version")
   "List of `exercism' commands")
 (defun pcomplete/exercism ()
@@ -817,8 +817,7 @@ No longer desired with aweshell now enabled.
 *** Preferred functions and variables
 #+BEGIN_SRC emacs-lisp
 (after! eshell
-  (setq eshell-prefer-lisp-functions t)
-  (setq eshell-prefer-lisp-variables t))
+  (setq eshell-prefer-lisp-functions t))
 #+END_SRC
 *** Password caching
 #+BEGIN_SRC emacs-lisp
@@ -864,7 +863,7 @@ No longer desired with aweshell now enabled.
   (dolist (cmd '("tmux" "aptitude" "aws-shell" "neofetch" "htop" "radeontop"))
     (add-to-list 'eshell-visual-commands cmd)))
 #+END_SRC
-** COMMENT Aweshell
+** Aweshell
 *** Package
 #+begin_src emacs-lisp :tangle packages.el
 (package! aweshell :recipe (:host github :repo "manateelazycat/aweshell")
