@@ -1531,8 +1531,14 @@ Just for Jenkinsfile support
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! groovy-mode :recipe
   (:host github :repo "Groovy-Emacs-Modes/groovy-emacs-modes")
-  :pin "99eaf70") ;; Commit date 2021/5/9
+  :pin "7b8520b") ;; Commit date 2023/3/18
 #+END_SRC
+*** config
+#+begin_src emacs-lisp
+(use-package! groovy-mode
+  :config
+  (setq groovy-indent-offset 2))
+#+end_src
 
 ** HTML
 *** Impatience mode for realtime editing of html
