@@ -562,6 +562,17 @@ There is no package file for eaf, so dependencies have to be manually managed. D
     (eaf-bind-key nil "M-q" eaf-browser-keybinding))) ;; unbind, see more in the Wiki)
 #+end_src
 * Pcomplete
+** pcmpl-args
+*** package
+#+begin_src emacs-lisp :tangle packages.el
+(package! pcmpl-args :recipe (:host github :repo "JonWaltman/pcmpl-args.el")
+  :pin "43229e1") ;; Commit date May 10, 2022
+#+end_src
+*** config
+#+begin_src emacs-lisp
+(after! eshell-mode
+  (use-package! pcmpl-args))
+#+end_src
 ** apt
 #+BEGIN_SRC emacs-lisp
 (defconst pcmpl-apt-commands
@@ -592,7 +603,7 @@ There is no package file for eaf, so dependencies have to be manually managed. D
 (defun pcomplete/exercism ()
   (pcomplete-here* pcmpl-exercism-commands))
 #+END_SRC
-** git
+** COMMENT git
 #+BEGIN_SRC emacs-lisp
 (defconst pcmpl-git-commands
   '("add" "bisect" "branch" "checkout" "clone"
