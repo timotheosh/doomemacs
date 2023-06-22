@@ -1184,11 +1184,16 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
   (:host github :repo "Malabarba/aggressive-indent-mode")
   :pin "b0ec004") ;; Commit date 2020/8/24
 #+END_SRC
+**** Company settings
+#+begin_src emacs-lisp
+(after! company
+  (setq! company-idle-delay 5.0))
+#+end_src
 **** [[https://github.com/company-mode/company-quickhelp][Company-quickhelp]] for on the fly documentation.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! company-quickhelp :recipe
   (:host github :repo "company-mode/company-quickhelp")
-  :pin "530b293") ;; Commit date 2021/5/15
+  :pin "9505fb0") ;; Commit date 2022/12/12
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! company
@@ -1731,42 +1736,6 @@ export default function ${`(file-name-nondirectory (file-name-sans-extension buf
 
 ** Python
 *** Packages
-**** Elpy
-I have found anaconda-mode to be inferior ro elpy.
-#+BEGIN_SRC emacs-lisp :tangle packages.el
-(package! anaconda-mode :ignore t)
-(package! elpy :recipe
-  (:host github :repo "jorgenschaefer/elpy")
-  :pin "de31d30") ;; Commit date 2022/06/27
-#+END_SRC
-**** pyenv-mode
-Create a file in ~~/.pyenv/plugins/pyenv-virtualenv/etc/pyenv.d/virtualenv/after.bash~ with the following:
-#+begin_src shell :tangle no
-#!/bin/bash
-# This hook is sourced after a new virtualenv is activated.
-upgrade_packages() {
-  PYENV_VERSION=$VIRTUALENV_NAME pyenv-exec pip install --upgrade pip
-  PYENV_VERSION=$VIRTUALENV_NAME pyenv-exec pip install ipython==7.* python-lsp-server elpy jedi==0.17.2 autopep8 yapf flake8 pipenv nose pytest black tox
-}
-#+end_src
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! pyenv-mode :recipe
-  (:host github :repo "pythonic-emacs/pyenv-mode")
-  :pin "b818901") ;; Commit Date 2020/09/04
-#+end_src
-**** Auto-virtualenv
-#+begin_src emacs-lisp :tangle packages.el
-(package! auto-virtualenv :recipe
-  (:host github :repo "marcwebbie/auto-virtualenv")
-  :pin "1e1542f") ;; Commit date 2022/07/13
-#+end_src
-**** Pydoc
-#+begin_src emacs-lisp :tangle packages.el
-(package! pydoc :recipe
-  (:host github :repo "statmobile/pydoc")
-  :pin "c8b667e");; Commit date 2022/05/31
-#+end_src
 *** Config
 #+begin_src emacs-lisp
 (defun projectile-pyenv-mode-set ()
@@ -1779,12 +1748,13 @@ upgrade_packages() {
 
 ;;(add-hook! 'projectile-after-switch-project-hook #'projectile-pyenv-mode-set)
 (add-hook! 'python-mode-hook
+           #'anaconda-mode
+           #'anaconda-eldoc-mode
            #'auto-virtualenv-set-virtualenv
            #'lsp-deferred)
 
 (after! python
   (setq! python-indent-offset 4)
-  (elpy-enable)
   (use-package! pyenv-mode)
   (when (executable-find (expand-file-name "~/.pyenv/shims/ipython"))
     (setq! python-shell-interpreter (expand-file-name "~/.pyenv/shims/ipython")
