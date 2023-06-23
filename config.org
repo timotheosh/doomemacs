@@ -1187,7 +1187,7 @@ Just ~(add-hook! /programming-mode-hook/ #'aggressive-indent-mode)~ to activate.
 **** Company settings
 #+begin_src emacs-lisp
 (after! company
-  (setq! company-idle-delay 5.0))
+  (setq! company-idle-delay 0.5))
 #+end_src
 **** [[https://github.com/company-mode/company-quickhelp][Company-quickhelp]] for on the fly documentation.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
@@ -1750,7 +1750,6 @@ export default function ${`(file-name-nondirectory (file-name-sans-extension buf
 (add-hook! 'python-mode-hook
            #'anaconda-mode
            #'anaconda-eldoc-mode
-           #'auto-virtualenv-set-virtualenv
            #'lsp-deferred)
 
 (after! python
