@@ -1462,6 +1462,18 @@ See also the Github repo [[https://github.com/cxxxr/cl-lsp.git][cl-lsp]].
 ;;                     :server-id 'cl-lsp))
 ;;   (add-hook 'lisp-mode-hook 'lsp-deferred)
 #+END_SRC
+** Csh and tcsh mode
+*** package
+#+begin_src emacs-lisp :tangle packages.el
+(package! csh-mode :recipe (:host github :repo "tcsh-org/tcsh"
+                            :files ("csh-mode.el")) :pin "d075ab5") ;; Commit date: 2023-06-27
+#+end_src
+*** config
+#+begin_src emacs-lisp
+;; Enable csh-mode
+(use-package! csh-mode
+  :mode ("\\.csh\\'" "\\.cshrc\\'" "\\.tcshrc\\'"))
+#+end_src
 ** Emacs Lisp
 *** Settings
 #+BEGIN_SRC emacs-lisp
