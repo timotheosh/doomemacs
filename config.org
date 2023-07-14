@@ -933,7 +933,7 @@ Aweshell toggle.
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! org-jira :recipe
   (:host github :repo "ahungry/org-jira")
-  :pin "c8b0580") ;; Commit date 2021/7/27
+  :pin "63a74d4") ;; Commit date 2023/4/13
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (after! org
@@ -1748,6 +1748,12 @@ export default function ${`(file-name-nondirectory (file-name-sans-extension buf
 
 ** Python
 *** Packages
+**** pyright
+***** package
+#+begin_src emacs-lisp :tangle packages.el
+(package! lsp-pyright :recipe (:host github :repo "emacs-lsp/lsp-pyright")
+  :pin "54a2acd") ;; Commit date Feb 25, 2023
+#+end_src
 *** Config
 #+begin_src emacs-lisp
 (defun projectile-pyenv-mode-set ()
@@ -1762,6 +1768,7 @@ export default function ${`(file-name-nondirectory (file-name-sans-extension buf
 (add-hook! 'python-mode-hook
            #'anaconda-mode
            #'anaconda-eldoc-mode
+           (lambda ()  (use-package! lsp-pyright))
            #'lsp-deferred)
 
 (after! python
