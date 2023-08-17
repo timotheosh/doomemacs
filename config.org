@@ -363,7 +363,7 @@ This is for running arbitrary programs I don't run often.
 
 (map! "C-!" #'run-program)
 #+END_SRC
-* Emacs Frame Manager
+* COMMENT Emacs Frame Manager
 The purpose of this module is managing Emacs windows in an environment without using EXWM. This will offer functions an emacsclient can run conditioned on the current state of the window, and fast terminal access within Emacs. This will work with X11, not sure what the implications are for Cocoa or Windows.
 ** Frame Names
 First, we set up unique names for the X Window names, so we can easily reference these windows in an X Window environment. The names have random numbers, to make them easier to isolate among many windows in an X environment.
@@ -1343,6 +1343,12 @@ Personal project for projectile to understand exercism.io projects. The project 
         :leader
         (:prefix ("x" . "exercism")
          :desc "Submit marked files"      "x" #'exercism-dired-submit-marked-files)))
+#+end_src
+** Chicken Scheme
+*** package
+#+begin_src emacs-lisp :tangle packages.el
+(package! geiser-chicken :recipe (:host gitlab :repo "emacs-geiser/chicken")
+  :pin "a480598b") ;; Commit date July 17, 2022
 #+end_src
 ** Clojure
 *** defaults
