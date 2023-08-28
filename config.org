@@ -961,6 +961,10 @@ Aweshell toggle.
 (after! org
   (use-package! ox-bb))
 #+end_src
+*** Confluence
+#+begin_src emacs-lisp
+(use-package! ox-confluence)
+#+end_src
 *** Github Flavored Markdown
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! ox-gfm)
