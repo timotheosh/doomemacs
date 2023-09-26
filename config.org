@@ -1102,6 +1102,36 @@ obtt is an acronym for "org-babel-tangle templates".
 (when (not (file-directory-p obtt-templates-dir))
     (make-directory obtt-templates-dir))
 #+END_SRC
+** Publishing
+#+begin_src emacs-lisp
+(setq! org-publish-project-alist
+       '(("naurrnen-website"
+          :recursive t
+          :base-directory "~/org-files/Projects/naurrnen-website/src/"
+          :publishing-directory "~/org-files/Projects/naurrnen-website/public/"
+          :creator (concat "GNU Emacs: " emacs-version "  Org-mode: " (org-version) " Tim Hawes © 2023")
+          :with-author nil           ;; Don't include author name
+          :with-creator t            ;; Include Emacs and Org versions in footer
+          :with-toc nil              ;; Include a table of contents
+          :section-numbers nil       ;; Don't include section numbers
+          :time-stamp-file nil       ;; Don't include time stamp in file
+          :exclude "setup.org\\|navbar.org"
+          :auto-sitemap t
+          :sitemap-filename "sitemap.org"
+          :base-extension "org"
+          :publishing-function org-html-publish-to-html)
+         ("naurrnen-artifacts"
+          :recursive t
+          :base-directory "~/org-files/Projects/naurrnen-website/src/"
+          :publishing-directory "~/org-files/Projects/naurrnen-website/public/"
+          :base-extension "js\\|css\\|png\\|jpg"
+          :publishing-function org-publish-attachment)))
+       (setq!  org-html-validation-link nil
+               org-html-head-include-script nil
+               org-html-head-include-default-style nil
+               org-html-head nil)
+;;        org-html-head "<link rel=\"stylesheet\" href=\"https://cdn.simplecss.org/simple.min.css\" />")
+#+end_src
 * Book Readers
 ** Calibre
 *** Package
