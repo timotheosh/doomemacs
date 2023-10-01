@@ -1102,19 +1102,6 @@ obtt is an acronym for "org-babel-tangle templates".
 (when (not (file-directory-p obtt-templates-dir))
     (make-directory obtt-templates-dir))
 #+END_SRC
-*** Transclusion
-**** package
-#+begin_src emacs-lisp :tangle packages.el
-(package! org-transclusions :recipe (:host github :repo "nobiot/org-transclusion")
-  :pin "b10d4de") ;; Commit date Aug 19, 2023
-#+end_src
-**** config
-#+begin_src emacs-lisp
-(use-package! org-transclusion
-  :after org
-  :init
-  (add-hook! #'org-mode-hook #'org-transclusion-mode))
-#+end_src
 ** Publishing
 #+begin_src emacs-lisp
 (setq! org-publish-project-alist
