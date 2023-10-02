@@ -1102,6 +1102,12 @@ obtt is an acronym for "org-babel-tangle templates".
 (when (not (file-directory-p obtt-templates-dir))
     (make-directory obtt-templates-dir))
 #+END_SRC
+*** org-sidebar
+**** package
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-sidebar :recipe (:host github :repo "alphapapa/org-sidebar")
+  :pin "288703b") ;; Commit date Sep 12, 2021
+#+end_src
 ** Publishing
 #+begin_src emacs-lisp
 (setq! org-publish-project-alist
