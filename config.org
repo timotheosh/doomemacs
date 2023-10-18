@@ -1115,10 +1115,11 @@ obtt is an acronym for "org-babel-tangle templates".
           :recursive t
           :base-directory "~/org-files/Projects/naurrnen-website/src/"
           :publishing-directory "~/org-files/Projects/naurrnen-website/public/"
-          :creator (concat "GNU Emacs: " emacs-version "  Org-mode: " (org-version) " Tim Hawes © 2023")
-          :with-author nil           ;; Don't include author name
+          :author "Tim Hawes © 2023"
+          :with-author t           ;; Don't include author name
           :with-creator t            ;; Include Emacs and Org versions in footer
           :with-toc nil              ;; Include a table of contents
+          :with-title nil
           :section-numbers nil       ;; Don't include section numbers
           :time-stamp-file nil       ;; Don't include time stamp in file
           :exclude "setup.org\\|navbar.org"
@@ -1132,10 +1133,10 @@ obtt is an acronym for "org-babel-tangle templates".
           :publishing-directory "~/org-files/Projects/naurrnen-website/public/"
           :base-extension "js\\|css\\|png\\|jpg"
           :publishing-function org-publish-attachment)))
-       (setq!  org-html-validation-link nil
-               org-html-head-include-script nil
-               org-html-head-include-default-style nil
-               org-html-head nil)
+(setq! org-html-validation-link nil
+        org-html-head-include-scripts nil
+        org-html-head-include-default-style nil
+        org-html-head nil)
 ;;        org-html-head "<link rel=\"stylesheet\" href=\"https://cdn.simplecss.org/simple.min.css\" />")
 #+end_src
 * Book Readers
@@ -1660,7 +1661,7 @@ Just for Jenkinsfile support
 (add-hook! 'js2-mode-hook
            #'aggressive-indent-mode
            #'smartparens-strict-mode
-           #'tide-mode)
+           #'lsp)
 #+end_src
 *** Packages for org-mode
 This is needed for org-mode babel.
