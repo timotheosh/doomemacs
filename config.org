@@ -900,6 +900,20 @@ Aweshell toggle.
 (setq! deft-recursive t)
 (map! "<f8>" 'deft)
 #+END_SRC
+* ChatGPT
+** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! chatgpt
+  :recipe (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
+  :pin "b31337e") ;; Commit date Sept 10, 2023
+#+end_src
+** Config
+#+begin_src emacs-lisp
+(use-package! chatgpt
+  :defer t
+  :bind ("C-c q" . chatgpt-query))
+
+#+end_src
 * Org-mode
 ** Basic Config
 *** Variables
