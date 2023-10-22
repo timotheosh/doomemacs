@@ -1398,11 +1398,30 @@ Personal project for projectile to understand exercism.io projects. The project 
            #'smartparens-strict-mode
            #'aggressive-indent-mode
            #'lisp-extra-font-lock-mode)
+(add-hook! 'clojurec-mode-hook
+           #'lsp-deferred
+           #'smartparens-strict-mode
+           #'aggressive-indent-mode
+           #'lisp-extra-font-lock-mode)
+
+(setq! gc-cons-threshold (* 100 1024 1024)
+       read-process-output-max (* 1024 1024)
+       treemacs-space-between-root-nodes nil
+       company-minimum-prefix-length 1
+       ;; lsp-enable-indentation nil ; uncomment to use cider indentation instead of lsp
+       ;; lsp-enable-completion-at-point nil ; uncomment to use cider completion instead of lsp
+       )
+
+(use-package! cider
+  :after clojure-mode
+  :config
+  (set-lookup-handlers! 'cider-mode nil))
+
+(use-package! clj-refactor
+  :after clojure-mode
+  :config
+  (set-lookup-handlers! 'clj-refactor-mode nil))
 #+END_SRC
-*** Bugfix for cider and Emacs 28
-#+begin_src emacs-lisp :tangle packages.el
-(package! map :pin "bb50dba")
-#+end_src
 ** Common Lisp
 *** Settings
 **** Config
