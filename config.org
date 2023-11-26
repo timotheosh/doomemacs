@@ -1153,6 +1153,23 @@ obtt is an acronym for "org-babel-tangle templates".
         org-html-head nil)
 ;;        org-html-head "<link rel=\"stylesheet\" href=\"https://cdn.simplecss.org/simple.min.css\" />")
 #+end_src
+* adoc-mode
+** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! adoc-mode :recipe (:host github :repo "bbatsov/adoc-mode")
+  :pin "05914c7") ;; Commit date Sept 5, 2023
+
+(package! org-asciidoc :recipe (:host github :repo "yashi/org-asciidoc")
+  :pin "c0b8db5") ;; Commit date Oct 16, 2023
+#+end_src
+** COMMENT Config
+#+begin_src emacs-lisp
+(use-package! adoc-mode
+  :mode (("\\.adoc\\'"  . adoc-mode)
+         ("\\.asciidoc\\'" . adoc-mode)))
+
+(after! org (use-package! ox-asciidoc))
+#+end_src
 * Book Readers
 ** Calibre
 *** Package
