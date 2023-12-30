@@ -1122,7 +1122,7 @@ obtt is an acronym for "org-babel-tangle templates".
 (package! org-sidebar :recipe (:host github :repo "alphapapa/org-sidebar")
   :pin "288703b") ;; Commit date Sep 12, 2021
 #+end_src
-** Publishing
+** COMMENT Publishing
 #+begin_src emacs-lisp
 (setq! org-publish-project-alist
        '(("naurrnen-website"
@@ -1152,6 +1152,18 @@ obtt is an acronym for "org-babel-tangle templates".
         org-html-head-include-default-style nil
         org-html-head nil)
 ;;        org-html-head "<link rel=\"stylesheet\" href=\"https://cdn.simplecss.org/simple.min.css\" />")
+#+end_src
+** gimel
+*** package
+#+begin_src emacs-lisp :tangle packages.el
+;;(package! gimel :recipe (:host github :repo "timotheosh/gimel"
+;;                         :files ("resources/org-mode/gimel.el")))
+#+end_src
+*** config
+#+begin_src emacs-lisp
+(add-to-list 'load-path "/home/thawes/src/projects/gimel/resources/org-mode/")
+(require 'gimel)
+(add-hook 'after-save-hook #'gimel-run-on-save)
 #+end_src
 * adoc-mode
 ** Package
@@ -1734,7 +1746,7 @@ Needed by Indium
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! indium :recipe
   (:host github :repo "NicolasPetton/Indium")
-  :pin "8499e15") ;; Commit date 2021/3/9
+  :pin "8499e15") ;; Commit date 2021/5/9
 #+END_SRC
 *** Node-REPL
 **** Package
