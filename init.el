@@ -26,7 +26,8 @@
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        (ivy +icons
-            +prescient)      ; a search engine for love and life
+            +prescient)               ; a search engine for love and life
+       ;;(vertico +icons)          ; the search engine of the future
 
        :ui
        deft              ; notational velocity for Emacs
@@ -88,6 +89,7 @@
        :tools
        ansible
        ;;biblio            ; Writes a PhD for you (citation needed)
+       ;;collab            ; buffers with friends
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        direnv
        docker
@@ -164,10 +166,17 @@
        ;;raku              ; the artist formerly known as perl6
        rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
-       (ruby +rails +lsp)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-       (rust +lsp)             ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+       (rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
-       (scheme +chicken +gambit +guile +mit +geiser)   ; a fully conniving family of lisps
+       ;; BEGIN_CUSTOM_BLOCK
+       ;; See this issue for a temporary workaround: https://github.com/doomemacs/doomemacs/issues/7472
+       ;; contents for emacs/.local/etc/@/init.28.d/85-loaddefs.hacks.el
+       ;; (require 'geiser-autoloads)
+       ;; (require 'geiser-guile-autoloads)
+       ;; init.xx.d should match the emacs major version number
+       (scheme +geiser +chicken +gambit +guile +mit)   ; a fully conniving family of lisps
+       ;; END_CUSTOM_BLOCK 
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
@@ -186,8 +195,8 @@
        calendar
        ;;emms
        ;;everywhere        ; *leave* Emacs!? You must be joking
-       irc               ; how neckbeards socialize
-       (rss +org)        ; emacs as an RSS reader
+       ;;irc               ; how neckbeards socialize
+       ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
 
        :config
