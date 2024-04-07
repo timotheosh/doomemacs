@@ -23,6 +23,7 @@
        :completion
        (company
         +prescient)           ; the ultimate code completion backend
+       ;;(corfu +orderless)  ; complete with cap(f), cape and a flying feather!
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        (ivy +icons
@@ -96,7 +97,6 @@
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
-       ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        lsp
        magit             ; a git porcelain for Emacs
@@ -169,14 +169,7 @@
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        (rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
-       ;; BEGIN_CUSTOM_BLOCK
-       ;; See this issue for a temporary workaround: https://github.com/doomemacs/doomemacs/issues/7472
-       ;; contents for emacs/.local/etc/@/init.28.d/85-loaddefs.hacks.el
-       ;; (require 'geiser-autoloads)
-       ;; (require 'geiser-guile-autoloads)
-       ;; init.xx.d should match the emacs major version number
-       (scheme +geiser +chicken +gambit +guile +mit)   ; a fully conniving family of lisps
-       ;; END_CUSTOM_BLOCK 
+       scheme              ; a fully conniving family of lisps
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.

@@ -507,6 +507,20 @@ Use Gmail in gnus
    ("reddit\\.com" . browse-url-firefox)
    ("." . browse-url-generic)))
 #+END_SRC
+** Epub reader
+*** Packages
+#+begin_src emacs-lisp :tangle packages.el
+(package! nov :recipe (:host "https://depp.brause.cc/" :repo "nov.el.git"))
+#+end_src
+*** Config
+#+begin_src emacs-lisp
+(defun my/nov-font-setup ()
+  (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
+                                           :height 1.0))
+(use-package! nov
+  :mode ("\\.epub\\'" . nov-mode))
+(add-hook! 'nov-mode-hook 'my/nov-font-setup)
+#+end_src
 ** Search Tools
 *** Google
 **** Package
@@ -1200,7 +1214,7 @@ obtt is an acronym for "org-babel-tangle templates".
 #+begin_src emacs-lisp
 (use-package! calibredb
   :config
-  (setq calibredb-root-dir "~/CalibreBooks"
+  (setq calibredb-root-dir "~/Documents/Sync/CalibreBooks"
         calibredb-db-dir (expand-file-name "metadata.db" calibredb-root-dir)))
 #+end_src
 ** Epub Reader
