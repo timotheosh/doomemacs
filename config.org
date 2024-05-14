@@ -658,10 +658,17 @@ There is no package file for eaf, so dependencies have to be manually managed. D
     (pcomplete-here* (pcmpl-git-get-refs "heads")))))
 #+END_SRC
 * Dired
+** Packages
+*** s3ed S3 for Dired
+#+begin_src emacs-lisp :tangle packages.el
+(package! s3ed :recipe (:host github :repo "mattusifer/s3ed")
+  :pin "2234444") ; Commit date Sep 29, 2020
+#+end_src
 ** Settings
 #+BEGIN_SRC emacs-lisp
 (setq! dired-hide-details-mode t)
 (setq! ranger-override-dired-mode t)
+(use-package! s3ed)
 #+END_SRC
 ** Functions
 #+BEGIN_SRC emacs-lisp
