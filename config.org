@@ -1909,8 +1909,9 @@ export default function ${`(file-name-nondirectory (file-name-sans-extension buf
            python-shell-interpreter-interactive-arg "-i"
            python-shell-interpreter-args "-i --no-banner --simple-prompt --pprint"
            python-shell-prompt-regexp "In \[[0-9]+\]: "
-           python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: ")))
-
+           python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+           python-shell-completion-native-enable nil)
+    (setenv "PYTHONUNBUFFERED" "1")))
 #+end_src
 ** Racket
 *** Package
