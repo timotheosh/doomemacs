@@ -914,7 +914,7 @@ No longer desired with aweshell now enabled.
 ** Shell-pop
 Default Doom eshell (disabled, but left for reference).
 #+BEGIN_SRC emacs-lisp
-(map! "<f3>" '+eshell/toggle)
+(map! "<f3>" 'aweshell-toggle)
 #+END_SRC
 Aweshell toggle.
 #+begin_src emacs-lisp
