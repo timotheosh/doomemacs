@@ -1052,9 +1052,6 @@ Aweshell toggle.
 *** Javascript
 #+begin_src emacs-lisp
 (use-package! ob-js)
-(add-to-list 'org-babel-load-languages '(js . t))
-(org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
-(add-to-list 'org-babel-tangle-lang-exts '("js" . "js"))
 
 (defun ob-js-insert-session-header-arg (session)
   "Insert ob-js `SESSION' header argument.
@@ -1192,6 +1189,17 @@ obtt is an acronym for "org-babel-tangle templates".
 (require 'gimel)
 (add-hook 'after-save-hook #'gimel-run-on-save)
 #+end_src
+** language support
+#+begin_src emacs-lisp
+(dolist (item '((emacs-lisp . t)
+                 (python . t)
+                 (shell . t)
+                 (racket . t)
+                 (js . t)
+                 (lisp . t)
+                 (clojure . t)))
+         (add-to-list 'org-babel-load-languages item))
+#+end_src
 * adoc-mode
 ** Package
 #+begin_src emacs-lisp :tangle packages.el
@@ -1275,7 +1283,29 @@ We use simple-httpd for emacs, since that comes with impatient-mode.
 #+begin_src emacs-lisp :tangle packages.el
 (package! simple-httpd :recipe
   (:host github :repo "skeeto/emacs-web-server")
-  :pin "22ce66e") ;; Commit date 2019/11/3
+  :pin "3982c55") ;; Commit date 2023/12/29
+#+end_src
+* ZeroMQ
+Needed for ~emacs-jupiter~
+** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! zmq :recipe
+  (:host github :repo "nnicandro/emacs-zmq")
+  :pin "1d9d5a3") ;; Commit date 2024/7/16
+#+end_src
+* Emacs Jupyter
+** Package
+#+begin_src emacs-lisp :tangle packages.el
+(package! jupyter :recipe
+  (:host github :repo "emacs-jupyter/jupyter")
+  :pin "f97f4b5") ;; Commit date 2024/7/16
+#+end_src
+** Config
+#+begin_src emacs-lisp
+(use-package! jupyter
+  :config
+  (add-to-list 'org-babel-load-languages '(jupyter . t)))
+
 #+end_src
 * Programming Languages
 ** General
@@ -1766,7 +1796,7 @@ Needed by Indium
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! websocket :recipe
   (:host github :repo "ahyatt/emacs-websocket")
-  :pin "34e1112") ;; Commit date 2021/1/9  Old: :pin "491a60b"
+  :pin "40c208e") ;; Commit date 2023/8/8  Old: :pin "34e1112"
 #+END_SRC
 *** Indium
 **** Package
