@@ -1184,11 +1184,11 @@ obtt is an acronym for "org-babel-tangle templates".
 *** package
 #+begin_src emacs-lisp :tangle packages.el
 ;;(package! gimel :recipe (:host github :repo "timotheosh/gimel"
-;;                         :files ("resources/org-mode/gimel.el")))
+;;                         :files ("resources/emacs/gimel.el")))
 #+end_src
 *** config
 #+begin_src emacs-lisp
-(add-to-list 'load-path "/home/thawes/src/projects/gimel/resources/org-mode/")
+(add-to-list 'load-path "/home/thawes/src/projects/gimel/resources/emacs/")
 (require 'gimel)
 (add-hook 'after-save-hook #'gimel-run-on-save)
 #+end_src
